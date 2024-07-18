@@ -1,0 +1,23 @@
+title: zzz
+frequency: 3
+dirfilter:
+- tmp
+- .git
+- public
+- scripts
+- vendor
+- logs
+- templates
+ext:
+- go
+enablerun: true
+action:
+  before:
+  - go mod tidy
+  - go mod vendor
+  - ps -ef|grep 'dztasks web'| grep -v grep | awk '{print $2}' | xargs kill -9
+  after:
+  - ./dztasks web &
+  exit:
+  - ps -ef|grep 'dztasks web'| grep -v grep | awk '{print $2}' | xargs kill -9
+link: https://github.com/midoks/zzz
