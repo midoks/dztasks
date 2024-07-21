@@ -3,42 +3,75 @@ package conf
 import (
 	"fmt"
 	"log"
-	"net/url"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
+
+	"net/url"
+	"path/filepath"
 
 	"github.com/pkg/errors"
 	"gopkg.in/ini.v1"
 
-	"github.com/midoks/dztasks/internal/assets/conf"
 	"github.com/midoks/dztasks/internal/tools"
+	"github.com/midoks/dztasks/embed"
 )
-
-// Asset is a wrapper for getting conf assets.
-func Asset(name string) ([]byte, error) {
-	return conf.Asset(name)
-}
-
-// AssetDir is a wrapper for getting conf assets.
-func AssetDir(name string) ([]string, error) {
-	return conf.AssetDir(name)
-}
-
-// MustAsset is a wrapper for getting conf assets.
-func MustAsset(name string) []byte {
-	return conf.MustAsset(name)
-}
 
 // File is the configuration object.
 var File *ini.File
 
+func autoMakeCustomConf(customConf string) error {
+
+	if tools.IsExist(customConf) {
+		return nil
+	}
+
+	// auto make custom conf file
+	cfg := ini.Empty()
+	if tools.IsFile(customConf) {
+		if err := cfg.Append(customConf); err != nil {
+			return err
+		}
+	}
+
+	cfg.Section("").Key("app_name").SetValue("vez")
+	cfg.Section("").Key("run_mode").SetValue("prod")
+
+	cfg.Section("web").Key("http_port").SetValue("11011")
+	cfg.Section("session").Key("provider").SetValue("memory")
+
+	cfg.Section("mongodb").Key("addr").SetValue("127.0.0.1:27017")
+	cfg.Section("mongodb").Key("db").SetValue("vez")
+
+	// cfg.Section("image").Key("addr").SetValue("http://0.0.0.0:3333/i/")
+	// cfg.Section("image").Key("ping").SetValue("http://0.0.0.0:3333/ping")
+	// cfg.Section("image").Key("ping_response").SetValue("ok")
+
+	cfg.Section("security").Key("install_lock").SetValue("true")
+	secretKey := tools.RandString(15)
+	cfg.Section("security").Key("secret_key").SetValue(secretKey)
+
+
+	fmt.Println("customConf:",customConf)
+
+	os.MkdirAll(filepath.Dir(customConf), os.ModePerm)
+	if err := cfg.SaveTo(customConf); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+
 func Init(customConf string) error {
 
+
+	data, _ := embed.Conf.ReadFile("conf/app.conf")
+
+	fmt.Println(data)
 	File, err := ini.LoadSources(ini.LoadOptions{
 		IgnoreInlineComment: true,
-	}, conf.MustAsset("conf/app.conf"))
+	}, data)
 	if err != nil {
 		return errors.Wrap(err, "parse 'conf/app.conf'")
 	}
@@ -47,6 +80,7 @@ func Init(customConf string) error {
 
 	if customConf == "" {
 		customConf = filepath.Join(CustomDir(), "conf", "app.conf")
+		autoMakeCustomConf(customConf)
 	} else {
 		customConf, err = filepath.Abs(customConf)
 		if err != nil {

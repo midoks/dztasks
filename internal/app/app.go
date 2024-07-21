@@ -2,24 +2,87 @@ package app
 
 
 import (
+	"fmt"
+	"io"
+	// "io/ioutil"
+	// "path"
+	"strings"
+	"bytes"
 	"net/http"
 	"path/filepath"
 
 	"gopkg.in/macaron.v1"
 
-	// "github.com/go-macaron/binding"
+	"github.com/go-macaron/binding"
 	"github.com/go-macaron/cache"
 	"github.com/go-macaron/captcha"
-	// "github.com/go-macaron/csrf"
+	"github.com/go-macaron/csrf"
 	"github.com/go-macaron/gzip"
-	// "github.com/go-macaron/session"
+	"github.com/go-macaron/session"
 
-	// "github.com/midoks/dztasks/internal/app/context"
-	// "github.com/midoks/dztasks/internal/app/router"
+	"github.com/midoks/dztasks/internal/app/context"
+	"github.com/midoks/dztasks/internal/app/router"
+	"github.com/midoks/dztasks/internal/app/router/user"
+	"github.com/midoks/dztasks/internal/app/form"
 	"github.com/midoks/dztasks/internal/app/template"
-	"github.com/midoks/dztasks/internal/assets/templates"
 	"github.com/midoks/dztasks/internal/conf"
+	// "github.com/midoks/dztasks/embed"
 )
+
+type fileSystem struct {
+	files []macaron.TemplateFile
+}
+
+func (fs *fileSystem) ListFiles() []macaron.TemplateFile {
+	return fs.files
+}
+
+func (fs *fileSystem) Get(name string) (io.Reader, error) {
+	for i := range fs.files {
+		if fs.files[i].Name()+fs.files[i].Ext() == name {
+			return bytes.NewReader(fs.files[i].Data()), nil
+		}
+	}
+	return nil, fmt.Errorf("file %q not found", name)
+}
+
+// NewTemplateFileSystem returns a macaron.TemplateFileSystem instance for embedded assets.
+// The argument "dir" can be used to serve subset of embedded assets. Template file
+// found under the "customDir" on disk has higher precedence over embedded assets.
+func newTemplateFileSystem(dir, customDir string) macaron.TemplateFileSystem {
+	if dir != "" && !strings.HasSuffix(dir, "/") {
+		dir += "/"
+	}
+
+	fmt.Println(dir, customDir)
+
+	var files []macaron.TemplateFile
+	// names := AssetNames()
+	// for _, name := range names {
+	// 	if !strings.HasPrefix(name, dir) {
+	// 		continue
+	// 	}
+
+	// 	// Check if corresponding custom file exists
+	// 	var err error
+	// 	var data []byte
+	// 	fpath := path.Join(customDir, name)
+	// 	if tools.IsFile(fpath) {
+	// 		data, err = ioutil.ReadFile(fpath)
+	// 	} else {
+	// 		data, err = Asset(name)
+	// 	}
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+
+	// 	name = strings.TrimPrefix(name, dir)
+	// 	ext := path.Ext(name)
+	// 	name = strings.TrimSuffix(name, ext)
+	// 	files = append(files, macaron.NewTplFile(name, data, ext))
+	// }
+	return &fileSystem{files: files}
+}
 
 func newMacaron() *macaron.Macaron {
 	m := macaron.New()
@@ -63,8 +126,7 @@ func newMacaron() *macaron.Macaron {
 		IndentJSON:        macaron.Env != macaron.PROD,
 	}
 	if !conf.Web.LoadAssetsFromDisk {
-		// renderOpt.TemplateFileSystem = http.FS(conf.App.TemplateFs)
-		renderOpt.TemplateFileSystem = templates.NewTemplateFileSystem("", renderOpt.AppendDirectories[0])
+		renderOpt.TemplateFileSystem = newTemplateFileSystem("", renderOpt.AppendDirectories[0])
 	}
 
 	m.Use(macaron.Renderer(renderOpt))
@@ -84,9 +146,46 @@ func newMacaron() *macaron.Macaron {
 	return m
 }
 
+func setRouter(m *macaron.Macaron) *macaron.Macaron {
+
+	reqSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: true})
+	// ignSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: conf.Auth.RequireSigninView})
+	// reqSignOut := context.Toggle(&context.ToggleOptions{SignOutRequired: true})
+
+	bindIgnErr := binding.BindIgnErr
+	m.SetAutoHead(true)
+
+	m.Group("", func() {
+	
+		m.Group("/login", func() {
+			m.Combo("").Get(user.Login).Post(bindIgnErr(form.SignIn{}), user.LoginPost)
+		})
+		m.Get("/", reqSignIn, router.Home)
+
+	}, session.Sessioner(session.Options{
+		Provider:       conf.Session.Provider,
+		ProviderConfig: conf.Session.ProviderConfig,
+		CookieName:     conf.Session.CookieName,
+		CookiePath:     conf.Web.Subpath,
+		Gclifetime:     conf.Session.GCInterval,
+		Maxlifetime:    conf.Session.MaxLifeTime,
+		Secure:         conf.Session.CookieSecure,
+	}), csrf.Csrfer(csrf.Options{
+		Secret:         conf.Security.SecretKey,
+		Header:         "X-CSRF-Token",
+		Cookie:         conf.Session.CSRFCookieName,
+		CookieDomain:   conf.Web.URL.Hostname(),
+		CookiePath:     conf.Web.Subpath,
+		CookieHttpOnly: true,
+		SetCookie:      true,
+		Secure:         conf.Web.URL.Scheme == "https",
+	}), context.Contexter())
+	return m
+}
+
 
 func Start(port int) {
 	m := newMacaron()
-	// m = setRouter(m)
+	m = setRouter(m)
 	m.Run(port)
 }

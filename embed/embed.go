@@ -8,5 +8,9 @@ import (
 var Static embed.FS
 
 
-//go:embed tmplate/*
+//go:embed templates
 var Templates embed.FS
+
+
+//go:embed conf/*
+var Conf embed.FS

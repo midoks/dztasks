@@ -54,7 +54,7 @@ var (
 // binary is located.
 func WorkDir() string {
 	workDirOnce.Do(func() {
-		workDir = os.Getenv("IMAIL_WORK_DIR")
+		workDir = os.Getenv("DZTASKS_WORK_DIR")
 		if workDir != "" {
 			return
 		}
@@ -75,7 +75,7 @@ var (
 // directory returned by WorkDir function.
 func CustomDir() string {
 	customDirOnce.Do(func() {
-		customDir = os.Getenv("IMAIL_CUSTOM")
+		customDir = os.Getenv("DZTASKS_CUSTOM")
 		if customDir != "" {
 			return
 		}

@@ -17,7 +17,6 @@ import (
 	"github.com/editorconfig/editorconfig-core-go/v2"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/unknwon/i18n"
-
 	"github.com/midoks/dztasks/internal/conf"
 )
 

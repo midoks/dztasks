@@ -10,6 +10,7 @@ import (
 
 	"github.com/urfave/cli"
 
+	"github.com/midoks/dztasks/internal/conf"
 	"github.com/midoks/dztasks/internal/app"
 )
 
@@ -25,6 +26,8 @@ var Web = cli.Command{
 
 
 func runWeb(c *cli.Context) error {
+	conf.Init("")
+
 	app.Start(9011)
 	return nil
 }
