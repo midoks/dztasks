@@ -1,8 +1,9 @@
 package cmd
 
 import (
-	"github.com/urfave/cli"
 	"time"
+
+	"github.com/urfave/cli"
 )
 
 func stringFlag(name, value, usage string) cli.StringFlag {

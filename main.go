@@ -5,9 +5,9 @@ import (
 	"log"
 	"os"
 
-	"dztasks/internal/cmd"
-
 	"github.com/urfave/cli"
+
+	"github.com/midoks/dztasks/internal/cmd"	
 )
 
 

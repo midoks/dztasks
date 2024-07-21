@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	// "fmt"
 	// "net/http"
 	// _ "net/http/pprof"
 	// "path/filepath"
@@ -9,27 +9,22 @@ import (
 	// "time"
 
 	"github.com/urfave/cli"
-	"github.com/gin-gonic/gin"
+
+	"github.com/midoks/dztasks/internal/app"
 )
 
 var Web = cli.Command{
 	Name:        "web",
-	Usage:       "This command start web services",
-	Description: `Start Web Services`,
+	Usage:       "this command start web services",
+	Description: `start web services`,
 	Action:      runWeb,
 	Flags: []cli.Flag{
-		stringFlag("config, c", "", "Custom configuration file path"),
+		stringFlag("config, c", "", "custom configuration file path"),
 	},
 }
 
 
 func runWeb(c *cli.Context) error {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run()
+	app.Start(9011)
 	return nil
 }
