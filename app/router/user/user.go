@@ -6,10 +6,9 @@ import (
 
 	"github.com/go-macaron/captcha"
 
-	"github.com/midoks/dztasks/internal/app/context"
-	"github.com/midoks/dztasks/internal/app/form"
+	"github.com/midoks/dztasks/app/context"
+	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/internal/conf"
-	// "github.com/midoks/imail/internal/db"
 	"github.com/midoks/dztasks/internal/log"
 	"github.com/midoks/dztasks/internal/tools"
 )
@@ -66,7 +65,7 @@ func AutoLogin(c *context.Context) (bool, error) {
 }
 
 func Login(c *context.Context) {
-	c.Title("sign_in")
+
 
 	// Check auto-login
 	isSucceed, err := AutoLogin(c)
@@ -218,7 +217,7 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 	// 	IsActive: false,
 	// }
 
-	
+
 	// if err := db.CreateUser(u); err != nil {
 	// 	c.Error(err, "create user")
 	// 	return

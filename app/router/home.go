@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/midoks/dztasks/internal/app/context"
+	"github.com/midoks/dztasks/app/context"
 )
 
 const (

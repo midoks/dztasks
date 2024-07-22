@@ -20,11 +20,11 @@ import (
 	"github.com/go-macaron/gzip"
 	"github.com/go-macaron/session"
 
-	"github.com/midoks/dztasks/internal/app/context"
-	"github.com/midoks/dztasks/internal/app/router"
-	"github.com/midoks/dztasks/internal/app/router/user"
-	"github.com/midoks/dztasks/internal/app/form"
-	"github.com/midoks/dztasks/internal/app/template"
+	"github.com/midoks/dztasks/app/context"
+	"github.com/midoks/dztasks/app/router"
+	"github.com/midoks/dztasks/app/router/user"
+	"github.com/midoks/dztasks/app/form"
+	"github.com/midoks/dztasks/app/template"
 	"github.com/midoks/dztasks/internal/conf"
 	// "github.com/midoks/dztasks/embed"
 )
@@ -131,7 +131,6 @@ func newMacaron() *macaron.Macaron {
 
 	m.Use(macaron.Renderer(renderOpt))
 	//template end
-
 
 	m.Use(cache.Cacher(cache.Options{
 		Adapter:       conf.Cache.Adapter,

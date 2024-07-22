@@ -10,13 +10,11 @@ require (
 	github.com/go-macaron/captcha v0.2.0
 	github.com/go-macaron/csrf v0.0.0-20200329073418-5d38f39de352
 	github.com/go-macaron/gzip v0.0.0-20200329073552-98214d7a897e
-	github.com/go-macaron/i18n v0.6.0
 	github.com/go-macaron/session v1.0.2
 	github.com/microcosm-cc/bluemonday v1.0.21
 	github.com/phachon/go-logger v0.0.0-20191215032019-86e4227f71ea
 	github.com/pkg/errors v0.9.1
 	github.com/smartystreets/goconvey v1.7.2
-	github.com/unknwon/i18n v0.0.0-20210904045753-ff3a8617e361
 	github.com/urfave/cli v1.22.15
 	golang.org/x/text v0.5.0
 	gopkg.in/ini.v1 v1.67.0

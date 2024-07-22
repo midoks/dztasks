@@ -7,21 +7,49 @@ package context
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"gopkg.in/macaron.v1"
 
 	"github.com/go-macaron/cache"
 	"github.com/go-macaron/csrf"
-	"github.com/go-macaron/i18n"
 	"github.com/go-macaron/session"
 	
 
-	"github.com/midoks/dztasks/internal/app/form"
-	"github.com/midoks/dztasks/internal/app/template"
+	"github.com/midoks/dztasks/app/form"
+	"github.com/midoks/dztasks/app/template"
 	"github.com/midoks/dztasks/internal/conf"
 	"github.com/midoks/dztasks/internal/log"
 )
+
+type ToggleOptions struct {
+	SignInRequired  bool
+	SignOutRequired bool
+	AdminRequired   bool
+	DisableCSRF     bool
+}
+
+func Toggle(options *ToggleOptions) macaron.Handler {
+
+	return func(c *Context) {
+		if !conf.Security.InstallLock {
+			// fmt.Println("Toggle:not install")
+			c.RedirectSubpath("/install")
+			return
+		}
+
+		if options.SignInRequired {
+			if !c.IsLogged {
+				c.SetCookie("redirect_to", url.QueryEscape(conf.Web.Subpath+c.Req.RequestURI), 0, conf.Web.Subpath)
+				c.RedirectSubpath("/login")
+				return
+			}
+		}
+	}
+}
+
+
 
 // Context represents context of a request.
 type Context struct {
@@ -134,13 +162,13 @@ func (c *Context) Fail(code int64, msg string) {
 
 // NotFound renders the 404 page.
 func (c *Context) NotFound() {
-	c.Title("status.page_not_found")
+	// c.Title("status.page_not_found")
 	c.HTML(http.StatusNotFound, fmt.Sprintf("status/%d", http.StatusNotFound))
 }
 
 // Error renders the 500 page.
 func (c *Context) Error(err error, msg string) {
-	c.Title("status.internal_server_error")
+	// c.Title("status.internal_server_error")
 
 	// Only in non-production mode or admin can see the actual error message.
 	if !conf.IsProdMode() || (c.IsLogged) {
@@ -171,7 +199,7 @@ func (c *Context) RedirectSubpath(location string, status ...int) {
 
 // Contexter initializes a classic context for a request.
 func Contexter() macaron.Handler {
-	return func(ctx *macaron.Context, l i18n.Locale, cache cache.Cache, sess session.Store, f *session.Flash, x csrf.CSRF) {
+	return func(ctx *macaron.Context, cache cache.Cache, sess session.Store, f *session.Flash, x csrf.CSRF) {
 		c := &Context{
 			Context: ctx,
 			Cache:   cache,
@@ -182,7 +210,7 @@ func Contexter() macaron.Handler {
 
 		ctx.Map(c)
 
-		c.Data["NowLang"] = l.Lang
+		// c.Data["NowLang"] = l.Lang
 		c.Data["PageStartTime"] = time.Now()
 
 		if len(conf.Web.AccessControlAllowOrigin) > 0 {

@@ -11,7 +11,7 @@ import (
 	"github.com/urfave/cli"
 
 	"github.com/midoks/dztasks/internal/conf"
-	"github.com/midoks/dztasks/internal/app"
+	"github.com/midoks/dztasks/app"
 )
 
 var Web = cli.Command{

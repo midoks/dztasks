@@ -34,18 +34,15 @@ func autoMakeCustomConf(customConf string) error {
 		}
 	}
 
-	cfg.Section("").Key("app_name").SetValue("vez")
+	cfg.Section("").Key("app_name").SetValue("dztasks")
 	cfg.Section("").Key("run_mode").SetValue("prod")
 
 	cfg.Section("web").Key("http_port").SetValue("11011")
 	cfg.Section("session").Key("provider").SetValue("memory")
 
 	cfg.Section("mongodb").Key("addr").SetValue("127.0.0.1:27017")
-	cfg.Section("mongodb").Key("db").SetValue("vez")
-
-	// cfg.Section("image").Key("addr").SetValue("http://0.0.0.0:3333/i/")
-	// cfg.Section("image").Key("ping").SetValue("http://0.0.0.0:3333/ping")
-	// cfg.Section("image").Key("ping_response").SetValue("ok")
+	cfg.Section("mongodb").Key("db").SetValue("dztasks")
+	
 
 	cfg.Section("security").Key("install_lock").SetValue("true")
 	secretKey := tools.RandString(15)
@@ -68,7 +65,7 @@ func Init(customConf string) error {
 
 	data, _ := embed.Conf.ReadFile("conf/app.conf")
 
-	fmt.Println(data)
+	// fmt.Println(data)
 	File, err := ini.LoadSources(ini.LoadOptions{
 		IgnoreInlineComment: true,
 	}, data)
