@@ -14,13 +14,7 @@ import (
 )
 
 const (
-	LOGIN                    = "user/auth/login"
-	TWO_FACTOR               = "user/auth/two_factor"
-	TWO_FACTOR_RECOVERY_CODE = "user/auth/two_factor_recovery_code"
-	SIGNUP                   = "user/auth/signup"
-	ACTIVATE                 = "user/auth/activate"
-	FORGOT_PASSWORD          = "user/auth/forgot_passwd"
-	RESET_PASSWORD           = "user/auth/reset_passwd"
+	LOGIN                    = "/user/login"
 )
 
 // AutoLogin reads cookie and try to auto-login.
@@ -67,35 +61,34 @@ func AutoLogin(c *context.Context) (bool, error) {
 func Login(c *context.Context) {
 
 
-	// Check auto-login
-	isSucceed, err := AutoLogin(c)
-	if err != nil {
-		c.Error(err, "auto login")
-		return
-	}
+	// // Check auto-login
+	// isSucceed, err := AutoLogin(c)
+	// if err != nil {
+	// 	c.Error(err, "auto login")
+	// 	return
+	// }
 
-	redirectTo := c.Query("redirect_to")
-	if len(redirectTo) > 0 {
-		c.SetCookie("redirect_to", redirectTo, 0, conf.Web.Subpath)
-	} else {
-		redirectTo, _ = url.QueryUnescape(c.GetCookie("redirect_to"))
-	}
+	// redirectTo := c.Query("redirect_to")
+	// if len(redirectTo) > 0 {
+	// 	c.SetCookie("redirect_to", redirectTo, 0, conf.Web.Subpath)
+	// } else {
+	// 	redirectTo, _ = url.QueryUnescape(c.GetCookie("redirect_to"))
+	// }
 
-	if isSucceed {
-		if tools.IsSameSiteURLPath(redirectTo) {
-			c.Redirect(redirectTo)
-		} else {
-			c.RedirectSubpath("/")
-		}
-		c.SetCookie("redirect_to", "", -1, conf.Web.Subpath)
-		return
-	}
+	// if isSucceed {
+	// 	if tools.IsSameSiteURLPath(redirectTo) {
+	// 		c.Redirect(redirectTo)
+	// 	} else {
+	// 		c.RedirectSubpath("/")
+	// 	}
+	// 	c.SetCookie("redirect_to", "", -1, conf.Web.Subpath)
+	// 	return
+	// }
 
 	c.Success(LOGIN)
 }
 
 func LoginPost(c *context.Context, f form.SignIn) {
-	c.Title("sign_in")
 
 	fmt.Println(f.UserName, f.Password)
 
@@ -155,38 +148,21 @@ func SignOut(c *context.Context) {
 	c.RedirectSubpath("/")
 }
 
-func LoginTwoFactor(c *context.Context) {
-	c.Title("sign_in")
-}
-
-func LoginTwoFactorPost(c *context.Context) {
-	c.Title("sign_in")
-}
-
-func LoginTwoFactorRecoveryCode(c *context.Context) {
-	c.Title("sign_in")
-}
-
-func LoginTwoFactorRecoveryCodePost(c *context.Context) {
-	c.Title("sign_in")
-}
 
 func SignUp(c *context.Context) {
-	c.Title("sign_up")
-
 	c.Data["EnableCaptcha"] = conf.Auth.EnableRegistrationCaptcha
 
 	if conf.Auth.DisableRegistration {
 		c.Data["DisableRegistration"] = true
-		c.Success(SIGNUP)
+		c.Success(LOGIN)
 		return
 	}
 
-	c.Success(SIGNUP)
+	c.Success(LOGIN)
 }
 
 func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
-	c.Title("sign_up")
+
 	c.Data["EnableCaptcha"] = conf.Auth.EnableRegistrationCaptcha
 
 	if conf.Auth.DisableRegistration {
@@ -195,13 +171,13 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 	}
 
 	if c.HasError() {
-		c.Success(SIGNUP)
+		c.Success(LOGIN)
 		return
 	}
 
 	if conf.Auth.EnableRegistrationCaptcha && !cpt.VerifyReq(c.Req) {
 		c.FormErr("Captcha")
-		c.RenderWithErr(c.Tr("form.captcha_incorrect"), SIGNUP, &f)
+		c.RenderWithErr("验证码错误!", LOGIN, &f)
 		return
 	}
 
@@ -249,5 +225,5 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 	// 	return
 	// }
 
-	c.RedirectSubpath("/user/login")
+	c.RedirectSubpath("/login")
 }

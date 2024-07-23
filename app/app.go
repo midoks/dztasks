@@ -4,8 +4,9 @@ package app
 import (
 	"fmt"
 	"io"
+	// "io/fs"
 	// "io/ioutil"
-	// "path"
+	"path"
 	"strings"
 	"bytes"
 	"net/http"
@@ -26,7 +27,7 @@ import (
 	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/app/template"
 	"github.com/midoks/dztasks/internal/conf"
-	// "github.com/midoks/dztasks/embed"
+	"github.com/midoks/dztasks/embed"
 )
 
 type fileSystem struct {
@@ -34,10 +35,14 @@ type fileSystem struct {
 }
 
 func (fs *fileSystem) ListFiles() []macaron.TemplateFile {
+	// for i := range fs.files {
+	// 	fmt.Println(fs.files[i].Name())
+	// }
 	return fs.files
 }
 
 func (fs *fileSystem) Get(name string) (io.Reader, error) {
+
 	for i := range fs.files {
 		if fs.files[i].Name()+fs.files[i].Ext() == name {
 			return bytes.NewReader(fs.files[i].Data()), nil
@@ -50,41 +55,26 @@ func (fs *fileSystem) Get(name string) (io.Reader, error) {
 // The argument "dir" can be used to serve subset of embedded assets. Template file
 // found under the "customDir" on disk has higher precedence over embedded assets.
 func newTemplateFileSystem(dir, customDir string) macaron.TemplateFileSystem {
+	var files []macaron.TemplateFile
+
 	if dir != "" && !strings.HasSuffix(dir, "/") {
 		dir += "/"
 	}
+	allfn := embed.TemplatesAllNames("templates")
 
-	fmt.Println(dir, customDir)
+	for _,name := range allfn {
+		ext := path.Ext(name)
+		data, _ := embed.Templates.ReadFile(name)
 
-	var files []macaron.TemplateFile
-	// names := AssetNames()
-	// for _, name := range names {
-	// 	if !strings.HasPrefix(name, dir) {
-	// 		continue
-	// 	}
+		name = strings.TrimPrefix(name, "templates")
+		name = strings.TrimSuffix(name, ext)
+		files = append(files, macaron.NewTplFile(name, data, ext))
+	}
 
-	// 	// Check if corresponding custom file exists
-	// 	var err error
-	// 	var data []byte
-	// 	fpath := path.Join(customDir, name)
-	// 	if tools.IsFile(fpath) {
-	// 		data, err = ioutil.ReadFile(fpath)
-	// 	} else {
-	// 		data, err = Asset(name)
-	// 	}
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-
-	// 	name = strings.TrimPrefix(name, dir)
-	// 	ext := path.Ext(name)
-	// 	name = strings.TrimSuffix(name, ext)
-	// 	files = append(files, macaron.NewTplFile(name, data, ext))
-	// }
 	return &fileSystem{files: files}
 }
 
-func newMacaron() *macaron.Macaron {
+func bootstrapMacaron() *macaron.Macaron {
 	m := macaron.New()
 
 	if !conf.Web.DisableRouterLog {
@@ -98,22 +88,21 @@ func newMacaron() *macaron.Macaron {
 	}
 
 	m.Use(macaron.Static(
-		filepath.Join(conf.CustomDir(), "public"),
+		filepath.Join(conf.CustomDir(), "static"),
 		macaron.StaticOptions{
 			SkipLogging: conf.Web.DisableRouterLog,
 		},
 	))
 
-	var publicFs http.FileSystem
+	var staticFs http.FileSystem
 	if !conf.Web.LoadAssetsFromDisk {
-		// publicFs = public.NewFileSystem()
-		publicFs = http.FS(conf.App.PublicFs)
+		staticFs = http.FS(embed.Static)
 	}
 
 	m.Use(macaron.Static(
-		filepath.Join(conf.WorkDir(), "public"),
+		filepath.Join(conf.WorkDir(), "static"),
 		macaron.StaticOptions{
-			FileSystem:  publicFs,
+			FileSystem:  staticFs,
 			SkipLogging: conf.Web.DisableRouterLog,
 		},
 	))
@@ -184,7 +173,7 @@ func setRouter(m *macaron.Macaron) *macaron.Macaron {
 
 
 func Start(port int) {
-	m := newMacaron()
-	m = setRouter(m)
-	m.Run(port)
+	boot := bootstrapMacaron()
+	boot = setRouter(boot)
+	boot.Run(port)
 }
