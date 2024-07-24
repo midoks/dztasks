@@ -3,14 +3,13 @@ frequency: 3
 dirfilter:
 - tmp
 - .git
-- public
 - scripts
-- assets
 - vendor
 - logs
-- templates
 ext:
 - go
+- js
+- tmpl
 enablerun: true
 action:
   before:

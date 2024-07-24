@@ -134,7 +134,7 @@ func bootstrapMacaron() *macaron.Macaron {
 	return m
 }
 
-func setRouter(m *macaron.Macaron) *macaron.Macaron {
+func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 
 	reqSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: true})
 	// ignSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: conf.Auth.RequireSigninView})
@@ -174,6 +174,6 @@ func setRouter(m *macaron.Macaron) *macaron.Macaron {
 
 func Start(port int) {
 	boot := bootstrapMacaron()
-	boot = setRouter(boot)
+	boot = bootstrapRouter(boot)
 	boot.Run(port)
 }
