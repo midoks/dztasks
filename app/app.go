@@ -137,17 +137,19 @@ func bootstrapMacaron() *macaron.Macaron {
 func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 
 	reqSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: true})
-	// ignSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: conf.Auth.RequireSigninView})
-	// reqSignOut := context.Toggle(&context.ToggleOptions{SignOutRequired: true})
+	reqSignOut := context.Toggle(&context.ToggleOptions{SignOutRequired: true})
 
 	bindIgnErr := binding.BindIgnErr
 	m.SetAutoHead(true)
 
 	m.Group("", func() {
-	
-		m.Group("/login", func() {
-			m.Combo("").Get(user.Login).Post(bindIgnErr(form.SignIn{}), user.LoginPost)
-		})
+
+		m.Group("", func() {
+			m.Group("/login", func() {
+				m.Combo("").Get(user.Login).Post(bindIgnErr(form.SignIn{}), user.LoginPost)
+			})
+			m.Post("/logout", user.SignOut)
+		}, reqSignOut)
 		m.Get("/", reqSignIn, router.Home)
 
 	}, session.Sessioner(session.Options{

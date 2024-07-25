@@ -33,11 +33,6 @@ type ToggleOptions struct {
 func Toggle(options *ToggleOptions) macaron.Handler {
 
 	return func(c *Context) {
-		if !conf.Security.InstallLock {
-			// fmt.Println("Toggle:not install")
-			c.RedirectSubpath("/install")
-			return
-		}
 
 		if options.SignInRequired {
 			if !c.IsLogged {
@@ -217,26 +212,12 @@ func Contexter() macaron.Handler {
 			c.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
 		}
 
-		// Get user from session or header when possible
-		uid := c.Session.Get("uid")
-
-		// fmt.Println("ready[uid]:", uid)
-		if uid != nil {
-			// u, err := db.UserGetById(uid.(int64))
-			// if err == nil {
-			// 	c.IsLogged = true
-			// 	c.Data["IsLogged"] = c.IsLogged
-			// 	c.Data["LoggedUser"] = u
-			// 	c.Data["LoggedUserID"] = u.Id
-			// 	c.Data["LoggedUserName"] = u.Name
-			// 	c.Data["IsAdmin"] = u.IsAdmin
-			// }
-
-			// c.User = &u
-			// c.Data["MenuDomains"], _ = db.DomainVaildList(1, 10)
-		} else {
-			c.Data["LoggedUserID"] = 0
-			c.Data["LoggedUserName"] = ""
+		isLogged := c.Session.Get("login").(bool)
+		name := c.Session.Get("name")
+		if isLogged {
+			c.IsLogged = true
+			c.Data["LoggedUserName"] = name
+			c.Data["IsAdmin"] = true
 		}
 
 		c.Data["CSRFToken"] = x.GetToken()
@@ -246,11 +227,6 @@ func Contexter() macaron.Handler {
 			log.Debugf("Session ID: %s", sess.ID())
 			log.Debugf("CSRF Token: %s", c.Data["CSRFToken"])
 		}
-
-		c.Data["ShowRegistrationButton"] = !conf.Auth.DisableRegistration
-
-
-		// c.renderNoticeBanner()
 
 		// avoid iframe use by other.
 		c.Header().Set("X-Content-Type-Options", "nosniff")

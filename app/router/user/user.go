@@ -4,8 +4,6 @@ import (
 	"fmt"
 	// "net/url"
 
-	"github.com/go-macaron/captcha"
-
 	"github.com/midoks/dztasks/app/context"
 	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/internal/conf"
@@ -14,7 +12,7 @@ import (
 )
 
 const (
-	LOGIN                    = "/user/login"
+	LOGIN = "/user/login"
 )
 
 // AutoLogin reads cookie and try to auto-login.
@@ -99,84 +97,4 @@ func SignOut(c *context.Context) {
 	c.SetCookie(conf.Security.CookieRememberName, "", -1, conf.Web.Subpath)
 	c.SetCookie(conf.Session.CSRFCookieName, "", -1, conf.Web.Subpath)
 	c.RedirectSubpath("/")
-}
-
-
-func SignUp(c *context.Context) {
-	c.Data["EnableCaptcha"] = conf.Auth.EnableRegistrationCaptcha
-
-	if conf.Auth.DisableRegistration {
-		c.Data["DisableRegistration"] = true
-		c.Success(LOGIN)
-		return
-	}
-
-	c.Success(LOGIN)
-}
-
-func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
-
-	c.Data["EnableCaptcha"] = conf.Auth.EnableRegistrationCaptcha
-
-	if conf.Auth.DisableRegistration {
-		c.Status(403)
-		return
-	}
-
-	if c.HasError() {
-		c.Success(LOGIN)
-		return
-	}
-
-	if conf.Auth.EnableRegistrationCaptcha && !cpt.VerifyReq(c.Req) {
-		c.FormErr("Captcha")
-		c.RenderWithErr("验证码错误!", LOGIN, &f)
-		return
-	}
-
-	// if f.Password != f.Retype {
-	// 	c.FormErr("Password")
-	// 	c.RenderWithErr(c.Tr("form.password_not_match"), SIGNUP, &f)
-	// 	return
-	// }
-
-	// u := &db.User{
-	// 	Name:     f.UserName,
-	// 	Password: f.Password,
-	// 	IsActive: false,
-	// }
-
-
-	// if err := db.CreateUser(u); err != nil {
-	// 	c.Error(err, "create user")
-	// 	return
-	// }
-
-	// log.Debugf("Account created: %s", u.Name)
-
-	// Auto-set admin for the only user.
-	// if db.UsersCount() == 1 {
-	// 	u.IsAdmin = true
-	// 	u.IsActive = true
-	// 	if err := db.UpdateUser(u); err != nil {
-	// 		c.Error(err, "update user")
-	// 		return
-	// 	}
-	// }
-
-	// Send confirmation email.
-	// if conf.Auth.RequireEmailConfirmation {
-	// 	email.SendActivateAccountMail(c.Context, db.NewMailerUser(u))
-	// 	c.Data["IsSendRegisterMail"] = true
-	// 	c.Data["Email"] = u.Email
-	// 	c.Data["Hours"] = conf.Auth.ActivateCodeLives / 60
-	// 	c.Success(ACTIVATE)
-
-	// 	if err := c.Cache.Put(u.MailResendCacheKey(), 1, 180); err != nil {
-	// 		log.Error("Failed to put cache key 'mail resend': %v", err)
-	// 	}
-	// 	return
-	// }
-
-	c.RedirectSubpath("/login")
 }
