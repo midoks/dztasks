@@ -40,17 +40,15 @@ func autoMakeCustomConf(customConf string) error {
 	cfg.Section("web").Key("http_port").SetValue("11011")
 	cfg.Section("session").Key("provider").SetValue("memory")
 
-	cfg.Section("mongodb").Key("addr").SetValue("127.0.0.1:27017")
-	cfg.Section("mongodb").Key("db").SetValue("dztasks")
+	cfg.Section("admin").Key("user").SetValue("admin")
+	cfg.Section("admin").Key("pass").SetValue("admin")
 	
 
 	cfg.Section("security").Key("install_lock").SetValue("true")
 	secretKey := tools.RandString(15)
 	cfg.Section("security").Key("secret_key").SetValue(secretKey)
 
-
-	fmt.Println("customConf:",customConf)
-
+	// fmt.Println("customConf:",customConf)
 	os.MkdirAll(filepath.Dir(customConf), os.ModePerm)
 	if err := cfg.SaveTo(customConf); err != nil {
 		return err
@@ -61,7 +59,7 @@ func autoMakeCustomConf(customConf string) error {
 
 
 func Init(customConf string) error {
-
+	
 
 	data, _ := embed.Conf.ReadFile("conf/app.conf")
 
@@ -72,8 +70,6 @@ func Init(customConf string) error {
 	if err != nil {
 		return errors.Wrap(err, "parse 'conf/app.conf'")
 	}
-
-	File.NameMapper = ini.TitleUnderscore
 
 	if customConf == "" {
 		customConf = filepath.Join(CustomDir(), "conf", "app.conf")
@@ -86,6 +82,7 @@ func Init(customConf string) error {
 	}
 	CustomConf = customConf
 
+
 	if tools.IsFile(customConf) {
 		if err = File.Append(customConf); err != nil {
 			return errors.Wrapf(err, "append %q", customConf)
@@ -93,6 +90,9 @@ func Init(customConf string) error {
 	} else {
 		log.Println("Custom config ", customConf, " not found. Ignore this warning if you're running for the first time")
 	}
+
+	
+	File.NameMapper = ini.TitleUnderscore
 
 	if err = File.Section(ini.DefaultSection).MapTo(&App); err != nil {
 		return errors.Wrap(err, "mapping default section")
@@ -102,13 +102,6 @@ func Init(customConf string) error {
 	// ----- Log settings -----
 	// ***************************
 	if err = File.Section("log").MapTo(&Log); err != nil {
-		return errors.Wrap(err, "mapping [log] section")
-	}
-
-	// ***************************
-	// ----- Database settings -----
-	// ***************************
-	if err = File.Section("database").MapTo(&Database); err != nil {
 		return errors.Wrap(err, "mapping [log] section")
 	}
 
@@ -151,20 +144,14 @@ func Init(customConf string) error {
 		return errors.Wrap(err, "mapping [session] section")
 	}
 
-	// ***********************************
-	// ----- Authentication settings -----
-	// ***********************************
+	// ****************************
+	// ----- Session settings -----
+	// ****************************
 
-	if err = File.Section("auth").MapTo(&Auth); err != nil {
-		return errors.Wrap(err, "mapping [auth] section")
+	if err = File.Section("admin").MapTo(&Admin); err != nil {
+		return errors.Wrap(err, "mapping [admin] section")
 	}
 
-	// ***************************
-	// ----- Ssl settings -----
-	// ***************************
-	if err = File.Section("ssl").MapTo(&Ssl); err != nil {
-		return errors.Wrap(err, "mapping [ssl] section")
-	}
 
 	// *****************************
 	// ----- Security settings -----
@@ -172,12 +159,6 @@ func Init(customConf string) error {
 
 	if err = File.Section("security").MapTo(&Security); err != nil {
 		return errors.Wrap(err, "mapping [security] section")
-	}
-
-	if err = File.Section("cache").MapTo(&Cache); err != nil {
-		return errors.Wrap(err, "mapping [cache] section")
-	} else if err = File.Section("other").MapTo(&Other); err != nil {
-		return errors.Wrap(err, "mapping [other] section")
 	}
 
 	// Check run user when the install is locked.

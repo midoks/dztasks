@@ -2,7 +2,7 @@ package user
 
 import (
 	"fmt"
-	"net/url"
+	// "net/url"
 
 	"github.com/go-macaron/captcha"
 
@@ -10,7 +10,7 @@ import (
 	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/internal/conf"
 	"github.com/midoks/dztasks/internal/log"
-	"github.com/midoks/dztasks/internal/tools"
+	// "github.com/midoks/dztasks/internal/tools"
 )
 
 const (
@@ -35,7 +35,8 @@ func AutoLogin(c *context.Context) (bool, error) {
 		}
 	}()
 
-	// uid := c.Session.Get("uid")
+	name := c.Session.Get("name")
+	fmt.Println("login:",name)
 	// if uid != nil {
 	// 	u, err := db.UserGetById(uid.(int64))
 	// 	if err != nil {
@@ -59,84 +60,36 @@ func AutoLogin(c *context.Context) (bool, error) {
 }
 
 func Login(c *context.Context) {
-
-
-	// // Check auto-login
-	// isSucceed, err := AutoLogin(c)
-	// if err != nil {
-	// 	c.Error(err, "auto login")
-	// 	return
-	// }
-
-	// redirectTo := c.Query("redirect_to")
-	// if len(redirectTo) > 0 {
-	// 	c.SetCookie("redirect_to", redirectTo, 0, conf.Web.Subpath)
-	// } else {
-	// 	redirectTo, _ = url.QueryUnescape(c.GetCookie("redirect_to"))
-	// }
-
-	// if isSucceed {
-	// 	if tools.IsSameSiteURLPath(redirectTo) {
-	// 		c.Redirect(redirectTo)
-	// 	} else {
-	// 		c.RedirectSubpath("/")
-	// 	}
-	// 	c.SetCookie("redirect_to", "", -1, conf.Web.Subpath)
-	// 	return
-	// }
-
 	c.Success(LOGIN)
 }
 
 func LoginPost(c *context.Context, f form.SignIn) {
 
-	fmt.Println(f.UserName, f.Password)
+	fmt.Println("api",f.Username, f.Password)
+	fmt.Println("conf",conf.Admin.User, conf.Admin.Pass)
 
-	// loginBool, uid := db.LoginByUserPassword(f.UserName, f.Password)
 
-	// if !loginBool {
-	// 	c.FormErr("UserName", "Password")
-	// 	c.RenderWithErr(c.Tr("form.username_password_incorrect"), LOGIN, &f)
-	// 	return
-	// }
+	if (conf.Admin.User == f.Username && conf.Admin.Pass == f.Password){
+		name := conf.Admin.User
+		pass := conf.Admin.Pass
+		if f.Remember {
+			days := 86400 * conf.Security.LoginRememberDays
+			c.SetCookie(conf.Security.CookieUsername, name, days, conf.Web.Subpath, "", conf.Security.CookieSecure, true)
+			c.SetSuperSecureCookie(pass, conf.Security.CookieRememberName, name, days, conf.Web.Subpath, "", conf.Security.CookieSecure, true)
+		}
 
-	if c.HasError() {
-		c.Success(LOGIN)
-		return
-	}
+		c.Session.Set("name", name)
+		c.Session.Set("login", true)
 
-	// u, err := db.UserGetByName(f.UserName)
-	// if err != nil {
-	// 	c.FormErr("UserName", "Password")
-	// 	c.RenderWithErr(c.Tr("form.username_password_incorrect"), LOGIN, &f)
-	// 	return
-	// }
+		c.SetCookie(conf.Session.CSRFCookieName, "", -1, conf.Web.Subpath)
+		if conf.Security.EnableLoginStatusCookie {
+			c.SetCookie(conf.Security.LoginStatusCookieName, "true", 0, conf.Web.Subpath)
+		}
 
-	// if f.Remember {
-	// 	days := 86400 * conf.Security.LoginRememberDays
-	// 	c.SetCookie(conf.Security.CookieUsername, u.Name, days, conf.Web.Subpath, "", conf.Security.CookieSecure, true)
-	// 	c.SetSuperSecureCookie(u.Salt+u.Password, conf.Security.CookieRememberName, u.Name, days, conf.Web.Subpath, "", conf.Security.CookieSecure, true)
-	// }
-
-	// session.Start(c)
-	// c.Session.Set("uid", uid)
-	// c.Session.Set("uname", f.UserName)
-
-	// Clear whatever CSRF has right now, force to generate a new one
-	c.SetCookie(conf.Session.CSRFCookieName, "", -1, conf.Web.Subpath)
-	if conf.Security.EnableLoginStatusCookie {
-		c.SetCookie(conf.Security.LoginStatusCookieName, "true", 0, conf.Web.Subpath)
-	}
-
-	redirectTo, _ := url.QueryUnescape(c.GetCookie("redirect_to"))
-	c.SetCookie("redirect_to", "", -1, conf.Web.Subpath)
-
-	if tools.IsSameSiteURLPath(redirectTo) {
-		c.Redirect(redirectTo)
-		return
-	}
-
-	c.RedirectSubpath("/")
+		c.Ok("登录成功")
+	} else {
+		c.Fail("认证失败")
+	}	
 }
 
 func SignOut(c *context.Context) {

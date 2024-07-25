@@ -66,7 +66,7 @@ type Context struct {
 }
 
 //json api common data
-type JsonMsg struct {
+type JsonData struct {
 	Code int64       `json:"code"`
 	Msg  string      `json:"msg"`
 	Data interface{} `json:"data,omitempty"`
@@ -142,27 +142,26 @@ func (c *Context) Success(name string) {
 }
 
 // JSONSuccess responses JSON with status http.StatusOK.
-func (c *Context) JSONSuccess(data interface{}) {
+func (c *Context) renderJson(data interface{}) {
 	c.JSON(http.StatusOK, data)
 }
 
 //JSON Success Message
-func (c *Context) OK(msg string) {
-	c.JSONSuccess(JsonMsg{Code: 0, Msg: msg})
+func (c *Context) ReturnJson(code int64, msg string, data interface{}) {
+	c.renderJson(JsonData{Code: code, Msg: msg, Data:data})
 }
 
-func (c *Context) OKDATA(msg string, data interface{}) {
-	c.JSONSuccess(JsonMsg{Code: 0, Msg: msg, Data: data})
+func (c *Context) Ok(msg string) {
+	c.ReturnJson(1,msg,"")
 }
 
 //JSON Fail Message
-func (c *Context) Fail(code int64, msg string) {
-	c.JSONSuccess(JsonMsg{Code: code, Msg: msg})
+func (c *Context) Fail(msg string) {
+	c.ReturnJson(-1,msg,"")
 }
 
 // NotFound renders the 404 page.
 func (c *Context) NotFound() {
-	// c.Title("status.page_not_found")
 	c.HTML(http.StatusNotFound, fmt.Sprintf("status/%d", http.StatusNotFound))
 }
 
@@ -209,8 +208,6 @@ func Contexter() macaron.Handler {
 		}
 
 		ctx.Map(c)
-
-		// c.Data["NowLang"] = l.Lang
 		c.Data["PageStartTime"] = time.Now()
 
 		if len(conf.Web.AccessControlAllowOrigin) > 0 {

@@ -36,6 +36,12 @@ var (
 		RootPath string
 	}
 
+	// log
+	Admin struct {
+		User   string
+		Pass string
+	}
+
 	// Cache settings
 	Cache struct {
 		Adapter  string
@@ -101,30 +107,6 @@ var (
 		CSRFCookieName string `ini:"csrf_cookie_name"`
 	}
 
-	// Smtp settings
-	Smtp struct {
-		Port      int
-		Enable    bool
-		Debug     bool
-		SslEnable bool
-		SslPort   int
-		ModeIn    bool
-	}
-
-	//ssl
-	Ssl struct {
-		Enable   bool
-		Debug    bool
-		CertFile string
-		KeyFile  string
-	}
-
-	//Hook
-	Hook struct {
-		Enable        bool
-		ReceiveScript string
-		SendScript    string
-	}
 
 	// Security settings
 	Security struct {
@@ -138,31 +120,4 @@ var (
 		LoginStatusCookieName   string
 	}
 
-	// Other settings
-	Other struct {
-		ShowFooterBranding         bool
-		ShowFooterTemplateLoadTime bool
-	}
-
-	// Global setting
-	HasRobotsTxt bool
 )
-
-type DatabaseOpts struct {
-	Type         string
-	Host         string
-	Name         string
-	User         string
-	Password     string
-	SslMode      string `ini:"ssl_mode"`
-	Path         string
-	Prefix       string
-	Charset      string
-	Timezone     string
-	MaxOpenConns int
-	MaxIdleConns int
-}
-
-// Database settings
-var Database DatabaseOpts
-
