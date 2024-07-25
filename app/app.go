@@ -148,7 +148,7 @@ func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 			m.Group("/login", func() {
 				m.Combo("").Get(user.Login).Post(bindIgnErr(form.SignIn{}), user.LoginPost)
 			})
-			m.Post("/logout", user.SignOut)
+			m.Get("/logout", user.SignOut)
 		}, reqSignOut)
 		m.Get("/", reqSignIn, router.Home)
 

@@ -212,9 +212,9 @@ func Contexter() macaron.Handler {
 			c.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
 		}
 
-		isLogged := c.Session.Get("login").(bool)
+		isLogged := c.Session.Get("login")
 		name := c.Session.Get("name")
-		if isLogged {
+		if isLogged == true {
 			c.IsLogged = true
 			c.Data["LoggedUserName"] = name
 			c.Data["IsAdmin"] = true
