@@ -24,6 +24,7 @@ import (
 	"github.com/midoks/dztasks/app/context"
 	"github.com/midoks/dztasks/app/router"
 	"github.com/midoks/dztasks/app/router/user"
+	"github.com/midoks/dztasks/app/router/plugin"
 	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/app/template"
 	"github.com/midoks/dztasks/internal/conf"
@@ -151,6 +152,7 @@ func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 			m.Get("/logout", user.SignOut)
 		}, reqSignOut)
 		m.Get("/", reqSignIn, router.Home)
+		m.Get("/plugin", reqSignIn, plugin.Home)
 
 	}, session.Sessioner(session.Options{
 		Provider:       conf.Session.Provider,
