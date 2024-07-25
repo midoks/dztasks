@@ -71,17 +71,32 @@
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
 
                 	<li data-name="home" class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;" lay-tips="主页" lay-direction="2">
+                        <a href="javascript:;" lay-tips="控制台" lay-direction="2">
                             <i class="layui-icon layui-icon-home"></i>
-                            <cite>主页</cite>
+                            <cite>控制台</cite>
                         </a>
-                        <dl class="layui-nav-child">
-                            <dd data-name="console" class="layui-this">
-                                <a lay-href="home/console.html">控制台</a>
-                            </dd>
-                        </dl>
+                    </li>
+
+                    <li data-name="plugins" class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" lay-tips="插件管理" lay-direction="2">
+                            <i class="layui-icon layui-icon-home"></i>
+                            <cite>插件管理</cite>
+                        </a>
                     </li>
                 </ul>
+            </div>
+        </div>
+
+         <!-- 页面标签 -->
+        <div class="layadmin-pagetabs" id="LAY_app_tabs">
+            <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage" style="right:0px;"></div>
+
+            <div class="layui-card layadmin-header" style="display: block; line-height: 40px;height: 40px;">
+                <div class="layui-breadcrumb" lay-filter="breadcrumb">
+                    <!-- <a lay-href="">主页</a> -->
+                    <a><cite>主页</cite></a>
+                </div>
             </div>
         </div>
       
