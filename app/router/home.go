@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	HOME = "console/index"
+	HOME = "/console/index"
 )
 
 func Home(c *context.Context) {

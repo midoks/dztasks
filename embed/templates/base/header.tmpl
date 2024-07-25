@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+    <title>定制</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/layuiadmin/layui/css/modules/laydate/default/laydate.css?v={{BuildCommit}}">
+    <link rel="stylesheet" href="/static/layuiadmin/layui/css/layui.css?v={$version}" media="all">
+    <link rel="stylesheet" href="/static/layuiadmin/style/template.css?v={$version}" media="all">
+    <link rel="stylesheet" href="/static/layuiadmin/style/admin.css?v={$version}" media="all">
+</head>
+
+<body class="layui-layout-body">
+<!-- start -->
+<div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <!-- 头部区域 -->
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item layadmin-flexible" lay-unselect>
+                    <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
+                        <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                    </a>
+                </li>
+
+                <!-- <li class="layui-nav-item layui-hide-xs" lay-unselect><a href="/">系统</a></li> -->
+ 
+            </ul>
+
+            <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="note">
+                        <i class="layui-icon layui-icon-note"></i>
+                    </a>
+                </li>
+
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="fullscreen">
+                        <i class="layui-icon layui-icon-screen-full"></i>
+                    </a>
+                </li>
+
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;">
+                        <cite>{{.LoggedUserName}}</cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd style="text-align: center;"><a href="/logout">退出</a></dd>
+                    </dl>
+                </li>
+              
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="theme"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                </li>
+                <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
+                    <a href="javascript:;" layadmin-event="theme"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                </li>
+            </ul>
+        </div>
+      
+        <!-- 侧边菜单 -->
+        <div class="layui-side layui-side-menu">
+            <div class="layui-side-scroll">
+                <div class="layui-logo layui-hide-xs layui-bg-black">
+                    <span>&nbsp;订制</span>
+                </div>
+
+                <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+
+                	<li data-name="home" class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" lay-tips="主页" lay-direction="2">
+                            <i class="layui-icon layui-icon-home"></i>
+                            <cite>主页</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd data-name="console" class="layui-this">
+                                <a lay-href="home/console.html">控制台</a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+      
+        <!-- 主体内容 -->
+        <div class="layui-body" id="LAY_app_body">
+            <div class="layadmin-tabsbody-item layui-show" style="overflow-y: auto;margin-bottom: 40px;">
+<!--     
+        </div>
+</div> 
+-->
