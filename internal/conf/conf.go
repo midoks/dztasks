@@ -152,6 +152,14 @@ func Init(customConf string) error {
 		return errors.Wrap(err, "mapping [admin] section")
 	}
 
+	// ****************************
+	// ----- Session settings -----
+	// ****************************
+
+	if err = File.Section("plugins").MapTo(&Plugins); err != nil {
+		return errors.Wrap(err, "mapping [plugins] section")
+	}
+
 
 	// *****************************
 	// ----- Security settings -----

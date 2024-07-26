@@ -47,10 +47,6 @@ func FuncMap() []template.FuncMap {
 			"AppVer": func() string {
 				return conf.App.Version
 			},
-			"AppDomain": func() string {
-				return conf.Web.Domain
-			},
-
 			"Safe":        Safe,
 			"Str2HTML":    Str2HTML,
 			"Sanitize":    bluemonday.UGCPolicy().Sanitize,

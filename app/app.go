@@ -152,7 +152,8 @@ func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 			m.Get("/logout", user.SignOut)
 		}, reqSignOut)
 		m.Get("/", reqSignIn, router.Home)
-		m.Get("/plugin", reqSignIn, plugin.Home)
+		m.Get("/plugin", reqSignIn, plugin.PluginHome)
+		m.Get("/plugin/list", reqSignIn, plugin.PluginList)
 
 	}, session.Sessioner(session.Options{
 		Provider:       conf.Session.Provider,

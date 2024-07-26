@@ -1,21 +1,32 @@
 package plugin
 
 import (
-	// "fmt"
+	"fmt"
 	// "net/url"
 
 	"github.com/midoks/dztasks/app/context"
-
+	"github.com/midoks/dztasks/internal/conf"
 	// "github.com/midoks/dztasks/app/form"
-	// "github.com/midoks/dztasks/internal/conf"
+	
 	// "github.com/midoks/dztasks/internal/log"
 	// "github.com/midoks/dztasks/internal/tools"
 )
 
 const (
-	PLUGIN_PAGE = "/plugin/index"
+	PLUGIN_HOME = "/plugin/index"
 )
 
-func Home(c *context.Context) {
-	c.Success(PLUGIN_PAGE)
+func PluginHome(c *context.Context) {
+	c.Success(PLUGIN_HOME)
+}
+
+func PluginList(c *context.Context) {
+
+	pathdir := conf.Plugins.PathDir
+
+	fmt.Println(pathdir)
+
+
+
+	c.Ok("ok")
 }

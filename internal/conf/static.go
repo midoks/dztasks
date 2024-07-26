@@ -1,7 +1,6 @@
 package conf
 
 import (
-	"embed"
 	"net/url"
 	"os"
 )
@@ -26,8 +25,6 @@ var (
 		BrandName string
 		RunUser   string
 		RunMode   string
-
-		PublicFs embed.FS
 	}
 
 	// log
@@ -40,6 +37,10 @@ var (
 	Admin struct {
 		User   string
 		Pass string
+	}
+
+	Plugins struct{
+		PathDir string
 	}
 
 	// Cache settings

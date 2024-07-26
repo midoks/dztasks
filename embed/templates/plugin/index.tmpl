@@ -24,6 +24,39 @@
     </div>
 </div>
 
-<script src="/static/common/js/pulgins.js?v={{BuildCommit}}"></script>  
+<!-- 
+<script src="/static/common/js/plugins.js?v={{BuildCommit}}"></script>  
+-->
 
+<script src="/static/layuiadmin/layui/layui.js?v={{BuildCommit}}"></script>
+<script type="text/javascript">
+
+layui.config({base: '{__STATIC__}/admin/layuiadmin/'}).use(['table','jquery'], function(){
+///
+var admin = layui.admin
+,$ = layui.$
+,form = layui.form
+,table = layui.table;
+
+table.render({
+    elem: '#list',
+    url: '/plugin/list',
+    defaultToolbar: [],
+    title: '数据表',
+    cols: [[
+        {type: 'checkbox', fixed: 'left'},
+        {field:'id', title:'ID', width:100},
+        {field:'uid', title:'会员ID',width:100},
+        {field:'name', title:'类型',width:130},
+        {field:'text', title:'内容'},
+        {field:'did', title:'是否已读',toolbar: '#didTpl',width:100},
+        {field:'addtime', title:'消息时间',width:170,},
+        {title:'操作', toolbar: '#cmdTpl', width:70, fixed: 'right'}
+     ]],
+    page: true
+});
+
+///
+});
+</script>
 {{template "/base/footer" .}}
