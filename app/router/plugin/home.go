@@ -22,7 +22,7 @@ func PluginHome(c *context.Context) {
 
 func PluginList(c *context.Context) {
 
-	pathdir := conf.Plugins.PathDir
+	pathdir := conf.Plugins.Path
 
 	fmt.Println(pathdir)
 

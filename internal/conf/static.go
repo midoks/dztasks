@@ -40,7 +40,7 @@ var (
 	}
 
 	Plugins struct{
-		PathDir string
+		Path string
 	}
 
 	// Cache settings

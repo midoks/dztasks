@@ -15,18 +15,6 @@ type Empty struct {
 
 func init() {
 	binding.SetNameMapper(tools.ToSnakeCase)
-	// binding.AddRule(&binding.Rule{
-	// 	IsMatch: func(rule string) bool {
-	// 		return rule == "AlphaDashDotSlash"
-	// 	},
-	// 	IsValid: func(errs binding.Errors, name string, v interface{}) (bool, binding.Errors) {
-	// 		if AlphaDashDotSlashPattern.MatchString(fmt.Sprintf("%v", v)) {
-	// 			errs.Add([]string{name}, ERR_ALPHA_DASH_DOT_SLASH, "AlphaDashDotSlash")
-	// 			return false, errs
-	// 		}
-	// 		return true, errs
-	// 	},
-	// })
 }
 
 // Assign assign form values back to the template data.

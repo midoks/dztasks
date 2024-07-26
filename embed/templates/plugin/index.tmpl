@@ -24,10 +24,6 @@
     </div>
 </div>
 
-<!-- 
-<script src="/static/common/js/plugins.js?v={{BuildCommit}}"></script>  
--->
-
 <script src="/static/layuiadmin/layui/layui.js?v={{BuildCommit}}"></script>
 <script type="text/javascript">
 
@@ -44,11 +40,8 @@ table.render({
     defaultToolbar: [],
     title: '数据表',
     cols: [[
-        {type: 'checkbox', fixed: 'left'},
-        {field:'id', title:'ID', width:100},
-        {field:'uid', title:'会员ID',width:100},
-        {field:'name', title:'类型',width:130},
-        {field:'text', title:'内容'},
+        {field:'name', title:'插件名称',width:130},
+        {field:'ps', title:'说明'},
         {field:'did', title:'是否已读',toolbar: '#didTpl',width:100},
         {field:'addtime', title:'消息时间',width:170,},
         {title:'操作', toolbar: '#cmdTpl', width:70, fixed: 'right'}
