@@ -1,10 +1,50 @@
 {{template "/base/header" .}}
 
+<div class="layui-fluid">
+    <div class="layui-col-md12" style="padding: 5px;">
+        <div class="layui-card">
+            
+            <div class="layui-card-body">
+                <div class="layui-form toolbar" style="margin-top: 10px;margin-bottom: 10px;">
 
 
+                    <div class="layui-inline select100 mr0">
+                        <div class="layui-input-inline h30">
+                            <select name="name">
+                                <option value="">全部</option>
+                                <option value="系统消息">系统消息</option>
+                                <option value="在线购买成功">在线购买成功</option>
+                                <option value="AI科技">AI科技</option>
+                            </select>
+                        </div>
+                    </div>
 
-plugin
+                    <div class="layui-inline select100 mr0">
+                        <div class="layui-input-inline h30">
+                            <select name="zd">
+                                <option value="0">全部</option>
+                                <option value="text">评论内容</option>
+                                <option value="uid">会员ID</option>
+                            </select>
+                        </div>
+                    </div>
 
+                    <div class="layui-inline mr0">
+                        <div class="layui-input-inline mr0">
+                            <input type="text" name="key" placeholder="请输入关键字" autocomplete="off" class="layui-input h30" value="">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline mr0">
+                        <button class="layui-btn layui-btn-sm" data-id="message" lay-submit lay-filter="table-sreach"><i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                    </div>
+                </div>
+                <div id="message"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
