@@ -9,12 +9,12 @@
 
                     <div class="layui-inline mr0">
                         <div class="layui-input-inline mr0">
-                            <input type="text" name="key" placeholder="请输入关键字" autocomplete="off" class="layui-input h30" value="">
+                            <input type="text" name="key" placeholder="插件名称" autocomplete="off" class="layui-input h30" value="">
                         </div>
                     </div>
 
                     <div class="layui-inline mr0">
-                        <button class="layui-btn layui-btn-sm" data-id="message" lay-submit lay-filter="table-sreach">搜索
+                        <button class="layui-btn layui-btn-sm" data-id="list" lay-submit lay-filter="table-sreach">搜索
                         </button>
                     </div>
                 </div>
@@ -24,6 +24,6 @@
     </div>
 </div>
 
-
+<script src="/static/common/js/pulgins.js?v={{BuildCommit}}"></script>  
 
 {{template "/base/footer" .}}
