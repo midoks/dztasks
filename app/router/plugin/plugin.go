@@ -1,10 +1,10 @@
 package plugin
 
 import (
-	"fmt"
-	// "os"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"os"
 	// "path/filepath"
 	// "net/url"
 
@@ -30,10 +30,18 @@ type PluginTask struct {
 }
 
 type Plugin struct {
-	Name   string `json:"name"`
-	Ps     string `json:"ps"`
-	Author string `json:"author"`
-	Path   string `json:"path"`
+	Name      string `json:"name"`
+	Ps        string `json:"ps"`
+	Author    string `json:"author"`
+	Path      string `json:"path"`
+	Installed bool   `json:"installed"`
+}
+
+func getPluginInstallLock(path string) string {
+	pathdir := conf.Plugins.Path
+	plugin_dir := fmt.Sprintf("%s/%s", pathdir, path)
+	lock := fmt.Sprintf("%s/install.lock", plugin_dir)
+	return lock
 }
 
 // 插件列表
@@ -63,6 +71,11 @@ func PluginList(c *context.Context) {
 			continue
 		}
 
+		plugin_lock := getPluginInstallLock(file.Name())
+		if tools.IsExist(plugin_lock) {
+			p.Installed = true
+		}
+
 		p.Path = file.Name()
 		result = append(result, p)
 	}
@@ -71,17 +84,22 @@ func PluginList(c *context.Context) {
 
 // 插件安装
 func PluginInstall(c *context.Context, args form.PluginInstall) {
-	pathdir := conf.Plugins.Path
-	plugin_dir := fmt.Sprintf("%s/%s", pathdir, args.Path)
-	plugin_install := fmt.Sprintf("%s/install.lock", plugin_dir)
-
-	if !tools.IsExist(plugin_install) {
-		tools.WriteFile(plugin_install, "ok")
+	plugin_lock := getPluginInstallLock(args.Path)
+	if !tools.IsExist(plugin_lock) {
+		tools.WriteFile(plugin_lock, "ok")
+		c.Ok("安装成功")
+		return
 	}
-	c.Ok("安装成功")
+	c.Ok("已经安装成功")
 }
 
 // 插件卸载
-func PluginUninstall(c *context.Context) {
-
+func PluginUninstall(c *context.Context, args form.PluginUninstall) {
+	plugin_lock := getPluginInstallLock(args.Path)
+	if tools.IsExist(plugin_lock) {
+		os.Remove(plugin_lock)
+		c.Ok("卸载成功")
+		return
+	}
+	c.Ok("已经卸载成功")
 }

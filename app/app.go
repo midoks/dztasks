@@ -155,7 +155,7 @@ func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 		m.Get("/plugin", reqSignIn, plugin.PluginHome)
 		m.Get("/plugin/list", reqSignIn, plugin.PluginList)
 		m.Post("/plugin/install", reqSignIn, bindIgnErr(form.PluginInstall{}), plugin.PluginInstall)
-		m.Post("/plugin/uninstall", reqSignIn, plugin.PluginInstall)
+		m.Post("/plugin/uninstall", reqSignIn, bindIgnErr(form.PluginUninstall{}), plugin.PluginUninstall)
 
 	}, session.Sessioner(session.Options{
 		Provider:       conf.Session.Provider,

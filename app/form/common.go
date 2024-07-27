@@ -11,3 +11,7 @@ type SignIn struct {
 type PluginInstall struct {
 	Path string `binding:"Required;MaxSize(254)"`
 }
+
+type PluginUninstall struct {
+	Path string `binding:"Required;MaxSize(254)"`
+}
