@@ -13,8 +13,8 @@ import (
 	"github.com/pkg/errors"
 	"gopkg.in/ini.v1"
 
-	"github.com/midoks/dztasks/internal/tools"
 	"github.com/midoks/dztasks/embed"
+	"github.com/midoks/dztasks/internal/tools"
 )
 
 // File is the configuration object.
@@ -44,12 +44,11 @@ func autoMakeCustomConf(customConf string) error {
 	cfg.Section("admin").Key("pass").SetValue("admin")
 
 	cfg.Section("plugins").Key("path").SetValue("plugins")
-	
 
 	cfg.Section("security").Key("install_lock").SetValue("true")
 	secretKey := tools.RandString(15)
 	cfg.Section("security").Key("secret_key").SetValue(secretKey)
-	
+
 	os.MkdirAll(filepath.Dir(customConf), os.ModePerm)
 	if err := cfg.SaveTo(customConf); err != nil {
 		return err
@@ -58,9 +57,7 @@ func autoMakeCustomConf(customConf string) error {
 	return nil
 }
 
-
 func Init(customConf string) error {
-	
 
 	data, _ := embed.Conf.ReadFile("conf/app.conf")
 
@@ -83,7 +80,6 @@ func Init(customConf string) error {
 	}
 	CustomConf = customConf
 
-
 	if tools.IsFile(customConf) {
 		if err = File.Append(customConf); err != nil {
 			return errors.Wrapf(err, "append %q", customConf)
@@ -92,7 +88,6 @@ func Init(customConf string) error {
 		log.Println("Custom config ", customConf, " not found. Ignore this warning if you're running for the first time")
 	}
 
-	
 	File.NameMapper = ini.TitleUnderscore
 
 	if err = File.Section(ini.DefaultSection).MapTo(&App); err != nil {
@@ -160,7 +155,6 @@ func Init(customConf string) error {
 	if err = File.Section("plugins").MapTo(&Plugins); err != nil {
 		return errors.Wrap(err, "mapping [plugins] section")
 	}
-
 
 	// *****************************
 	// ----- Security settings -----

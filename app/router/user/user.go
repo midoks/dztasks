@@ -15,7 +15,6 @@ const (
 	LOGIN = "/user/login"
 )
 
-
 func Login(c *context.Context) {
 	isLogged := c.Session.Get("login")
 	if isLogged == true {
@@ -29,7 +28,7 @@ func LoginPost(c *context.Context, f form.SignIn) {
 	// fmt.Println("api",f.Username, f.Password)
 	// fmt.Println("conf",conf.Admin.User, conf.Admin.Pass)
 
-	if (conf.Admin.User == f.Username && conf.Admin.Pass == f.Password){
+	if conf.Admin.User == f.Username && conf.Admin.Pass == f.Password {
 		name := conf.Admin.User
 		pass := conf.Admin.Pass
 		if f.Remember {
@@ -49,7 +48,7 @@ func LoginPost(c *context.Context, f form.SignIn) {
 		c.Ok("登录成功")
 	} else {
 		c.Fail("认证失败")
-	}	
+	}
 }
 
 func SignOut(c *context.Context) {

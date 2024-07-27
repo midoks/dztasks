@@ -1,16 +1,15 @@
 package app
 
-
 import (
 	"fmt"
 	"io"
 	// "io/fs"
 	// "io/ioutil"
-	"path"
-	"strings"
 	"bytes"
 	"net/http"
+	"path"
 	"path/filepath"
+	"strings"
 
 	"gopkg.in/macaron.v1"
 
@@ -22,13 +21,13 @@ import (
 	"github.com/go-macaron/session"
 
 	"github.com/midoks/dztasks/app/context"
-	"github.com/midoks/dztasks/app/router"
-	"github.com/midoks/dztasks/app/router/user"
-	"github.com/midoks/dztasks/app/router/plugin"
 	"github.com/midoks/dztasks/app/form"
+	"github.com/midoks/dztasks/app/router"
+	"github.com/midoks/dztasks/app/router/plugin"
+	"github.com/midoks/dztasks/app/router/user"
 	"github.com/midoks/dztasks/app/template"
-	"github.com/midoks/dztasks/internal/conf"
 	"github.com/midoks/dztasks/embed"
+	"github.com/midoks/dztasks/internal/conf"
 )
 
 type fileSystem struct {
@@ -63,7 +62,7 @@ func newTemplateFileSystem(dir, customDir string) macaron.TemplateFileSystem {
 	}
 	allfn := embed.TemplatesAllNames("templates")
 
-	for _,name := range allfn {
+	for _, name := range allfn {
 		ext := path.Ext(name)
 		data, _ := embed.Templates.ReadFile(name)
 
@@ -175,7 +174,6 @@ func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 	}), context.Contexter())
 	return m
 }
-
 
 func Start(port int) {
 	boot := bootstrapMacaron()

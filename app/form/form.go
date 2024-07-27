@@ -5,7 +5,7 @@ import (
 	"reflect"
 	// "strings"
 	"github.com/go-macaron/binding"
-	
+
 	"github.com/midoks/dztasks/internal/tools"
 )
 

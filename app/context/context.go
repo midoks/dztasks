@@ -15,7 +15,6 @@ import (
 	"github.com/go-macaron/cache"
 	"github.com/go-macaron/csrf"
 	"github.com/go-macaron/session"
-	
 
 	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/app/template"
@@ -44,8 +43,6 @@ func Toggle(options *ToggleOptions) macaron.Handler {
 	}
 }
 
-
-
 // Context represents context of a request.
 type Context struct {
 	*macaron.Context
@@ -60,7 +57,7 @@ type Context struct {
 	IsTokenAuth bool
 }
 
-//json api common data
+// json api common data
 type JsonData struct {
 	Code int64       `json:"code"`
 	Msg  string      `json:"msg"`
@@ -141,18 +138,18 @@ func (c *Context) renderJson(data interface{}) {
 	c.JSON(http.StatusOK, data)
 }
 
-//JSON Success Message
+// JSON Success Message
 func (c *Context) ReturnJson(code int64, msg string, data interface{}) {
-	c.renderJson(JsonData{Code: code, Msg: msg, Data:data})
+	c.renderJson(JsonData{Code: code, Msg: msg, Data: data})
 }
 
 func (c *Context) Ok(msg string) {
-	c.ReturnJson(1,msg,"")
+	c.ReturnJson(1, msg, "")
 }
 
-//JSON Fail Message
+// JSON Fail Message
 func (c *Context) Fail(msg string) {
-	c.ReturnJson(-1,msg,"")
+	c.ReturnJson(-1, msg, "")
 }
 
 // NotFound renders the 404 page.

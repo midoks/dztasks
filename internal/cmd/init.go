@@ -67,7 +67,6 @@ package cmd
 // 	conf.Init(customConf)
 // 	logs.Init()
 
-
 // 	return nil
 // }
 

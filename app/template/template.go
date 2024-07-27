@@ -116,4 +116,3 @@ func NewLine2br(raw string) string {
 func EscapePound(str string) string {
 	return strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F").Replace(str)
 }
-

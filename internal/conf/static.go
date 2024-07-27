@@ -35,11 +35,11 @@ var (
 
 	// log
 	Admin struct {
-		User   string
+		User string
 		Pass string
 	}
 
-	Plugins struct{
+	Plugins struct {
 		Path string
 	}
 
@@ -108,7 +108,6 @@ var (
 		CSRFCookieName string `ini:"csrf_cookie_name"`
 	}
 
-
 	// Security settings
 	Security struct {
 		InstallLock             bool
@@ -120,5 +119,4 @@ var (
 		EnableLoginStatusCookie bool
 		LoginStatusCookieName   string
 	}
-
 )

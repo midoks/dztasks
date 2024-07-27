@@ -10,8 +10,8 @@ import (
 
 	"github.com/urfave/cli"
 
-	"github.com/midoks/dztasks/internal/conf"
 	"github.com/midoks/dztasks/app"
+	"github.com/midoks/dztasks/internal/conf"
 )
 
 var Web = cli.Command{
@@ -23,7 +23,6 @@ var Web = cli.Command{
 		stringFlag("config, c", "", "custom configuration file path"),
 	},
 }
-
 
 func runWeb(c *cli.Context) error {
 	conf.Init("")
