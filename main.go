@@ -7,9 +7,8 @@ import (
 
 	"github.com/urfave/cli"
 
-	"github.com/midoks/dztasks/internal/cmd"	
+	"github.com/midoks/dztasks/internal/cmd"
 )
-
 
 const Version = "0.0.3"
 const AppName = "dztasks"

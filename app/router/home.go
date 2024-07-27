@@ -9,5 +9,6 @@ const (
 )
 
 func Home(c *context.Context) {
+	c.Data["PageIsHome"] = true
 	c.Success(HOME)
 }
