@@ -9,8 +9,8 @@ import (
 	// "net/url"
 
 	"github.com/midoks/dztasks/app/context"
+	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/internal/conf"
-	// "github.com/midoks/dztasks/app/form"
 
 	// "github.com/midoks/dztasks/internal/log"
 	"github.com/midoks/dztasks/internal/tools"
@@ -33,7 +33,6 @@ type Plugin struct {
 	Name   string `json:"name"`
 	Ps     string `json:"ps"`
 	Author string `json:"author"`
-	Sign   string `json:"sign"`
 	Path   string `json:"path"`
 }
 
@@ -54,25 +53,32 @@ func PluginList(c *context.Context) {
 		}
 
 		content, err := ioutil.ReadFile(plugin_info)
-		fmt.Println(err)
 		if err != nil {
 			continue
 		}
 
 		var p Plugin
 		err = json.Unmarshal(content, &p)
-		fmt.Println(err)
-		fmt.Println(p)
+		if err != nil {
+			continue
+		}
+
+		p.Path = file.Name()
 		result = append(result, p)
 	}
-
-	// fmt.Println(len(result))
 	c.ReturnLayuiJson(0, "ok", len(result), result)
 }
 
 // 插件安装
-func PluginInstall(c *context.Context) {
+func PluginInstall(c *context.Context, args form.PluginInstall) {
+	pathdir := conf.Plugins.Path
+	plugin_dir := fmt.Sprintf("%s/%s", pathdir, args.Path)
+	plugin_install := fmt.Sprintf("%s/install.lock", plugin_dir)
 
+	if !tools.IsExist(plugin_install) {
+		tools.WriteFile(plugin_install, "ok")
+	}
+	c.Ok("安装成功")
 }
 
 // 插件卸载

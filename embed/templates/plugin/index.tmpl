@@ -42,12 +42,42 @@ table.on('tool(list)', function(obj){
 
 
 function pluginInstall(obj){
-    console.log(obj);
+    // console.log(obj);
+    var data = obj['data'];
+    addVersion(data['name'], data['ps'], data['path']);
 }
 
 function pluginUninstall(obj){
     console.log(obj);
 }
+
+function addVersion(name,ps,path){
+    // console.log(name,ps,path);
+    layer.open({
+        type:1,
+        title:"插件["+name+"]安装",
+        btn: ['安装','关闭'],
+        area: '350px',
+        content: "<div style='padding:20px;'>\
+            <div style='text-align:center;'>"+ps+"</div>\
+        </div>",
+        yes:function(){
+            var loadT = layer.msg('正在添加到安装器...', { icon: 16, time: 0, shade: [0.3, '#000'] });
+            $.post("/plugin/install", {"path":path}, function(rdata) {
+                layer.closeAll();
+                //layer.msg(rdata.msg, { icon: rdata.status ? 2 : 1 });
+                //location.reload();
+
+                showMsg(rdata.msg, function(){
+                    if(rdata.code > -1){
+                        table.reload('list');
+                    }
+                },{icon: rdata.code > -1 ? 1 : 2,shift:rdata.code>-1 ? 0 : 6});
+            },'json');
+        }
+    });
+}
+
 
 ///
 });
@@ -58,7 +88,7 @@ function pluginUninstall(obj){
 
     <a class="layui-btn layui-btn-xs">设置</a>
     <a class="layui-btn layui-btn-xs" lay-event='install'>安装</a>
-    <a class="layui-btn layui-btn-xs">卸载</a>
+    <a class="layui-btn layui-btn-xs" lay-event='uninstall'>卸载</a>
 
 </script>
 {[template "/base/footer" .]}

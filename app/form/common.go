@@ -7,3 +7,7 @@ type SignIn struct {
 	Password string `binding:"Required;MaxSize(255)"`
 	Remember bool
 }
+
+type PluginInstall struct {
+	Path string `binding:"Required;MaxSize(254)"`
+}
