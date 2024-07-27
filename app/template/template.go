@@ -7,8 +7,6 @@ package template
 import (
 	"fmt"
 	"html/template"
-	"mime"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
@@ -78,11 +76,6 @@ func FuncMap() []template.FuncMap {
 			"DateFmtShort": func(t time.Time) string {
 				// fmt.Println(t)
 				return t.Format("Jan 02, 2006")
-			},
-
-			"FilenameIsImage": func(filename string) bool {
-				mimeType := mime.TypeByExtension(filepath.Ext(filename))
-				return strings.HasPrefix(mimeType, "image/")
 			},
 		}}
 	})

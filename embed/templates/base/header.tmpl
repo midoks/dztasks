@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="/static/layuiadmin/style/template.css?v={[BuildCommit]}" media="all">
     <link rel="stylesheet" href="/static/layuiadmin/style/admin.css?v={[BuildCommit]}" media="all">
     <link rel="stylesheet" href="/static/common/css/common.css?v={[BuildCommit]}" media="all">
+    <script src="/static/layuiadmin/layui/layui.js?v={{BuildCommit}}"></script>
+    <script src="/static/common/js/common.js?v={[BuildCommit]}"></script>
 </head>
 
 <body class="layui-layout-body">
@@ -94,8 +96,8 @@
 
             <div class="layui-card layadmin-header" style="display: block; line-height: 40px;height: 40px;">
                 <div class="layui-breadcrumb" lay-filter="breadcrumb">
-                    <!-- <a lay-href="">主页</a> -->
-                    <a><cite>主页</cite></a>
+                    {[if .PageIsHome ]}<a><cite>主页</cite></a>{[end]}
+                    {[if .PageIsPlugin ]}<a><cite>插件管理</cite></a>{[end]}
                 </div>
             </div>
         </div>

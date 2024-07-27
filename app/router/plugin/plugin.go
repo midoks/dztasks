@@ -33,16 +33,11 @@ type Plugin struct {
 	Name   string `json:"name"`
 	Ps     string `json:"ps"`
 	Author string `json:"author"`
+	Sign   string `json:"sign"`
+	Path   string `json:"path"`
 }
 
-// json api common data
-type LayuiData struct {
-	Code  int64       `json:"code"`
-	Count int64       `json:"count"`
-	Msg   string      `json:"msg"`
-	Data  interface{} `json:"data,omitempty"`
-}
-
+// 插件列表
 func PluginList(c *context.Context) {
 
 	pathdir := conf.Plugins.Path
@@ -71,9 +66,16 @@ func PluginList(c *context.Context) {
 		result = append(result, p)
 	}
 
-	fmt.Println(len(result))
+	// fmt.Println(len(result))
+	c.ReturnLayuiJson(0, "ok", len(result), result)
+}
 
-	data := LayuiData{Code: 0, Msg: "ok", Count: 1, Data: result}
+// 插件安装
+func PluginInstall(c *context.Context) {
 
-	c.RenderJson(data)
+}
+
+// 插件卸载
+func PluginUninstall(c *context.Context) {
+
 }

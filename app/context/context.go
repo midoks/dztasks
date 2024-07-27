@@ -64,6 +64,14 @@ type JsonData struct {
 	Data interface{} `json:"data,omitempty"`
 }
 
+// json layui common data
+type LayuiData struct {
+	Code  int64       `json:"code"`
+	Count int         `json:"count"`
+	Msg   string      `json:"msg"`
+	Data  interface{} `json:"data,omitempty"`
+}
+
 // RawTitle sets the "Title" field in template data.
 func (c *Context) RawTitle(title string) {
 	c.Data["Title"] = title
@@ -141,6 +149,11 @@ func (c *Context) RenderJson(data interface{}) {
 // JSON Success Message
 func (c *Context) ReturnJson(code int64, msg string, data interface{}) {
 	c.RenderJson(JsonData{Code: code, Msg: msg, Data: data})
+}
+
+// Layui JSON Success Message
+func (c *Context) ReturnLayuiJson(code int64, msg string, count int, data interface{}) {
+	c.RenderJson(LayuiData{Code: code, Msg: msg, Count: count, Data: data})
 }
 
 func (c *Context) Ok(msg string) {
