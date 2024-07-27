@@ -14,7 +14,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/editorconfig/editorconfig-core-go/v2"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/midoks/dztasks/internal/conf"
 )
@@ -84,15 +83,6 @@ func FuncMap() []template.FuncMap {
 			"FilenameIsImage": func(filename string) bool {
 				mimeType := mime.TypeByExtension(filepath.Ext(filename))
 				return strings.HasPrefix(mimeType, "image/")
-			},
-			"TabSizeClass": func(ec *editorconfig.Editorconfig, filename string) string {
-				if ec != nil {
-					def, err := ec.GetDefinitionForFilename(filename)
-					if err == nil && def.TabWidth > 0 {
-						return fmt.Sprintf("tab-size-%d", def.TabWidth)
-					}
-				}
-				return "tab-size-8"
 			},
 		}}
 	})

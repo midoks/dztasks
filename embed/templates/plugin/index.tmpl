@@ -1,4 +1,4 @@
-{{template "/base/header" .}}
+{[template "/base/header" .]}
 
 <div class="layui-fluid">
     <div class="layui-col-md12" style="padding: 5px;">
@@ -13,23 +13,23 @@
 <script src="/static/layuiadmin/layui/layui.js?v={{BuildCommit}}"></script>
 <script type="text/javascript">
 
-layui.config({base: '{__STATIC__}/admin/layuiadmin/'}).use(['table','jquery'], function(){
+layui.config({base: '{__STATIC__}/admin/layuiadmin/'}).use(['table','jquery','laytpl'], function(){
 ///
 var admin = layui.admin
 ,$ = layui.$
 ,form = layui.form
 ,table = layui.table;
 
+
 table.render({
     elem: '#list',
     url: '/plugin/list',
-    defaultToolbar: [],
     title: '数据表',
     cols: [[
         {field:'name', title:'插件名称',width:130},
         {field:'ps', title:'说明'},
-        {field:'status', title:'状态',width:170,},
-        {title:'操作', toolbar: '#cmdTpl', width:70, fixed: 'right'}
+        {field:'status', title:'状态',width:80, toolbar:"#statusTpl"},
+        {title:'操作', toolbar: '#cmdTpl', width:170, fixed: 'right'}
      ]],
     page: true
 });
@@ -37,4 +37,23 @@ table.render({
 ///
 });
 </script>
-{{template "/base/footer" .}}
+
+<script type="text/html" id="statusTpl">
+    {{#  if(d.status == 0){ }}
+    <span class="layui-btn layui-btn-xs layui-btn-normal">正常</span>
+    {{# } else if (d.status == 1) { }}
+    <span class="layui-btn layui-btn-xs layui-btn-danger">锁定</span>
+    {{# } else { }}
+    <span class="layui-btn layui-btn-xs layui-btn-danger">未知</span>
+    {{# } }}
+</script>
+
+
+<script type="text/html" id="cmdTpl">
+
+    <a class="layui-btn layui-btn-xs">设置</a>
+    <a class="layui-btn layui-btn-xs">安装</a>
+    <a class="layui-btn layui-btn-xs">卸载</a>
+
+</script>
+{[template "/base/footer" .]}

@@ -30,9 +30,17 @@ type PluginTask struct {
 }
 
 type Plugin struct {
-	Name   string
-	Ps     string
-	Author string
+	Name   string `json:"name"`
+	Ps     string `json:"ps"`
+	Author string `json:"author"`
+}
+
+// json api common data
+type LayuiData struct {
+	Code  int64       `json:"code"`
+	Count int64       `json:"count"`
+	Msg   string      `json:"msg"`
+	Data  interface{} `json:"data,omitempty"`
 }
 
 func PluginList(c *context.Context) {
@@ -40,14 +48,12 @@ func PluginList(c *context.Context) {
 	pathdir := conf.Plugins.Path
 
 	files, _ := ioutil.ReadDir(pathdir)
+	result := make([]Plugin, 0)
 
 	for _, file := range files {
-		fmt.Println(file.Name())
 
-		plugin_name := fmt.Sprintf("%s/%s", pathdir, file.Name())
-		plugin_info := fmt.Sprintf("%s/info.json", plugin_name)
-		fmt.Println(plugin_name, plugin_info)
-
+		plugin_dir := fmt.Sprintf("%s/%s", pathdir, file.Name())
+		plugin_info := fmt.Sprintf("%s/info.json", plugin_dir)
 		if !tools.IsExist(plugin_info) {
 			continue
 		}
@@ -58,11 +64,16 @@ func PluginList(c *context.Context) {
 			continue
 		}
 
-		var payload Plugin
-		err = json.Unmarshal(content, &payload)
+		var p Plugin
+		err = json.Unmarshal(content, &p)
 		fmt.Println(err)
-
+		fmt.Println(p)
+		result = append(result, p)
 	}
 
-	c.Ok("ok")
+	fmt.Println(len(result))
+
+	data := LayuiData{Code: 0, Msg: "ok", Count: 1, Data: result}
+
+	c.RenderJson(data)
 }

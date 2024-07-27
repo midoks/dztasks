@@ -4,7 +4,6 @@ go 1.22.2
 
 require (
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
-	github.com/editorconfig/editorconfig-core-go/v2 v2.6.2
 	github.com/go-macaron/binding v1.2.0
 	github.com/go-macaron/cache v0.0.0-20200329073519-53bb48172687
 	github.com/go-macaron/captcha v0.2.0
@@ -37,7 +36,6 @@ require (
 	github.com/smarty/assertions v1.15.0 // indirect
 	github.com/unknwon/com v1.0.1 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
-	golang.org/x/mod v0.17.0 // indirect
 	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

@@ -134,13 +134,13 @@ func (c *Context) Success(name string) {
 }
 
 // JSONSuccess responses JSON with status http.StatusOK.
-func (c *Context) renderJson(data interface{}) {
+func (c *Context) RenderJson(data interface{}) {
 	c.JSON(http.StatusOK, data)
 }
 
 // JSON Success Message
 func (c *Context) ReturnJson(code int64, msg string, data interface{}) {
-	c.renderJson(JsonData{Code: code, Msg: msg, Data: data})
+	c.RenderJson(JsonData{Code: code, Msg: msg, Data: data})
 }
 
 func (c *Context) Ok(msg string) {

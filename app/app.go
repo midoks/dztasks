@@ -112,6 +112,7 @@ func bootstrapMacaron() *macaron.Macaron {
 		Directory:         filepath.Join(conf.WorkDir(), "templates"),
 		AppendDirectories: []string{filepath.Join(conf.CustomDir(), "templates")},
 		Funcs:             template.FuncMap(),
+		Delims:            macaron.Delims{"{[", "]}"},
 		IndentJSON:        macaron.Env != macaron.PROD,
 	}
 	if !conf.Web.LoadAssetsFromDisk {

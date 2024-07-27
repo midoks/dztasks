@@ -6,11 +6,11 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="/static/layuiadmin/layui/css/modules/laydate/default/laydate.css?v={{BuildCommit}}">
-    <link rel="stylesheet" href="/static/layuiadmin/layui/css/layui.css?v={{BuildCommit}}" media="all">
-    <link rel="stylesheet" href="/static/layuiadmin/style/template.css?v={{BuildCommit}}" media="all">
-    <link rel="stylesheet" href="/static/layuiadmin/style/admin.css?v={{BuildCommit}}" media="all">
-    <link rel="stylesheet" href="/static/common/css/common.css?v={{BuildCommit}}" media="all">
+    <link rel="stylesheet" href="/static/layuiadmin/layui/css/modules/laydate/default/laydate.css?v={[BuildCommit]}">
+    <link rel="stylesheet" href="/static/layuiadmin/layui/css/layui.css?v={[BuildCommit]}" media="all">
+    <link rel="stylesheet" href="/static/layuiadmin/style/template.css?v={[BuildCommit]}" media="all">
+    <link rel="stylesheet" href="/static/layuiadmin/style/admin.css?v={[BuildCommit]}" media="all">
+    <link rel="stylesheet" href="/static/common/css/common.css?v={[BuildCommit]}" media="all">
 </head>
 
 <body class="layui-layout-body">
@@ -70,14 +70,14 @@
 
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
 
-                	<li data-name="home" class="layui-nav-item layui-nav-itemed {{if .PageIsHome }}layui-this{{end}}">
+                	<li data-name="home" class="layui-nav-item layui-nav-itemed {[if .PageIsHome ]}layui-this{[end]}">
                         <a href="/" lay-tips="控制台" lay-direction="2" >
                             <i class="layui-icon layui-icon-home"></i>
                             <cite>控制台</cite>
                         </a>
                     </li>
 
-                    <li data-name="plugin" class="layui-nav-item layui-nav-itemed {{if .PageIsPlugin }}layui-this{{end}}">
+                    <li data-name="plugin" class="layui-nav-item layui-nav-itemed {[if .PageIsPlugin ]}layui-this{[end]}">
                         <a href="/plugin" lay-tips="插件管理" lay-direction="2">
                             <i class="layui-icon layui-icon-release"></i>
                             <cite>插件管理</cite>
