@@ -10,6 +10,7 @@ ext:
 - go
 - js
 - tmpl
+- json
 enablerun: true
 action:
   before:

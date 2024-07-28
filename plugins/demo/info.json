@@ -1,4 +1,16 @@
 {
+	"cron": [
+		{
+			"name":"测试",
+			"expr":"@every 1s",
+			"cmd": "echo 'ss'"
+		},
+		{
+			"name":"测试222",
+			"expr":"@every 1s",
+			"cmd": "echo '111'"
+		}
+	],
 	"name": "采集小说项目",
 	"ps": "小说",
 	"author": "dztask"
