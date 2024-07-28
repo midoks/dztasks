@@ -3,14 +3,14 @@ package plugin
 import (
 	"fmt"
 	"os"
+	"time"
 
+	"github.com/midoks/dztasks/app/bgtask"
+	"github.com/midoks/dztasks/app/common"
 	"github.com/midoks/dztasks/app/context"
 	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/internal/conf"
 	"github.com/midoks/dztasks/internal/tools"
-
-	"github.com/midoks/dztasks/app/common"
-	// "github.com/midoks/dztasks/internal/log"
 )
 
 const (
@@ -36,6 +36,8 @@ func PluginInstall(c *context.Context, args form.PluginInstall) {
 	plugin_lock := common.GetPluginInstallLock(plugin_name)
 	if !tools.IsExist(plugin_lock) {
 		tools.WriteFile(plugin_lock, "ok")
+		time.Sleep(2)
+		bgtask.ResetTask()
 		c.Ok("安装成功")
 		return
 	}
@@ -49,6 +51,8 @@ func PluginUninstall(c *context.Context, args form.PluginUninstall) {
 	plugin_lock := common.GetPluginInstallLock(plugin_name)
 	if tools.IsExist(plugin_lock) {
 		os.Remove(plugin_lock)
+		time.Sleep(2)
+		bgtask.ResetTask()
 		c.Ok("卸载成功")
 		return
 	}

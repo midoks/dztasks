@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
+	// "strings"
 	"time"
 
 	"github.com/robfig/cron/v3"
@@ -16,29 +16,30 @@ import (
 
 var task *cron.Cron
 
-func execInput(input string) error {
+func execInput(bin string, args []string) ([]byte, error) {
 	// Remove the newline character.
-	input = strings.TrimSuffix(input, "\n")
+	// input = strings.TrimSuffix(input, "\n")
 
 	// Prepare the command to execute.
-	cmd := exec.Command(input)
+	cmd := exec.Command(bin, args...)
 
-	// Set the correct output device.
-	cmd.Stderr = os.Stderr
-	cmd.Stdout = os.Stdout
+	cmd.Env = append(os.Environ())
 
 	// fmt.Println(os.Stdout, os.Stderr)
 	// Execute the command and return the error.
-	return cmd.Run()
+	return cmd.CombinedOutput()
 }
 
-func InitTask() {
+func clearTask() {
+	cronE := task.Entries()
+	for _, cron := range cronE {
+		task.Remove(cron.ID)
+	}
+}
 
+func runPluginTask() {
 	plugin_dir := conf.Plugins.Path
 	result := common.PluginList(plugin_dir)
-
-	// fmt.Println(result)
-	task = cron.New()
 
 	for _, plugin := range result {
 
@@ -48,15 +49,26 @@ func InitTask() {
 
 		// fmt.Println(len(plugin.Cron))
 		for _, cron := range plugin.Cron {
-			// fmt.Println(cron)
 			task.AddFunc(cron.Expr, func() {
-				msg := fmt.Sprintf("正在执行项目[%s][%s][%s]...", plugin.Name, cron.Name, cron.Expr)
-				fmt.Println(msg)
-				log.Info(msg)
+				msg := ""
+				// msg := fmt.Sprintf("正在执行项目[%s][%s][%s]...", plugin.Name, cron.Name, cron.Expr)
+				// fmt.Println(msg)
+				// log.Info(msg)
 
 				run_start := time.Now()
 
-				execInput(cron.Cmd)
+				out, err := execInput(cron.Bin, cron.Args)
+
+				fmt.Println(string(out))
+
+				if err != nil {
+					fmt.Println(err)
+					cos := time.Since(run_start)
+					msg = fmt.Sprintf("[%s][%s][%s]执行失败,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
+					fmt.Println(msg)
+					log.Info(msg)
+					return
+				}
 
 				cos := time.Since(run_start)
 
@@ -66,6 +78,17 @@ func InitTask() {
 			})
 		}
 	}
-	// task.AddFunc("@every 5s", func() { fmt.Println("Every hour thirty") })
+
+}
+
+func InitTask() {
+	task = cron.New(cron.WithSeconds())
+	runPluginTask()
+	task.Start()
+}
+
+func ResetTask() {
+	clearTask()
+	runPluginTask()
 	task.Start()
 }

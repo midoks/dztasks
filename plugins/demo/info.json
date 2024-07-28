@@ -1,18 +1,21 @@
 {
 	"cron": [
 		{
-			"name":"测试",
-			"expr":"@every 5s",
-			"cmd": "echo '5s'"
-		},
-		{
-			"name":"测试222",
+			"name":"测试任务--shell",
 			"expr":"@every 10s",
-			"cmd": "echo '10s'"
+			"cmd": "echo '10s'",
+			"bin" : "echo",
+			"args" : [
+				"10s"
+			]
 		},
 		{
-			"name":"测试222--11",
+			"name":"测试任务--python",
 			"expr":"@every 3s",
+			"bin" : "python3",
+			"args" : [
+				"/Users/midoks/Documents/GitHub/dztasks/plugins/demo/scripts/python.py"
+			],
 			"cmd": "python3 /Users/midoks/Documents/GitHub/dztasks/plugins/demo/scripts/python.py"
 		}
 	],

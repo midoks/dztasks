@@ -9,9 +9,11 @@ import (
 )
 
 type PluginCron struct {
-	Name string `json:"name"`
-	Expr string `json:"expr"`
-	Cmd  string `json:"cmd"`
+	Name string   `json:"name"`
+	Expr string   `json:"expr"`
+	Cmd  string   `json:"cmd"`
+	Bin  string   `json:"bin"`
+	Args []string `json:"args"`
 }
 
 type Plugin struct {
@@ -48,6 +50,7 @@ func PluginList(plugin_dir string) []Plugin {
 		var p Plugin
 		err = json.Unmarshal(content, &p)
 		if err != nil {
+			fmt.Println("err:", err)
 			continue
 		}
 		p.Path = file.Name()
