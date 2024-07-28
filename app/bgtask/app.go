@@ -40,6 +40,11 @@ func InitTask() {
 	task = cron.New()
 
 	for _, plugin := range result {
+
+		if !plugin.Installed {
+			continue
+		}
+
 		// fmt.Println(len(plugin.Cron))
 		for _, cron := range plugin.Cron {
 			// fmt.Println(cron)
