@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/robfig/cron/v3"
 
@@ -53,9 +54,13 @@ func InitTask() {
 				fmt.Println(msg)
 				log.Info(msg)
 
+				run_start := time.Now()
+
 				execInput(cron.Cmd)
 
-				msg = fmt.Sprintf("[%s][%s][%s]执行结束", plugin.Name, cron.Name, cron.Expr)
+				cos := time.Since(run_start)
+
+				msg = fmt.Sprintf("[%s][%s][%s]执行结束,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
 				fmt.Println(msg)
 				log.Info(msg)
 			})
