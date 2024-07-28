@@ -27,7 +27,7 @@ func execInput(input string) error {
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 
-	fmt.Println(os.Stdout, os.Stderr)
+	// fmt.Println(os.Stdout, os.Stderr)
 	// Execute the command and return the error.
 	return cmd.Run()
 }
