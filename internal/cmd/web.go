@@ -12,6 +12,7 @@ import (
 
 	"github.com/midoks/dztasks/app"
 	"github.com/midoks/dztasks/internal/conf"
+	"github.com/midoks/dztasks/internal/log"
 )
 
 var Web = cli.Command{
@@ -25,7 +26,9 @@ var Web = cli.Command{
 }
 
 func runWeb(c *cli.Context) error {
+
 	conf.Init("")
+	log.Init()
 
 	app.Start(9011)
 	return nil

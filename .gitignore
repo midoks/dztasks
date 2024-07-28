@@ -26,3 +26,4 @@ dztasks
 /custom
 /data
 *.lock
+/logs
