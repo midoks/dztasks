@@ -8,14 +8,15 @@ import (
 	"github.com/urfave/cli"
 
 	"github.com/midoks/dztasks/internal/cmd"
+	"github.com/midoks/dztasks/internal/conf"
 )
 
 const Version = "0.0.3"
 const AppName = "dztasks"
 
 func init() {
-	// conf.App.Version = Version
-	// conf.App.Name = AppName
+	conf.App.Version = Version
+	conf.App.Name = AppName
 }
 
 func main() {
