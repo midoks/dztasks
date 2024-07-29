@@ -20,7 +20,6 @@ import (
 	"github.com/go-macaron/gzip"
 	"github.com/go-macaron/session"
 
-	"github.com/midoks/dztasks/app/bgtask"
 	"github.com/midoks/dztasks/app/context"
 	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/app/router"
@@ -180,9 +179,6 @@ func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 }
 
 func Start(port int) {
-
-	bgtask.InitTask()
-
 	boot := bootstrapMacaron()
 	boot = bootstrapRouter(boot)
 	boot.Run(port)

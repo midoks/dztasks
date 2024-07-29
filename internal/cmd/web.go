@@ -11,6 +11,8 @@ import (
 	"github.com/urfave/cli"
 
 	"github.com/midoks/dztasks/app"
+	"github.com/midoks/dztasks/app/bgtask"
+	"github.com/midoks/dztasks/app/watch"
 	"github.com/midoks/dztasks/internal/conf"
 	"github.com/midoks/dztasks/internal/log"
 )
@@ -29,7 +31,9 @@ func runWeb(c *cli.Context) error {
 
 	conf.Init("")
 	log.Init()
+	go watch.InitWatch(conf.Plugins.Path)
+	bgtask.InitTask()
 
-	app.Start(9011)
+	app.Start(conf.Web.HttpPort)
 	return nil
 }

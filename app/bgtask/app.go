@@ -57,15 +57,14 @@ func runPluginTask() {
 
 				run_start := time.Now()
 
-				out, err := execInput(cron.Bin, cron.Args)
-
-				fmt.Println(string(out))
+				_, err := execInput(cron.Bin, cron.Args)
+				// fmt.Println(string(out))
 
 				if err != nil {
-					fmt.Println(err)
+					// fmt.Println(err)
 					cos := time.Since(run_start)
 					msg = fmt.Sprintf("[%s][%s][%s]执行失败,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
-					fmt.Println(msg)
+					// fmt.Println(msg)
 					log.Info(msg)
 					return
 				}
@@ -73,7 +72,7 @@ func runPluginTask() {
 				cos := time.Since(run_start)
 
 				msg = fmt.Sprintf("[%s][%s][%s]执行结束,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
-				fmt.Println(msg)
+				// fmt.Println(msg)
 				log.Info(msg)
 			})
 		}
@@ -88,6 +87,7 @@ func InitTask() {
 }
 
 func ResetTask() {
+	log.Info("重置任务")
 	clearTask()
 	runPluginTask()
 	task.Start()
