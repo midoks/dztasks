@@ -45,10 +45,6 @@ func autoMakeCustomConf(customConf string) error {
 
 	cfg.Section("plugins").Key("path").SetValue("plugins")
 
-	cfg.Section("security").Key("install_lock").SetValue("true")
-	secretKey := tools.RandString(15)
-	cfg.Section("security").Key("secret_key").SetValue(secretKey)
-
 	os.MkdirAll(filepath.Dir(customConf), os.ModePerm)
 	if err := cfg.SaveTo(customConf); err != nil {
 		return err
