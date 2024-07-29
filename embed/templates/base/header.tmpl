@@ -90,7 +90,13 @@
 
                     {[range $_I,$_M:=.PluginMenu]}
                     {[range .Menu]}
-                    <li data-name="{[$_M.Path]}" class="layui-nav-item layui-nav-itemed">
+                    <li data-name="{[$_M.Path]}" class="layui-nav-item layui-nav-itemed 
+                    {[if eq $_M.Path $.PageIsPluginMenu_Name ]}
+                    {[if eq .Tag $.PageIsPluginMenu_Tag ]}
+                    layui-this
+                    {[end]}
+                    {[end]}
+                    ">
                         <a href="/plugin/menu?name={[$_M.Path]}&tag={[.Tag]}" lay-tips="{[.Title]}" lay-direction="2">
                             <i class="layui-icon {[$_M.Icon]}"></i><cite>[插件]{[$_M.Name]}-{[.Title]}</cite>
                         </a>
@@ -115,8 +121,8 @@
                     {[if eq .Path $.PageIsPluginMenu_Name ]}
                         {[range .Menu]}
                             {[if eq .Tag $.PageIsPluginMenu_Tag ]}
-                            <a><cite>[插件]{[$_M.Name]}</cite></a>
-                            <a><cite>{[.Title]}</cite></a>
+                    <a><cite>[插件]{[$_M.Name]}</cite></a>
+                    <a><cite>{[.Title]}</cite></a>
                             {[end]}
                         {[end]}
                     {[end]}
