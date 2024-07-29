@@ -16,13 +16,21 @@ type PluginCron struct {
 	Args []string `json:"args"`
 }
 
+type PluginMenu struct {
+	Title string `json:"title"`
+	Path  string `json:"path"`
+	Tag   string `json:"tag"`
+}
+
 type Plugin struct {
 	Name      string       `json:"name"`
 	Ps        string       `json:"ps"`
 	Author    string       `json:"author"`
 	Path      string       `json:"path"`
+	Icon      string       `json:"icon"`
 	Installed bool         `json:"installed"`
 	Cron      []PluginCron `json:"cron"`
+	Menu      []PluginMenu `json:"menu"`
 }
 
 func GetPluginInstallLock(plugin_name string) string {

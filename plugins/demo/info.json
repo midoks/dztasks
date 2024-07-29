@@ -19,7 +19,15 @@
 			"cmd": "python3 /Users/midoks/Documents/GitHub/dztasks/plugins/demo/scripts/python.py"
 		}
 	],
-	"name": "采集小说项目",
+	"menu": [
+		{
+			"tag":"list",
+			"title":"列表",
+			"path":"html/index.html"
+		}
+	],
+	"icon":"layui-icon-template-1",
+	"name": "采集小说",
 	"ps": "小说",
 	"author": "dztask"
 }

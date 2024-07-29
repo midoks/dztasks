@@ -86,6 +86,17 @@
                             <cite>插件管理</cite>
                         </a>
                     </li>
+
+
+                    {[range $_I,$_M:=.PluginMenu]}
+                    {[range .Menu]}
+                    <li data-name="{[$_M.Path]}" class="layui-nav-item layui-nav-itemed">
+                        <a href="/plugin/menu?name={[$_M.Path]}&tag={[.Tag]}" lay-tips="{[.Title]}" lay-direction="2">
+                            <i class="layui-icon {[$_M.Icon]}"></i><cite>[插件]{[$_M.Name]}-{[.Title]}</cite>
+                        </a>
+                    </li>
+                    {[end]}
+                    {[end]}
                 </ul>
             </div>
         </div>
@@ -99,6 +110,17 @@
                 <div class="layui-breadcrumb" lay-filter="breadcrumb">
                     {[if .PageIsHome ]}<a><cite>主页</cite></a>{[end]}
                     {[if .PageIsPlugin ]}<a><cite>插件管理</cite></a>{[end]}
+
+                    {[range $_I,$_M:=.PluginMenu]}
+                    {[if eq .Path $.PageIsPluginMenu_Name ]}
+                        {[range .Menu]}
+                            {[if eq .Tag $.PageIsPluginMenu_Tag ]}
+                            <a><cite>[插件]{[$_M.Name]}</cite></a>
+                            <a><cite>{[.Title]}</cite></a>
+                            {[end]}
+                        {[end]}
+                    {[end]}
+                    {[end]}
                 </div>
             </div>
         </div>

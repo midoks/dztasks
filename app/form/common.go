@@ -8,10 +8,15 @@ type SignIn struct {
 	Remember bool
 }
 
-type PluginInstall struct {
+type ArgsPluginInstall struct {
 	Path string `binding:"Required;MaxSize(254)"`
 }
 
-type PluginUninstall struct {
+type ArgsPluginUninstall struct {
 	Path string `binding:"Required;MaxSize(254)"`
+}
+
+type ArgsPluginMenu struct {
+	Name string `binding:"Required;MaxSize(254)"`
+	Tag  string `binding:"Required;MaxSize(254)"`
 }

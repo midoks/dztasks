@@ -16,6 +16,7 @@ import (
 	"github.com/go-macaron/csrf"
 	"github.com/go-macaron/session"
 
+	"github.com/midoks/dztasks/app/common"
 	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/app/template"
 	"github.com/midoks/dztasks/internal/conf"
@@ -237,6 +238,8 @@ func Contexter() macaron.Handler {
 			log.Debugf("Session ID: %s", sess.ID())
 			log.Debugf("CSRF Token: %s", c.Data["CSRFToken"])
 		}
+		plugin_dir := conf.Plugins.Path
+		c.Data["PluginMenu"] = common.PluginList(plugin_dir)
 
 		// avoid iframe use by other.
 		c.Header().Set("X-Content-Type-Options", "nosniff")

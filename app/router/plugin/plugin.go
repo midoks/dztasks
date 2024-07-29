@@ -15,11 +15,24 @@ import (
 
 const (
 	PLUGIN_HOME = "/plugin/index"
+	PLUGIN_MENU = "/plugin/menu"
 )
 
 func PluginHome(c *context.Context) {
 	c.Data["PageIsPlugin"] = true
 	c.Success(PLUGIN_HOME)
+}
+
+func PluginMenu(c *context.Context, args form.ArgsPluginMenu) {
+	c.Data["PageIsPluginMenu"] = true
+	c.Data["PageIsPluginMenu_Name"] = args.Name
+	c.Data["PageIsPluginMenu_Tag"] = args.Tag
+
+	fmt.Println(args.Name, args.Tag)
+	plugin_dir := conf.Plugins.Path
+	list := common.PluginList(plugin_dir)
+	fmt.Println(list)
+	c.Success(PLUGIN_MENU)
 }
 
 // 插件列表
@@ -30,7 +43,7 @@ func PluginList(c *context.Context) {
 }
 
 // 插件安装
-func PluginInstall(c *context.Context, args form.PluginInstall) {
+func PluginInstall(c *context.Context, args form.ArgsPluginInstall) {
 	plugin_dir := conf.Plugins.Path
 	plugin_name := fmt.Sprintf("%s/%s", plugin_dir, args.Path)
 	plugin_lock := common.GetPluginInstallLock(plugin_name)
@@ -45,7 +58,7 @@ func PluginInstall(c *context.Context, args form.PluginInstall) {
 }
 
 // 插件卸载
-func PluginUninstall(c *context.Context, args form.PluginUninstall) {
+func PluginUninstall(c *context.Context, args form.ArgsPluginUninstall) {
 	plugin_dir := conf.Plugins.Path
 	plugin_name := fmt.Sprintf("%s/%s", plugin_dir, args.Path)
 	plugin_lock := common.GetPluginInstallLock(plugin_name)
