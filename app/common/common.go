@@ -63,6 +63,10 @@ func PluginList(plugin_dir string) []Plugin {
 		}
 		p.Path = file.Name()
 
+		if p.Icon == "" {
+			p.Icon = "layui-icon-tree"
+		}
+
 		plugin_lock := GetPluginInstallLock(plugin_name)
 		if tools.IsExist(plugin_lock) {
 			p.Installed = true
