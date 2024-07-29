@@ -152,6 +152,7 @@ func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 			m.Get("/logout", user.SignOut)
 		}, reqSignOut)
 		m.Get("/", reqSignIn, router.Home)
+		m.Get("/log", reqSignIn, router.Log)
 		m.Get("/plugin", reqSignIn, plugin.PluginHome)
 		m.Get("/plugin/list", reqSignIn, plugin.PluginList)
 		m.Post("/plugin/install", reqSignIn, bindIgnErr(form.PluginInstall{}), plugin.PluginInstall)
