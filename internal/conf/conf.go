@@ -40,8 +40,8 @@ func autoMakeCustomConf(customConf string) error {
 	cfg.Section("web").Key("http_port").SetValue("11011")
 	cfg.Section("session").Key("provider").SetValue("memory")
 
-	cfg.Section("admin").Key("user").SetValue("admin")
-	cfg.Section("admin").Key("pass").SetValue("admin")
+	cfg.Section("admin").Key("user").SetValue(tools.RandString(8))
+	cfg.Section("admin").Key("pass").SetValue(tools.RandString(10))
 
 	cfg.Section("plugins").Key("path").SetValue("plugins")
 
