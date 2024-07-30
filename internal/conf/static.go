@@ -40,7 +40,9 @@ var (
 	}
 
 	Plugins struct {
-		Path string
+		Path      string
+		ShowError bool
+		ShowCmd   bool
 	}
 
 	// Cache settings

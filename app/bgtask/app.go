@@ -16,7 +16,7 @@ import (
 
 var task *cron.Cron
 
-func execInput(bin string, args []string) ([]byte, error) {
+func ExecInput(bin string, args []string) ([]byte, error) {
 	// Remove the newline character.
 	// input = strings.TrimSuffix(input, "\n")
 
@@ -57,7 +57,7 @@ func runPluginTask() {
 
 				run_start := time.Now()
 
-				_, err := execInput(cron.Bin, cron.Args)
+				_, err := ExecInput(cron.Bin, cron.Args)
 				// fmt.Println(string(out))
 
 				if err != nil {

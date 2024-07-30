@@ -20,15 +20,40 @@ var admin = layui.admin
 
 table.render({
     elem: '#list',
-    url: '/plugin/data?name=demo&a=list',
+    url: '/plugin/data?name=demo&action=list',
+    method:"POST",
+    request:{
+        pageName: 'page', // 页码的参数名称，默认：page
+        limitName: 'limit'
+    },
     title: '数据表',
     cols: [[
+        {field:'_id', title:'ID',width:250},
         {field:'time', title:'时间',width:130},
-        {field:'contentt', title:'内容'},
-        {title:'操作', toolbar: '#cmdTpl', width:70, fixed: 'right'}
+        {field:'content', title:'内容'},
+        {title:'操作', toolbar: '#cmdTpl', width:90, fixed: 'right'}
      ]],
     page: true
 });
+
+table.on('tool(list)', function(obj){
+    switch(obj.event){
+        case 'push':push(obj);break;
+    };
+});
+
+
+function push(obj){
+    layer.confirm('你真的要PUSH吗?', { closeBtn: 2, icon: 3 }, function() {
+        $.post('/plugin/data?name=demo&action=push', {'args':{'msg':obj.data.id}}, function(data) {
+            showMsg(data.msg,function(){
+                if (data.code>-1){
+                    location.reload();
+                }
+            },{icon:data.code>-1?1:2});
+        },'json');
+    });
+}
 
 ///
 });
@@ -36,5 +61,5 @@ table.render({
 
 
 <script type="text/html" id="cmdTpl">
-    <a class="layui-btn layui-btn-danger layui-btn-xs">PUSH</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="push">PUSH</a>
 </script>

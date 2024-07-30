@@ -44,6 +44,8 @@ func autoMakeCustomConf(customConf string) error {
 	cfg.Section("admin").Key("pass").SetValue(tools.RandString(10))
 
 	cfg.Section("plugins").Key("path").SetValue("plugins")
+	cfg.Section("plugins").Key("show_error").SetValue("true")
+	cfg.Section("plugins").Key("show_cmd").SetValue("true")
 
 	os.MkdirAll(filepath.Dir(customConf), os.ModePerm)
 	if err := cfg.SaveTo(customConf); err != nil {

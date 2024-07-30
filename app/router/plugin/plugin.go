@@ -1,9 +1,11 @@
 package plugin
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/midoks/dztasks/app/bgtask"
@@ -11,6 +13,7 @@ import (
 	"github.com/midoks/dztasks/app/context"
 	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/internal/conf"
+	"github.com/midoks/dztasks/internal/log"
 	"github.com/midoks/dztasks/internal/tools"
 )
 
@@ -83,14 +86,57 @@ func PluginUninstall(c *context.Context, args form.ArgsPluginUninstall) {
 	c.Ok("已经卸载成功")
 }
 
-// 插件卸载
-func GetPluginData(c *context.Context, args form.ArgsPluginData) {
-	fmt.Println(args)
-	c.Ok("ok")
-}
-
-// 插件卸载
+// 插件数据请求
 func PluginData(c *context.Context, args form.ArgsPluginData) {
-	fmt.Println(args)
-	c.Ok("ok")
+	plugin_dir := conf.Plugins.Path
+	list := common.PluginList(plugin_dir)
+
+	for _, plugin := range list {
+		if plugin.Path == args.Name {
+			default_script := fmt.Sprintf("%s/%s/index.py", plugin_dir, plugin.Path)
+
+			script_cmd := make([]string, 0)
+			script_cmd = append(script_cmd, default_script)
+			script_cmd = append(script_cmd, args.Action)
+
+			script_args := make(map[string]interface{})
+
+			if args.Page > -1 {
+				script_args["page"] = args.Page
+			}
+			if args.Limit > -1 {
+				script_args["limit"] = args.Limit
+			}
+			post_args, _ := json.Marshal(script_args)
+
+			//展示调用命令
+			if conf.Plugins.ShowCmd {
+				cmd_args := strings.Join(script_cmd, " ")
+				cmd := "python3 " + cmd_args + " '" + string(post_args) + "'"
+				log.Info(cmd)
+			}
+
+			script_cmd = append(script_cmd, string(post_args))
+			data, err := bgtask.ExecInput("python3", script_cmd)
+
+			if err != nil && conf.Plugins.ShowError {
+				log.Info(err.Error())
+			}
+
+			var plugin_data interface{}
+			err = json.Unmarshal(data, &plugin_data)
+
+			if err != nil && conf.Plugins.ShowError {
+				log.Info(err.Error())
+			}
+
+			if err == nil {
+				c.RenderJson(plugin_data)
+				return
+			}
+			c.Fail(err.Error())
+			return
+		}
+	}
+	c.Fail("异常")
 }

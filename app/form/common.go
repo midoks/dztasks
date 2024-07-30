@@ -24,4 +24,8 @@ type ArgsPluginMenu struct {
 type ArgsPluginData struct {
 	Name   string `binding:"Required;MaxSize(254)"`
 	Action string `binding:"Required;MaxSize(254)"`
+	Page   int64
+	Limit  int64
+	Extra  string
+	Args   map[string]interface{}
 }

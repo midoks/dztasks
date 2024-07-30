@@ -159,7 +159,7 @@ func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 		m.Post("/plugin/install", reqSignIn, bindIgnErr(form.ArgsPluginInstall{}), plugin.PluginInstall)
 		m.Post("/plugin/uninstall", reqSignIn, bindIgnErr(form.ArgsPluginUninstall{}), plugin.PluginUninstall)
 		m.Group("/plugin/data", func() {
-			m.Combo("").Get(bindIgnErr(form.ArgsPluginData{}), plugin.GetPluginData).Post(bindIgnErr(form.ArgsPluginData{}), plugin.PluginData)
+			m.Combo("").Get(bindIgnErr(form.ArgsPluginData{}), plugin.PluginData).Post(bindIgnErr(form.ArgsPluginData{}), plugin.PluginData)
 		}, reqSignIn)
 
 	}, session.Sessioner(session.Options{
