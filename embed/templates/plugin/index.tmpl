@@ -27,7 +27,7 @@ table.render({
     cols: [[
         {field:'name', title:'插件名称',width:130},
         {field:'ps', title:'说明'},
-        {title:'操作', toolbar: '#cmdTpl', width:120, fixed: 'right'}
+        {title:'操作', toolbar: '#cmdTpl', width:70, fixed: 'right'}
      ]],
     page: true
 });
@@ -105,12 +105,12 @@ function pluginUninstall(obj){
 
 <script type="text/html" id="cmdTpl">
 
-    {{# if (d.installed){ }}
-        <a class="layui-btn layui-btn-xs">设置</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event='uninstall'>卸载</a>
-    {{# } else{ }}
-        <a class="layui-btn layui-btn-xs" lay-event='install'>安装</a>
-    {{# } }}
+{{# if (d.installed){ }}
+    <!-- <a class="layui-btn layui-btn-xs">设置</a> -->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event='uninstall'>卸载</a>
+{{# } else{ }}
+    <a class="layui-btn layui-btn-xs" lay-event='install'>安装</a>
+{{# } }}
 
 </script>
 {[template "/base/footer" .]}

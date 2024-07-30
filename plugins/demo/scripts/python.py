@@ -12,7 +12,7 @@ def writeFile(filename, content, mode='w+'):
         return False
 
 
-writeFile("/tmp/t.txt", str(time.time())+"\n")
-print("hello")
+writeFile("/tmp/t.txt", str(time.time())+"ss\n")
+print("hellozzxxss")
 
 

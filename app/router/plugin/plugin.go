@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"time"
 
@@ -31,7 +32,22 @@ func PluginMenu(c *context.Context, args form.ArgsPluginMenu) {
 	fmt.Println(args.Name, args.Tag)
 	plugin_dir := conf.Plugins.Path
 	list := common.PluginList(plugin_dir)
-	fmt.Println(list)
+
+	c.Data["PluginContent"] = ""
+
+	for _, plugin := range list {
+		for _, menu := range plugin.Menu {
+			if plugin.Path == args.Name && menu.Tag == args.Tag {
+
+				abs_path := fmt.Sprintf("%s/%s/%s", conf.Plugins.Path, plugin.Path, menu.Path)
+				fmt.Println(abs_path)
+				content, err := ioutil.ReadFile(abs_path)
+				fmt.Println(content, err)
+				c.Data["PluginContent"] = string(content)
+			}
+		}
+	}
+
 	c.Success(PLUGIN_MENU)
 }
 
