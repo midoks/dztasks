@@ -82,8 +82,12 @@ def mongodbList():
 
 def mongodbPush():
     args = getArgs()
-    msg = args['msg']
-    return returnJson(0, 'ok:'+msg)
+    # print(args)
+    extra = args['extra']
+    return returnJson(0, 'ok:'+extra)
+
+def pythonError():
+    return returnJson(-1, '缺少命令')
 
 
 if __name__ == "__main__":
@@ -93,4 +97,4 @@ if __name__ == "__main__":
     elif func == 'push':
         print(mongodbPush())
     else:
-        print('error')
+        print(pythonError())

@@ -2,6 +2,56 @@
     <div class="layui-col-md12" style="padding: 5px;">
         <div class="layui-card">
             <div class="layui-card-body">
+                <div class="layui-form toolbar" style="margin-top: 10px;margin-bottom: 10px;">
+                <form class="layui-form" action="" id="list_form" onclick="return false;">
+                    <div class="layui-inline mr0" >
+                        <button class="layui-btn layui-btn-sm layui-btn-danger" onclick="Admin.batchDel('{:url('book/batchDel')}','list')">删除</button>
+                    </div>
+
+                    <div class="layui-inline mr0" >
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="Admin.open('新增','{:url('book/edit')}?id=0',1200,480)">添加</button>
+                    </div>
+
+                    <div class="layui-inline mr0">
+                        <div class="layui-input-inline mr0">
+                            <input name="times" class="layui-input date-icon h30" type="text" placeholder="请选择日期范围" autocomplete="off" lay-key="1">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline select100 mr0">
+                        <div class="layui-input-inline h30">
+                            <select name="zd">
+                                <option value="">条件</option>
+                                <option value="_id">ID</option>
+                                <option value="time">时间</option>
+                                <option value="content">内容</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline mr0">
+                        <div class="layui-input-inline mr0">
+                            <input type="text" name="key" placeholder="请输入关键字" autocomplete="off" class="layui-input h30" value="">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline select70 mr0">
+                        <div class="layui-input-inline h30">
+                            <select name="level">
+                                <option value="">推荐</option>
+                                <option value="1">是</option>
+                                <option value="0">否</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline mr0">
+                        <button class="layui-btn layui-btn-sm" id="table-sreach" data-id="list" lay-submit lay-filter="table-sreach"><i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                    </div>
+                </div>
+                </form>
+
                 <div id="list"></div>
             </div>
         </div>
@@ -31,7 +81,7 @@ table.render({
         {field:'_id', title:'ID',width:250},
         {field:'time', title:'时间',width:130},
         {field:'content', title:'内容'},
-        {title:'操作', toolbar: '#cmdTpl', width:90, fixed: 'right'}
+        {title:'操作', toolbar: '#cmdTpl', width:120, fixed: 'right'}
      ]],
     page: true
 });
@@ -44,8 +94,12 @@ table.on('tool(list)', function(obj){
 
 
 function push(obj){
+    console.log(obj);
     layer.confirm('你真的要PUSH吗?', { closeBtn: 2, icon: 3 }, function() {
-        $.post('/plugin/data?name=demo&action=push', {'args':{'msg':obj.data.id}}, function(data) {
+        $.post('/plugin/data?name=demo&action=push', {
+            'extra':obj.data._id,
+            'args':"测试"
+        }, function(data) {
             showMsg(data.msg,function(){
                 if (data.code>-1){
                     location.reload();
@@ -62,4 +116,6 @@ function push(obj){
 
 <script type="text/html" id="cmdTpl">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="push">PUSH</a>
+
+    <a class="layui-btn layui-btn-xs" title="编辑" onclick="Admin.open('【{{d.name}}】'+'编辑','{:url('book/edit')}?id={{d.id}}',1200,480)"><i class="layui-icon">&#xe642;</i></a>
 </script>

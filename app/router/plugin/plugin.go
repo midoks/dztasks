@@ -101,30 +101,42 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 
 			script_args := make(map[string]interface{})
 
-			if args.Page > -1 {
+			if args.Page > 0 {
 				script_args["page"] = args.Page
 			}
-			if args.Limit > -1 {
+			if args.Limit > 0 {
 				script_args["limit"] = args.Limit
 			}
+
+			if !strings.EqualFold(args.Extra, "") {
+				script_args["extra"] = args.Extra
+			}
+			if !strings.EqualFold(args.Args, "") {
+				script_args["args"] = args.Args
+			}
+
 			post_args, _ := json.Marshal(script_args)
+
+			// fmt.Println("args", args.Args)
+			// fmt.Println("extra", args.Extra)
 
 			//展示调用命令
 			if conf.Plugins.ShowCmd {
 				cmd_args := strings.Join(script_cmd, " ")
 				cmd := "python3 " + cmd_args + " '" + string(post_args) + "'"
+				// fmt.Println(cmd)
 				log.Info(cmd)
 			}
 
 			script_cmd = append(script_cmd, string(post_args))
-			data, err := bgtask.ExecInput("python3", script_cmd)
+			cmd_data, err := bgtask.ExecInput("python3", script_cmd)
 
 			if err != nil && conf.Plugins.ShowError {
 				log.Info(err.Error())
 			}
 
 			var plugin_data interface{}
-			err = json.Unmarshal(data, &plugin_data)
+			err = json.Unmarshal(cmd_data, &plugin_data)
 
 			if err != nil && conf.Plugins.ShowError {
 				log.Info(err.Error())

@@ -26,6 +26,6 @@ type ArgsPluginData struct {
 	Action string `binding:"Required;MaxSize(254)"`
 	Page   int64
 	Limit  int64
+	Args   string
 	Extra  string
-	Args   map[string]interface{}
 }

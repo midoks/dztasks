@@ -1,1 +1,3 @@
-html{background-color: #f2f2f2; color: #666;}
+.h30, .h30 .layui-input {
+    height: 32px;
+}
