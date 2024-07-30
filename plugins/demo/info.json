@@ -1,22 +1,26 @@
 {
 	"cron": [
 		{
-			"name":"测试任务--shell",
-			"expr":"@every 10s",
-			"cmd": "echo '10s'",
+			"name":"测试任务[shell]",
+			"expr":"@every 1min",
 			"bin" : "echo",
-			"args" : [
-				"10s"
-			]
+			"args" : ["shell测试"]
 		},
 		{
-			"name":"测试任务--python",
+			"name":"测试任务[python]",
 			"expr":"@every 3s",
 			"bin" : "python3",
 			"args" : [
 				"/Users/midoks/Documents/GitHub/dztasks/plugins/demo/scripts/python.py"
-			],
-			"cmd": "python3 /Users/midoks/Documents/GitHub/dztasks/plugins/demo/scripts/python.py"
+			]
+		},
+		{
+			"name":"测试任务[mongodb]",
+			"expr":"@every 10s",
+			"bin" : "python3",
+			"args" : [
+				"/Users/midoks/Documents/GitHub/dztasks/plugins/demo/scripts/python_mgdb.py"
+			]
 		}
 	],
 	"menu": [

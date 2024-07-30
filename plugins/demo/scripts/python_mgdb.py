@@ -1,18 +1,15 @@
 import time
+import pymongo
 
-def writeFile(filename, content, mode='w+'):
-    # 写文件内容
-    try:
-        fp = open(filename, mode)
-        fp.write(content)
-        fp.close()
-        return True
-    except Exception as e:
-        print(e)
-        return False
+mgdb_client = pymongo.MongoClient('127.0.0.1', 27017)
+db = mgdb_client["dztask"]
+collection = db["test"]
 
 
-writeFile("/tmp/t.txt", str(time.time())+"ss\n")
-print("hellozzxxss")
+now_t = int(time.time())
+insert_data = {
+    "time": now_t,
+    "content":"测试"+str(now_t)
+}
 
-
+collection.insert_one(insert_data)
