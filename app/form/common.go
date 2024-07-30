@@ -20,3 +20,8 @@ type ArgsPluginMenu struct {
 	Name string `binding:"Required;MaxSize(254)"`
 	Tag  string `binding:"Required;MaxSize(254)"`
 }
+
+type ArgsPluginData struct {
+	Name   string `binding:"Required;MaxSize(254)"`
+	Action string `binding:"Required;MaxSize(254)"`
+}

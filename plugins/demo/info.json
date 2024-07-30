@@ -24,10 +24,15 @@
 			"tag":"list",
 			"title":"列表",
 			"path":"html/index.html"
+		},
+		{
+			"tag":"mongodb",
+			"title":"MGDB",
+			"path":"html/mongodb.html"
 		}
 	],
 	"icon":"layui-icon-template-1",
-	"name": "采集小说",
+	"name": "采集",
 	"ps": "小说",
 	"author": "dztask"
 }

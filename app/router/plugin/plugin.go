@@ -82,3 +82,15 @@ func PluginUninstall(c *context.Context, args form.ArgsPluginUninstall) {
 	}
 	c.Ok("已经卸载成功")
 }
+
+// 插件卸载
+func GetPluginData(c *context.Context, args form.ArgsPluginData) {
+	fmt.Println(args)
+	c.Ok("ok")
+}
+
+// 插件卸载
+func PluginData(c *context.Context, args form.ArgsPluginData) {
+	fmt.Println(args)
+	c.Ok("ok")
+}
