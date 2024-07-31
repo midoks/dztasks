@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"os/exec"
+	"strings"
 
 	"github.com/midoks/dztasks/internal/tools"
 )
@@ -12,6 +15,8 @@ type PluginCron struct {
 	Name string   `json:"name"`
 	Expr string   `json:"expr"`
 	Cmd  string   `json:"cmd"`
+	Dir  string   `json:"dir"`
+	Env  string   `json:"env"`
 	Bin  string   `json:"bin"`
 	Args []string `json:"args"`
 }
@@ -33,6 +38,42 @@ type Plugin struct {
 	Installed bool         `json:"installed"`
 	Cron      []PluginCron `json:"cron"`
 	Menu      []PluginMenu `json:"menu"`
+}
+
+func ExecCron(bin string, cron PluginCron) ([]byte, error) {
+	// Remove the newline character.
+	// input = strings.TrimSuffix(input, "\n")
+
+	// Prepare the command to execute.
+	cmd := exec.Command(bin, cron.Args...)
+
+	if !strings.EqualFold(cron.Dir, "") {
+		cmd.Dir = cron.Dir
+	}
+
+	if !strings.EqualFold(cron.Env, "") {
+		t := make([]string, 0)
+		cmd.Env = append(t, cron.Env)
+	} else {
+		cmd.Env = append(os.Environ())
+	}
+
+	// fmt.Println(os.Stdout, os.Stderr)
+	// Execute the command and return the error.
+	return cmd.CombinedOutput()
+}
+
+func ExecInput(bin string, args []string) ([]byte, error) {
+	// Remove the newline character.
+	// input = strings.TrimSuffix(input, "\n")
+
+	// Prepare the command to execute.
+	cmd := exec.Command(bin, args...)
+	cmd.Env = append(os.Environ())
+
+	// fmt.Println(os.Stdout, os.Stderr)
+	// Execute the command and return the error.
+	return cmd.CombinedOutput()
 }
 
 func GetPluginInstallLock(plugin_name string) string {

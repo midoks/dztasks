@@ -2,8 +2,6 @@ package bgtask
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
 	"strings"
 	"time"
 
@@ -15,20 +13,6 @@ import (
 )
 
 var task *cron.Cron
-
-func ExecInput(bin string, args []string) ([]byte, error) {
-	// Remove the newline character.
-	// input = strings.TrimSuffix(input, "\n")
-
-	// Prepare the command to execute.
-	cmd := exec.Command(bin, args...)
-
-	cmd.Env = append(os.Environ())
-
-	// fmt.Println(os.Stdout, os.Stderr)
-	// Execute the command and return the error.
-	return cmd.CombinedOutput()
-}
 
 func clearTask() {
 	cronE := task.Entries()
@@ -57,11 +41,12 @@ func runPluginTask() {
 
 				run_start := time.Now()
 
-				cronData, err := ExecInput(cron.Bin, cron.Args)
-
 				if conf.Plugins.ShowCmd {
 					log.Info(cron.Bin + " " + strings.Join(cron.Args, " "))
 				}
+
+				// fmt.Println(cron.Bin, cron.Args)
+				cronData, err := common.ExecCron(cron.Bin, cron)
 
 				if conf.Plugins.ShowError {
 					if err != nil {
@@ -71,7 +56,6 @@ func runPluginTask() {
 					if !strings.EqualFold(string(cronData), "") {
 						log.Info(string(cronData))
 					}
-
 				}
 
 				if err != nil {

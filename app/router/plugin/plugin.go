@@ -157,7 +157,7 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 			}
 
 			script_cmd = append(script_cmd, string(post_args))
-			cmd_data, err := bgtask.ExecInput(plugin.Bin, script_cmd)
+			cmd_data, err := common.ExecInput(plugin.Bin, script_cmd)
 
 			if err != nil && conf.Plugins.ShowError {
 				log.Info(err.Error())
