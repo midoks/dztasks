@@ -95,7 +95,7 @@ func PluginPage(c *context.Context, args form.ArgsPluginPage) {
 	for _, plugin := range list {
 		if plugin.Path == args.Name {
 
-			fmt.Println(args)
+			// fmt.Println(args)
 			abs_path := fmt.Sprintf("%s/%s/%s", plugin_dir, plugin.Path, args.Page)
 
 			content, err := tools.ReadFile(abs_path)
@@ -144,12 +144,12 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 			//展示调用命令
 			if conf.Plugins.ShowCmd {
 				cmd_args := strings.Join(script_cmd, " ")
-				cmd := "[CMD]" + "python3 " + cmd_args + " '" + string(post_args) + "'"
+				cmd := "[CMD]" + plugin.Bin + " " + cmd_args + " '" + string(post_args) + "'"
 				log.Info(cmd)
 			}
 
 			script_cmd = append(script_cmd, string(post_args))
-			cmd_data, err := bgtask.ExecInput("python3", script_cmd)
+			cmd_data, err := bgtask.ExecInput(plugin.Bin, script_cmd)
 
 			if err != nil && conf.Plugins.ShowError {
 				log.Info(err.Error())
