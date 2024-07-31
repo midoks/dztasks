@@ -52,8 +52,9 @@ func ExecCron(bin string, cron PluginCron) ([]byte, error) {
 	}
 
 	if !strings.EqualFold(cron.Env, "") {
-		t := make([]string, 0)
-		cmd.Env = append(t, cron.Env)
+		env := make([]string, 0)
+		cmd.Env = append(env, cron.Env)
+		// fmt.Println(cmd.Env)
 	} else {
 		cmd.Env = append(os.Environ())
 	}
