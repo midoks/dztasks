@@ -41,12 +41,9 @@ func runPluginTask() {
 
 				run_start := time.Now()
 
-				if conf.Plugins.ShowCmd {
-					log.Info(cron.Bin + " " + strings.Join(cron.Args, " "))
-				}
-
 				// fmt.Println(cron.Bin, cron.Args)
-				cronData, err := common.ExecCron(cron.Bin, cron)
+				// cronData, err := common.ExecCron(cron.Bin, cron)
+				cronData, err := common.ExecPluginCron(plugin, cron)
 
 				if conf.Plugins.ShowError {
 					if err != nil {

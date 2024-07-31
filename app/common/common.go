@@ -8,16 +8,19 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/midoks/dztasks/internal/conf"
+	"github.com/midoks/dztasks/internal/log"
 	"github.com/midoks/dztasks/internal/tools"
 )
 
 type PluginCron struct {
+	Bin string `json:"bin"`
+	Env string `json:"env"`
+	Dir string `json:"dir"`
+
 	Name string   `json:"name"`
 	Expr string   `json:"expr"`
 	Cmd  string   `json:"cmd"`
-	Dir  string   `json:"dir"`
-	Env  string   `json:"env"`
-	Bin  string   `json:"bin"`
 	Args []string `json:"args"`
 }
 
@@ -28,16 +31,55 @@ type PluginMenu struct {
 }
 
 type Plugin struct {
-	Name      string       `json:"name"`
-	Ps        string       `json:"ps"`
-	Author    string       `json:"author"`
-	Path      string       `json:"path"`
-	Bin       string       `json:"bin"`
-	Index     string       `json:"index"`
-	Icon      string       `json:"icon"`
-	Installed bool         `json:"installed"`
-	Cron      []PluginCron `json:"cron"`
-	Menu      []PluginMenu `json:"menu"`
+	Bin string `json:"bin"`
+	Env string `json:"env"`
+	Dir string `json:"dir"`
+
+	Name      string `json:"name"`
+	Ps        string `json:"ps"`
+	Author    string `json:"author"`
+	Path      string `json:"path"`
+	Index     string `json:"index"`
+	Icon      string `json:"icon"`
+	Installed bool   `json:"installed"`
+
+	Cron []PluginCron `json:"cron"`
+	Menu []PluginMenu `json:"menu"`
+}
+
+func ExecPluginCron(plugin Plugin, cron PluginCron) ([]byte, error) {
+	bin := cron.Bin
+	if strings.EqualFold(bin, "") {
+		if !strings.EqualFold(plugin.Bin, "") {
+			bin = plugin.Bin
+		}
+	}
+
+	if conf.Plugins.ShowCmd {
+		log.Info(bin + " " + strings.Join(cron.Args, " "))
+	}
+
+	// Prepare the command to execute.
+	cmd := exec.Command(bin, cron.Args...)
+
+	if !strings.EqualFold(cron.Dir, "") {
+		cmd.Dir = cron.Dir
+	} else if !strings.EqualFold(plugin.Dir, "") {
+		cmd.Dir = plugin.Dir
+	}
+
+	env := os.Environ()
+	if !strings.EqualFold(cron.Env, "") {
+		env := make([]string, 0)
+		env = append(env, cron.Env)
+		// fmt.Println(cmd.Env)
+	} else if !strings.EqualFold(plugin.Env, "") {
+		env = append(env, plugin.Env)
+	}
+	cmd.Env = env
+
+	// fmt.Println(os.Stdout, os.Stderr)
+	return cmd.CombinedOutput()
 }
 
 func ExecCron(bin string, cron PluginCron) ([]byte, error) {
