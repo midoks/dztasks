@@ -89,6 +89,7 @@
 
 
                     {[range $_I,$_M:=.PluginMenu]}
+                    {[if $_M.Installed]}
                     {[range .Menu]}
                     <li data-name="{[$_M.Path]}" class="layui-nav-item layui-nav-itemed 
                     {[if eq $_M.Path $.PageIsPluginMenu_Name ]}
@@ -101,6 +102,7 @@
                             <i class="layui-icon {[$_M.Icon]}"></i><cite>[P]{[$_M.Name]}-{[.Title]}</cite>
                         </a>
                     </li>
+                    {[end]}
                     {[end]}
                     {[end]}
                 </ul>

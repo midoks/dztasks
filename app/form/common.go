@@ -29,3 +29,10 @@ type ArgsPluginData struct {
 	Args   string
 	Extra  string
 }
+
+type ArgsPluginPage struct {
+	Name  string `binding:"Required;MaxSize(254)"`
+	Page  string
+	Args  string
+	Extra string
+}

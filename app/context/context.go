@@ -137,6 +137,15 @@ func (c *Context) HTML(status int, name string) {
 	c.Context.HTML(status, name)
 }
 
+func (c *Context) HTMLString(name string, content string) {
+	c.Context.HTMLString(name, content)
+}
+
+// TEXT responses template with given status.
+func (c *Context) PlainText(status int, name []byte) {
+	c.Context.PlainText(status, name)
+}
+
 // Success responses template with status http.StatusOK.
 func (c *Context) Success(name string) {
 	c.HTML(http.StatusOK, name)
@@ -242,8 +251,8 @@ func Contexter() macaron.Handler {
 		c.Data["PluginMenu"] = common.PluginList(plugin_dir)
 
 		// avoid iframe use by other.
-		c.Header().Set("X-Content-Type-Options", "nosniff")
-		c.Header().Set("X-Frame-Options", "DENY")
+		// c.Header().Set("X-Content-Type-Options", "nosniff")
+		// c.Header().Set("X-Frame-Options", "DENY")
 
 	}
 }

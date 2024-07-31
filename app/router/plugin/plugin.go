@@ -87,6 +87,30 @@ func PluginUninstall(c *context.Context, args form.ArgsPluginUninstall) {
 }
 
 // 插件数据请求
+func PluginPage(c *context.Context, args form.ArgsPluginPage) {
+	plugin_dir := conf.Plugins.Path
+	list := common.PluginList(plugin_dir)
+
+	for _, plugin := range list {
+		if plugin.Path == args.Name {
+
+			fmt.Println(args)
+			abs_path := fmt.Sprintf("%s/%s/%s", plugin_dir, plugin.Path, args.Page)
+
+			content, err := tools.ReadFile(abs_path)
+			fmt.Println(content, err)
+			fmt.Println(abs_path)
+			if err == nil {
+				c.HTMLString("tag", content)
+				return
+			}
+			// c.PlainText(200, []byte(err.Error()))
+		}
+	}
+	c.PlainText(200, []byte("异常"))
+}
+
+// 插件数据请求
 func PluginData(c *context.Context, args form.ArgsPluginData) {
 	plugin_dir := conf.Plugins.Path
 	list := common.PluginList(plugin_dir)
@@ -117,14 +141,10 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 
 			post_args, _ := json.Marshal(script_args)
 
-			// fmt.Println("args", args.Args)
-			// fmt.Println("extra", args.Extra)
-
 			//展示调用命令
 			if conf.Plugins.ShowCmd {
 				cmd_args := strings.Join(script_cmd, " ")
-				cmd := "python3 " + cmd_args + " '" + string(post_args) + "'"
-				// fmt.Println(cmd)
+				cmd := "[CMD]" + "python3 " + cmd_args + " '" + string(post_args) + "'"
 				log.Info(cmd)
 			}
 

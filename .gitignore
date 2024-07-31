@@ -27,3 +27,4 @@ dztasks
 /data
 *.lock
 /logs
+/plugins/xx*

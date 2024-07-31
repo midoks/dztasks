@@ -118,5 +118,5 @@ function push(obj){
 <script type="text/html" id="cmdTpl">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="push">PUSH</a>
 
-    <a class="layui-btn layui-btn-xs" title="编辑" onclick="Admin.open('【{{d.name}}】'+'编辑','{:url('book/edit')}?id={{d.id}}',1200,480)"><i class="layui-icon">&#xe642;</i></a>
+    <a class="layui-btn layui-btn-xs" title="编辑" onclick="Admin.open('【{{d._id}}】'+'编辑','/plugin/page?name=demo&page=html/mongodb_edit.html',1200,480)"><i class="layui-icon">&#xe642;</i></a>
 </script>
