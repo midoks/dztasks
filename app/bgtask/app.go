@@ -60,7 +60,18 @@ func runPluginTask() {
 				cronData, err := ExecInput(cron.Bin, cron.Args)
 
 				if conf.Plugins.ShowCmd {
-					log.Info(string(cronData))
+					log.Info(cron.Bin + " " + strings.Join(cron.Args, " "))
+				}
+
+				if conf.Plugins.ShowError {
+					if err != nil {
+						log.Info(err.Error())
+					}
+
+					if !strings.EqualFold(string(cronData), "") {
+						log.Info(string(cronData))
+					}
+
 				}
 
 				if err != nil {
@@ -69,8 +80,7 @@ func runPluginTask() {
 					msg = fmt.Sprintf("[%s][%s][%s]执行失败,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
 					// fmt.Println(msg)
 					log.Info(msg)
-					log.Info(cron.Bin + " " + strings.Join(cron.Args, " "))
-					log.Info(err.Error())
+
 					return
 				}
 
