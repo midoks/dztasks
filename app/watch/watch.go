@@ -3,7 +3,9 @@ package watch
 import (
 	// "fmt"
 	"os"
+	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/fsnotify/fsnotify"
 
@@ -11,7 +13,7 @@ import (
 	"github.com/midoks/dztasks/internal/log"
 )
 
-func InitWatch(path string) {
+func InitWatch(file_pos string) {
 
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -37,9 +39,15 @@ func InitWatch(path string) {
 	}()
 
 	var files []string
-	err = filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
-		// fmt.Println(path)
-		files = append(files, path)
+	err = filepath.Walk(file_pos, func(file string, info os.FileInfo, err error) error {
+
+		extension := path.Ext(file)
+		// fmt.Println(file, extension)
+		if strings.EqualFold(extension, ".json") {
+			// fmt.Println(file)
+			files = append(files, file)
+		}
+
 		return nil
 	})
 
