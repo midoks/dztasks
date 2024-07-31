@@ -35,6 +35,8 @@
 			"path":"html/mongodb.html"
 		}
 	],
+	"bin" : "python3",
+	"index":"index.py",
 	"icon":"layui-icon-template-1",
 	"name": "采集",
 	"ps": "小说",

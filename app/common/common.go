@@ -27,6 +27,8 @@ type Plugin struct {
 	Ps        string       `json:"ps"`
 	Author    string       `json:"author"`
 	Path      string       `json:"path"`
+	Bin       string       `json:"bin"`
+	Index     string       `json:"index"`
 	Icon      string       `json:"icon"`
 	Installed bool         `json:"installed"`
 	Cron      []PluginCron `json:"cron"`

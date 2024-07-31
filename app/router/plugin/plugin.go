@@ -117,7 +117,15 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 
 	for _, plugin := range list {
 		if plugin.Path == args.Name {
-			default_script := fmt.Sprintf("%s/%s/index.py", plugin_dir, plugin.Path)
+
+			if plugin.Index == "" {
+				plugin.Index = "index.py"
+			}
+			if plugin.Bin == "" {
+				plugin.Bin = "python3"
+			}
+
+			default_script := fmt.Sprintf("%s/%s/%s", plugin_dir, plugin.Path, plugin.Index)
 
 			script_cmd := make([]string, 0)
 			script_cmd = append(script_cmd, default_script)
