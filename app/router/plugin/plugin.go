@@ -18,8 +18,9 @@ import (
 )
 
 const (
-	PLUGIN_HOME = "/plugin/index"
-	PLUGIN_MENU = "/plugin/menu"
+	PLUGIN_HOME    = "/plugin/index"
+	PLUGIN_MENU    = "/plugin/menu"
+	PLUGIN_CONTENT = "/plugin/content"
 )
 
 func PluginHome(c *context.Context) {
@@ -90,7 +91,7 @@ func PluginUninstall(c *context.Context, args form.ArgsPluginUninstall) {
 func PluginPage(c *context.Context, args form.ArgsPluginPage) {
 	plugin_dir := conf.Plugins.Path
 	list := common.PluginList(plugin_dir)
-
+	c.Data["PluginContent"] = ""
 	for _, plugin := range list {
 		if plugin.Path == args.Name {
 
@@ -98,16 +99,15 @@ func PluginPage(c *context.Context, args form.ArgsPluginPage) {
 			abs_path := fmt.Sprintf("%s/%s/%s", plugin_dir, plugin.Path, args.Page)
 
 			content, err := tools.ReadFile(abs_path)
-			fmt.Println(content, err)
-			fmt.Println(abs_path)
 			if err == nil {
-				c.HTMLString("tag", content)
+				c.Data["PluginContent"] = content
+				c.Success(PLUGIN_CONTENT)
 				return
 			}
-			// c.PlainText(200, []byte(err.Error()))
+			c.Data["PluginContent"] = err.Error()
 		}
 	}
-	c.PlainText(200, []byte("异常"))
+	c.Success(PLUGIN_CONTENT)
 }
 
 // 插件数据请求
