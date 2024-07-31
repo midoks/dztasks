@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	// "strings"
+	"strings"
 	"time"
 
 	"github.com/robfig/cron/v3"
@@ -69,6 +69,7 @@ func runPluginTask() {
 					msg = fmt.Sprintf("[%s][%s][%s]执行失败,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
 					// fmt.Println(msg)
 					log.Info(msg)
+					log.Info(cron.Bin + " " + strings.Join(cron.Args, " "))
 					log.Info(err.Error())
 					return
 				}
