@@ -47,8 +47,8 @@ func runPluginTask() {
 			continue
 		}
 
-		// fmt.Println(len(plugin.Cron))
 		for _, cron := range plugin.Cron {
+			// fmt.Println("cron", plugin.Name, cron.Name, cron.Expr)
 			task.AddFunc(cron.Expr, func() {
 				msg := ""
 				// msg := fmt.Sprintf("正在执行项目[%s][%s][%s]...", plugin.Name, cron.Name, cron.Expr)
@@ -57,8 +57,11 @@ func runPluginTask() {
 
 				run_start := time.Now()
 
-				_, err := ExecInput(cron.Bin, cron.Args)
-				// fmt.Println(string(out))
+				cronData, err := ExecInput(cron.Bin, cron.Args)
+
+				if conf.Plugins.ShowCmd {
+					log.Info(string(cronData))
+				}
 
 				if err != nil {
 					// fmt.Println(err)
@@ -66,6 +69,7 @@ func runPluginTask() {
 					msg = fmt.Sprintf("[%s][%s][%s]执行失败,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
 					// fmt.Println(msg)
 					log.Info(msg)
+					log.Info(err.Error())
 					return
 				}
 
