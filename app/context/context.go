@@ -146,6 +146,10 @@ func (c *Context) PlainText(status int, name []byte) {
 	c.Context.PlainText(status, name)
 }
 
+func (c *Context) RawData(status int, v []byte) {
+	c.Context.RawData(status, v)
+}
+
 // Success responses template with status http.StatusOK.
 func (c *Context) Success(name string) {
 	c.HTML(http.StatusOK, name)

@@ -198,10 +198,13 @@ func PluginFile(c *context.Context, args form.ArgsPluginFile) {
 		if plugin.Path == args.Name {
 
 			default_script := fmt.Sprintf("%s/%s/%s", plugin_dir, plugin.Path, args.File)
-
-			fmt.Println(default_script)
-
+			content, err := tools.ReadFileByte(default_script)
+			if err == nil {
+				c.RawData(200, content)
+				return
+			}
+			c.Fail(err.Error())
 		}
 	}
-	c.Fail("异常")
+	c.PlainText("异常")
 }
