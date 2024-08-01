@@ -1,5 +1,21 @@
 {[template "/base/header" .]}
 
+{/* 加载插件CSS,JS */}
+{[range $_I,$_M:=.PluginMenu]}
+{[if eq .Path $.PageIsPluginMenu_Name ]}
+    {[range .Menu]}
+        {[if eq .Tag $.PageIsPluginMenu_Tag ]}
+        	{[range .Css]}
+        	<link rel="stylesheet" href="/plugin/file?name={[$_M.Path]}&file={[.]}" media="all">
+        	{[end]}
+
+        	{[range .Js]}
+        	<script src="/plugin/file?name={[$_M.Path]}&file={[.]}"></script>
+        	{[end]}
+        {[end]}
+    {[end]}
+{[end]}
+{[end]}
 
 {[.PluginContent | Safe]}
 

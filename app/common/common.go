@@ -25,9 +25,11 @@ type PluginCron struct {
 }
 
 type PluginMenu struct {
-	Title string `json:"title"`
-	Path  string `json:"path"`
-	Tag   string `json:"tag"`
+	Title string   `json:"title"`
+	Path  string   `json:"path"`
+	Tag   string   `json:"tag"`
+	Css   []string `json:"css"`
+	Js    []string `json:"js"`
 }
 
 type Plugin struct {

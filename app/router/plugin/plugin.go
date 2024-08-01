@@ -206,5 +206,5 @@ func PluginFile(c *context.Context, args form.ArgsPluginFile) {
 			c.Fail(err.Error())
 		}
 	}
-	c.PlainText("异常")
+	c.PlainText(200, []byte("异常"))
 }

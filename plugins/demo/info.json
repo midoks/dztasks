@@ -24,6 +24,8 @@
 	],
 	"menu": [
 		{
+			"css": ["css/demo.css"],
+			"js": ["js/demo.js"],
 			"tag":"list",
 			"title":"列表",
 			"path":"html/index.html"
