@@ -83,10 +83,6 @@ func ExecPluginCron(plugin Plugin, cron PluginCron) ([]byte, error) {
 }
 
 func ExecCron(bin string, cron PluginCron) ([]byte, error) {
-	// Remove the newline character.
-	// input = strings.TrimSuffix(input, "\n")
-
-	// Prepare the command to execute.
 	cmd := exec.Command(bin, cron.Args...)
 
 	if !strings.EqualFold(cron.Dir, "") {
@@ -102,20 +98,31 @@ func ExecCron(bin string, cron PluginCron) ([]byte, error) {
 	}
 
 	// fmt.Println(os.Stdout, os.Stderr)
+	return cmd.CombinedOutput()
+}
+
+func ExecPluginCmd(plugin Plugin, args []string) ([]byte, error) {
+	// Remove the newline character.
+	// input = strings.TrimSuffix(input, "\n")
+
+	// Prepare the command to execute.
+	cmd := exec.Command(plugin.Bin, args...)
+	cmd.Env = append(os.Environ())
+
+	if !strings.EqualFold(plugin.Dir, "") {
+		cmd.Dir = plugin.Dir
+	}
+
+	// fmt.Println(os.Stdout, os.Stderr)
 	// Execute the command and return the error.
 	return cmd.CombinedOutput()
 }
 
 func ExecInput(bin string, args []string) ([]byte, error) {
-	// Remove the newline character.
-	// input = strings.TrimSuffix(input, "\n")
-
-	// Prepare the command to execute.
 	cmd := exec.Command(bin, args...)
 	cmd.Env = append(os.Environ())
 
 	// fmt.Println(os.Stdout, os.Stderr)
-	// Execute the command and return the error.
 	return cmd.CombinedOutput()
 }
 

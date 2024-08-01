@@ -126,6 +126,9 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 			}
 
 			default_script := fmt.Sprintf("%s/%s/%s", plugin_dir, plugin.Path, plugin.Index)
+			if !strings.EqualFold(plugin.Dir, "") {
+				default_script = fmt.Sprintf("%s", plugin.Index)
+			}
 
 			script_cmd := make([]string, 0)
 			script_cmd = append(script_cmd, default_script)
@@ -157,14 +160,19 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 			}
 
 			script_cmd = append(script_cmd, string(post_args))
-			cmd_data, err := common.ExecInput(plugin.Bin, script_cmd)
+			// cmd_data, err := common.ExecInput(plugin.Bin, script_cmd)
+			cmdData, err := common.ExecPluginCmd(plugin, script_cmd)
 
 			if err != nil && conf.Plugins.ShowError {
 				log.Info(err.Error())
 			}
 
+			if !strings.EqualFold(string(cmdData), "") {
+				log.Info(string(cmdData) + "\n")
+			}
+
 			var plugin_data interface{}
-			err = json.Unmarshal(cmd_data, &plugin_data)
+			err = json.Unmarshal(cmdData, &plugin_data)
 
 			if err != nil && conf.Plugins.ShowError {
 				log.Info(err.Error())
