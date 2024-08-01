@@ -9,7 +9,8 @@ collection = db["test"]
 now_t = int(time.time())
 insert_data = {
     "time": now_t,
-    "content":"测试"+str(now_t)
+    "content":"测试"+str(now_t),
+    "status":1
 }
 
 collection.insert_one(insert_data)

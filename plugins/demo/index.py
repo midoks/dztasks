@@ -34,13 +34,8 @@ def returnData(status, msg, data=None):
 
 
 def returnJson(code, msg, data=None, count=0):
-
-    # if data == None:
-    #     return {'status': status, 'msg': msg}
-    # return {'status': status, 'msg': msg, 'data': data}
-
     if data == None:
-        return getJson({'code': code, 'msg': msg,'count':count})
+        return getJson({'code': code, 'msg': msg})
     return getJson({'code': code, 'msg': msg, 'data': data,'count':count})
 
 

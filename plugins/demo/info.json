@@ -9,9 +9,8 @@
 		{
 			"name":"测试任务[python]",
 			"expr":"@every 10s",
-			"bin" : "python3",
 			"args" : [
-				"/Users/midoks/Documents/GitHub/dztasks/plugins/demo/scripts/python.py"
+				"scripts/python.py"
 			]
 		},
 		{
@@ -19,7 +18,7 @@
 			"expr":"@every 10s",
 			"bin" : "python3",
 			"args" : [
-				"/Users/midoks/Documents/GitHub/dztasks/plugins/demo/scripts/python_mgdb.py"
+				"scripts/python_mgdb.py"
 			]
 		}
 	],
@@ -35,6 +34,7 @@
 			"path":"html/mongodb.html"
 		}
 	],
+	"dir":"/Users/midoks/Documents/GitHub/dztasks/plugins/demo",
 	"bin" : "python3",
 	"index":"index.py",
 	"icon":"layui-icon-template-1",
