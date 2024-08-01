@@ -188,3 +188,20 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 	}
 	c.Fail("异常")
 }
+
+// 插件数据请求
+func PluginFile(c *context.Context, args form.ArgsPluginFile) {
+	plugin_dir := conf.Plugins.Path
+	list := common.PluginList(plugin_dir)
+
+	for _, plugin := range list {
+		if plugin.Path == args.Name {
+
+			default_script := fmt.Sprintf("%s/%s/%s", plugin_dir, plugin.Path, args.File)
+
+			fmt.Println(default_script)
+
+		}
+	}
+	c.Fail("异常")
+}

@@ -36,3 +36,10 @@ type ArgsPluginPage struct {
 	Args  string
 	Extra string
 }
+
+type ArgsPluginFile struct {
+	Name  string `binding:"Required;MaxSize(254)"`
+	File  string
+	Args  string
+	Extra string
+}
