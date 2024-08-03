@@ -5,6 +5,7 @@ export PATH
 startTime=`date +%s`
 echo "安装中..."
 
+DST_DIR=/opt/dztasks
 
 sysName=`uname`
 sysArch=`arch`
@@ -39,8 +40,9 @@ if [ ! -f $TMP_DIR/${FILE_NAME} ];then
 	wget --no-check-certificate -O $TMP_DIR/${FILE_NAME} ${DZTASKS_URL}/${FILE_NAME}
 fi
 
-cd $TMP_DIR && tar zxvf $FILE_NAME
+mkdir -p $DST_DIR
 
+cd $DST_DIR && tar zxvf $FILE_NAME
 
 
 endTime=`date +%s`
