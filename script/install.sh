@@ -81,6 +81,7 @@ PrivateTmp=false
 WantedBy=multi-user.target
 ''' > ${systemd_dir}/dztasks.service
 
+echo "${systemd_dir}/dztasks.service"
 systemctl daemon-reload
 systemctl start dztasks
 
