@@ -7,7 +7,7 @@ package template
 import (
 	"fmt"
 	"html/template"
-	"strconv"
+	// "strconv"
 	"strings"
 	"sync"
 	"time"
@@ -26,10 +26,11 @@ func FuncMap() []template.FuncMap {
 	funcMapOnce.Do(func() {
 		funcMap = []template.FuncMap{map[string]interface{}{
 			"BuildCommit": func() string {
-				if !strings.EqualFold(conf.BuildCommit, "") {
-					return conf.BuildCommit
-				}
-				return strconv.FormatInt(time.Now().Unix(), 10)
+				return conf.App.Version
+				// if !strings.EqualFold(conf.BuildCommit, "") {
+				// return conf.BuildCommit
+				// }
+				// return strconv.FormatInt(time.Now().Unix(), 10)
 			},
 
 			"Year": func() int {
