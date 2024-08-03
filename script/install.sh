@@ -39,6 +39,8 @@ if [ ! -f $TMP_DIR/${FILE_NAME} ];then
 	wget --no-check-certificate -O $TMP_DIR/${FILE_NAME} ${DZTASKS_URL}/${FILE_NAME}
 fi
 
+cd $TMP_DIR && tar zxvf $FILE_NAME
+
 
 
 endTime=`date +%s`
