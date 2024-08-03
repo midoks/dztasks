@@ -12,3 +12,9 @@ curl --insecure -fsSL https://cdn.jsdelivr.net/gh/midoks/dztasks@latest/script/i
 
 wget --no-check-certificate -O /tmp/dztasks.sh https://raw.githubusercontent.com/midoks/dztasks/master/script/install.sh?$(date +%s) && bash /tmp/dztasks.sh
 ```
+
+
+### 卸载脚本
+```
+curl --insecure -fsSL https://raw.githubusercontent.com/midoks/dztasks/master/script/uninstall.sh?$(date +%s) | bash
+```

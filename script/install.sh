@@ -84,6 +84,7 @@ WantedBy=multi-user.target
 echo "${systemd_dir}/dztasks.service"
 systemctl daemon-reload
 systemctl start dztasks
+systemctl enable dztasks
 
 
 endTime=`date +%s`
