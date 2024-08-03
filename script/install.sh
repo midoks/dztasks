@@ -35,10 +35,9 @@ DZTASKS_URL=https://github.com/midoks/dztasks/releases/download/${VERSION}
 FILE_NAME=dztasks_v${VERSION}_${SYSTEM}_${ARCH}.tar.gz
 TMP_DIR=/tmp
 
-if [ -f $TMP_DIR/${FILE_NAME} ];then
+if [ ! -f $TMP_DIR/${FILE_NAME} ];then
 	wget --no-check-certificate -O $TMP_DIR/${FILE_NAME} ${DZTASKS_URL}/${FILE_NAME}
 fi
-
 
 
 
