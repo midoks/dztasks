@@ -42,7 +42,7 @@ fi
 
 mkdir -p $DST_DIR
 
-cd $DST_DIR && tar zxvf $FILE_NAME
+cd $DST_DIR && tar zxvf $TMP_DIR/$FILE_NAME
 
 
 endTime=`date +%s`
