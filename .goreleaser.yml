@@ -3,7 +3,7 @@
 # https://www.jianshu.com/p/ac18956b0bc0
 
 
-# goreleaser release --snapshot --clean
+# find . -name ".pyc" -print -delete && goreleaser release --snapshot --clean
 
 # git tag -a v1.0 -m "release v1.0"
 # git push origin v0.0.3

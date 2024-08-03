@@ -36,7 +36,7 @@
 			"path":"html/mongodb.html"
 		}
 	],
-	"dir":"/Users/midoks/Documents/GitHub/dztasks/plugins/demo",
+	"dir":"/opt/dztasks/plugins/demo",
 	"bin" : "python3",
 	"index":"index.py",
 	"icon":"layui-icon-template-1",
