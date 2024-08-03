@@ -66,9 +66,9 @@ After=syslog.target
 [Service]
 User=root
 Group=root
-Type=simple
+Type=f
 WorkingDirectory=/opt/dztasks
-ExecStart=dztasks web
+ExecStart=/opt/dztasks/dztasks web
 ExecReload=/bin/kill -USR2 $MAINPID
 PermissionsStartOnly=true
 LimitNOFILE=5000
