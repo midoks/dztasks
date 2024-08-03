@@ -15,7 +15,7 @@
 		},
 		{
 			"name":"测试任务[mongodb]",
-			"expr":"@every 10s",
+			"expr":"@every 3s",
 			"bin" : "python3",
 			"args" : [
 				"scripts/python_mgdb.py"

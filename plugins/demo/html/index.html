@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 
-layui.config({base: '/static/layuiadmin/'}).use(['table','jquery','laytpl'], function(){
+layui.config({base: '/static/layuiadmin/'}).use(['table','jquery'], function(){
 ///
 var admin = layui.admin
 ,$ = layui.$
@@ -23,7 +23,7 @@ table.render({
     url: '/plugin/data?name=demo&a=list',
     title: '数据表',
     cols: [[
-        {field:'name', title:'插件名称',width:130},
+        {field:'name', title:'名称',width:130},
         {field:'ps', title:'说明'},
         {title:'操作', toolbar: '#cmdTpl', width:70, fixed: 'right'}
      ]],
@@ -40,60 +40,11 @@ table.on('tool(list)', function(obj){
 
 
 function pluginInstall(obj){
-    // console.log(obj);
-    var data = obj['data'];
-    var name = data['name'];
-    var ps =  data['ps'];
-    var path = data['path'];
-
-    layer.open({
-        type:1,
-        title:"插件["+name+"]安装",
-        btn: ['安装','关闭'],
-        area: '350px',
-        content: "<div style='padding:20px;'>\
-            <div style='text-align:center;'>"+ps+"</div>\
-        </div>",
-        yes:function(){
-            var loadT = layer.msg('正在安装...', { icon: 16, time: 0, shade: [0.3, '#000'] });
-            $.post("/plugin/install", {"path":path}, function(rdata) {
-                layer.closeAll();
-                showMsg(rdata.msg, function(){
-                    if(rdata.code > -1){
-                        table.reload('list');
-                    }
-                },{icon: rdata.code > -1 ? 1 : 2,shift:rdata.code>-1 ? 0 : 6});
-            },'json');
-        }
-    });
+    console.log(obj);
 }
 
 function pluginUninstall(obj){
-    var data = obj['data'];
-    var name = data['name'];
-    var ps =  data['ps'];
-    var path = data['path'];
-    
-    layer.open({
-        type:1,
-        title:"插件["+name+"]卸载",
-        btn: ['卸载','关闭'],
-        area: '350px',
-        content: "<div style='padding:20px;'>\
-            <div style='text-align:center;'>"+ps+"</div>\
-        </div>",
-        yes:function(){
-            var loadT = layer.msg('正在卸载...', { icon: 16, time: 0, shade: [0.3, '#000'] });
-            $.post("/plugin/uninstall", {"path":path}, function(rdata) {
-                layer.closeAll();
-                showMsg(rdata.msg, function(){
-                    if(rdata.code > -1){
-                        table.reload('list');
-                    }
-                },{icon: rdata.code > -1 ? 1 : 2,shift:rdata.code>-1 ? 0 : 6});
-            },'json');
-        }
-    });
+    console.log(obj);
 }
 
 ///
@@ -103,11 +54,7 @@ function pluginUninstall(obj){
 
 <script type="text/html" id="cmdTpl">
 
-{{# if (d.installed){ }}
-    <!-- <a class="layui-btn layui-btn-xs">设置</a> -->
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event='uninstall'>卸载</a>
-{{# } else{ }}
-    <a class="layui-btn layui-btn-xs" lay-event='install'>安装</a>
-{{# } }}
+<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event='ok'>ok</a>
+<a class="layui-btn layui-btn-xs" lay-event='fail'>fail</a>
 
 </script>

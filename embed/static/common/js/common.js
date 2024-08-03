@@ -62,7 +62,7 @@ util = layui.util;
 
 
 //监听table表单搜索
-form.on('submit(table-sreach)', function (data) {
+form.on('submit(sreach)', function (data) {
 	var _id = $(this).data('id');
     if (data.field.times) {
         var searchDate = data.field.times.split(' - ');
@@ -73,13 +73,14 @@ form.on('submit(table-sreach)', function (data) {
         data.field.jstime = '';
     }
     data.field.times = undefined;
-    table.reload(_id,{where: data.field,page:{curr: 1}});
+    var args = data.field;
+    data.field['args'] = JSON.stringify(args);
+    // console.log(data.field);
+    table.reload(_id,{where: data.field, page:{curr: 1}});
 });
 
-
-
 //监听全局表单提交
-form.on('submit(submit_save)', function(data){
+form.on('submit(submit)', function(data){
     var index = layer.load();
     $.post(data.form.action, data.field, function(res) {
         console.log(res);

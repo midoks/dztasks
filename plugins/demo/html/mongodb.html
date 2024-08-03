@@ -3,7 +3,7 @@
         <div class="layui-card">
             <div class="layui-card-body">
                 <div class="layui-form toolbar" style="margin-top: 10px;margin-bottom: 10px;">
-                <form class="layui-form" action="" id="list_form" onclick="return false;">
+                <form class="layui-form" action="" id="list_form" method="POST" onclick="return false;">
                     <div class="layui-inline mr0" >
                         <button class="layui-btn layui-btn-sm layui-btn-danger" onclick="Admin.batchDel('{:url('book/batchDel')}','list')">删除</button>
                     </div>
@@ -19,8 +19,7 @@
                             <select name="zd">
                                 <option value="">条件</option>
                                 <option value="_id">ID</option>
-                                <option value="time">时间</option>
-                                <option value="content">内容</option>
+                                <option value="content">标题</option>
                             </select>
                         </div>
                     </div>
@@ -33,16 +32,16 @@
 
                     <div class="layui-inline select70 mr0">
                         <div class="layui-input-inline h30">
-                            <select name="level">
-                                <option value="">推荐</option>
-                                <option value="1">是</option>
-                                <option value="0">否</option>
+                            <select name="status">
+                                <option value="">完结状态</option>
+                                <option value="1">完结</option>
+                                <option value="0">连载</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="layui-inline mr0">
-                        <button class="layui-btn layui-btn-sm" id="table-sreach" data-id="list" lay-submit lay-filter="table-sreach"><i class="layui-icon">&#xe615;</i>搜索
+                        <button class="layui-btn layui-btn-sm" id="sreach" data-id="list" lay-submit lay-filter="sreach"><i class="layui-icon">&#xe615;</i>搜索
                         </button>
                     </div>
                 </div>
@@ -56,7 +55,7 @@
 
 <script type="text/javascript">
 
-layui.config({base: '{__STATIC__}/admin/layuiadmin/'}).use(['table','jquery','laytpl'], function(){
+layui.config({base: '{__STATIC__}/admin/layuiadmin/'}).use(['table','jquery'], function(){
 ///
 var admin = layui.admin
 ,$ = layui.$
@@ -78,7 +77,8 @@ table.render({
         {field:'_id', title:'ID',width:250},
         {field:'time', title:'时间',width:150, templet: '#formatTime'},
         {field:'content', title:'内容'},
-        {title:'操作', toolbar: '#cmdTpl', width:120, fixed: 'right'}
+        {field:'status', title:'状态',width:150, templet: '#statusTpl'},
+        {title:'操作', toolbar: '#cmdTpl', width:180, fixed: 'right'}
      ]],
     page: true
 });
@@ -86,14 +86,31 @@ table.render({
 table.on('tool(list)', function(obj){
     switch(obj.event){
         case 'push':push(obj);break;
+        case 'delete':dataDelete(obj);break;
     };
 });
-
 
 function push(obj){
     console.log(obj);
     layer.confirm('你真的要PUSH吗?', { closeBtn: 2, icon: 3 }, function() {
         $.post('/plugin/data?name=demo&action=push', {
+            'extra':obj.data._id,
+            'args':"测试"
+        }, function(data) {
+            showMsg(data.msg,function(){
+                if (data.code>-1){
+                    location.reload();
+                }
+            },{icon:data.code>-1?1:2});
+        },'json');
+    });
+}
+
+
+function dataDelete(obj){
+    console.log(obj);
+    layer.confirm('你真的要删除吗?', { closeBtn: 2, icon: 3 }, function() {
+        $.post('/plugin/data?name=demo&action=delete', {
             'extra':obj.data._id,
             'args':"测试"
         }, function(data) {
@@ -114,8 +131,16 @@ function push(obj){
     {{formatDate(d.time)}}
 </script>
 
+<script type="text/html" id="statusTpl">
+    {{#  if(d.status == 1){ }}
+    <span class="layui-btn layui-btn-xs layui-btn-normal">完结</span>
+    {{#  } else if (d.status == 0) { }}
+    <span class="layui-btn layui-btn-xs layui-btn-danger">连载</span>
+    {{#  } }}
+</script>
 
 <script type="text/html" id="cmdTpl">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="push">推送</a>
-    <a class="layui-btn layui-btn-xs" title="编辑" onclick="Admin.open('【{{d._id}}】'+'编辑','/plugin/page?name=demo&page=html/mongodb_edit.html',1200,480)"><i class="layui-icon">&#xe642;</i></a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    <a class="layui-btn layui-btn-xs" title="编辑" onclick="Admin.open('【{{d._id}}】'+'编辑','/plugin/page?name=demo&page=html/mongodb_edit.html',1200,480)">编辑</a>
 </script>

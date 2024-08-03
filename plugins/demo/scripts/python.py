@@ -11,8 +11,7 @@ def writeFile(filename, content, mode='w+'):
         print(e)
         return False
 
-
 writeFile("/tmp/t.txt", str(time.time())+"ss\n")
-print("hellozzxxss")
+print("hello dztask")
 
 
