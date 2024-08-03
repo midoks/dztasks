@@ -11,7 +11,7 @@ import (
 	"github.com/midoks/dztasks/internal/conf"
 )
 
-const Version = "0.0.3"
+const Version = "1.0"
 const AppName = "dztasks"
 
 func init() {
