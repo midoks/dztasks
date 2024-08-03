@@ -82,6 +82,7 @@ WantedBy=multi-user.target
 ''' > ${systemd_dir}/dztasks.service
 
 echo "${systemd_dir}/dztasks.service"
+echo "default dir:${DST_DIR}"
 echo "default port:11011"
 systemctl daemon-reload
 systemctl start dztasks
