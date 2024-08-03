@@ -76,7 +76,7 @@ table.render({
     cols: [[
         {type: 'checkbox', fixed: 'left'},
         {field:'_id', title:'ID',width:250},
-        {field:'time', title:'时间',width:130},
+        {field:'time', title:'时间',width:150, templet: '#formatTime'},
         {field:'content', title:'内容'},
         {title:'操作', toolbar: '#cmdTpl', width:120, fixed: 'right'}
      ]],
@@ -110,9 +110,12 @@ function push(obj){
 });
 </script>
 
+<script type="text/html" id="formatTime">
+    {{formatDate(d.time)}}
+</script>
+
 
 <script type="text/html" id="cmdTpl">
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="push">PUSH</a>
-
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="push">推送</a>
     <a class="layui-btn layui-btn-xs" title="编辑" onclick="Admin.open('【{{d._id}}】'+'编辑','/plugin/page?name=demo&page=html/mongodb_edit.html',1200,480)"><i class="layui-icon">&#xe642;</i></a>
 </script>
