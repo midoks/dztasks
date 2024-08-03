@@ -44,6 +44,14 @@ mkdir -p $DST_DIR
 
 cd $DST_DIR && tar zxvf $TMP_DIR/$FILE_NAME
 
+if [ -f $TMP_DIR/install.sh ];then
+	rm -rf $TMP_DIR/install.sh
+fi
+
+if [ -f $TMP_DIR/${FILE_NAME} ];then
+	rm -rf $TMP_DIR/${FILE_NAME}
+fi
+
 
 endTime=`date +%s`
 ((outTime=(${endTime}-${startTime})/60))
