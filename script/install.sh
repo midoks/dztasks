@@ -53,7 +53,7 @@ if [ -f $TMP_DIR/${FILE_NAME} ];then
 fi
 
 systemd_dir=/lib/systemd/system
-if [ -d /usr/lib/systemd/system ];then
+if [ ! -d /usr/lib/systemd/system ];then
 	systemd_dir=/usr/lib/systemd/system
 fi
 
