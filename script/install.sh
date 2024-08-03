@@ -52,6 +52,35 @@ if [ -f $TMP_DIR/${FILE_NAME} ];then
 	rm -rf $TMP_DIR/${FILE_NAME}
 fi
 
+systemd_dir=/lib/systemd/system
+if [ -d /usr/lib/systemd/system ];then
+	systemd_dir=/usr/lib/systemd/system
+fi
+
+echo '''
+[Unit]
+Description=dztasks server
+After=network.service
+After=syslog.target
+
+[Service]
+User=dztasks
+Group=dztasks
+Type=simple
+WorkingDirectory=/opt/dztasks
+ExecStart=dztasks web
+ExecReload=/bin/kill -USR2 $MAINPID
+PermissionsStartOnly=true
+LimitNOFILE=5000
+Restart=on-failure
+RestartSec=10
+RestartPreventExitStatus=1
+PrivateTmp=false
+
+[Install]
+WantedBy=multi-user.target
+''' > ${systemd_dir}/dztasks.service
+
 
 endTime=`date +%s`
 ((outTime=(${endTime}-${startTime})/60))
