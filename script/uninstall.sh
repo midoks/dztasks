@@ -20,6 +20,10 @@ fi
 systemctl stop dztasks
 systemctl disable dztasks
 
+if [ -d /opt/dztasks ];then
+	rm -rf /opt/dztasks
+fi
+
 if [ -f ${systemd_dir}/dztasks.service ];then
 	rm -rf ${systemd_dir}/dztasks.service
 fi
