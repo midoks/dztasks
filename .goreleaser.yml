@@ -5,7 +5,7 @@
 
 # goreleaser release --snapshot --clean
 
-# git tag -a v1.0 -m "release v0.0.3"
+# git tag -a v1.0 -m "release v1.0"
 # git push origin v0.0.3
 # goreleaser --rm-dist
 # goreleaser --snapshot --skip-publish --rm-dist
@@ -38,7 +38,7 @@ release:
   # Default is extracted from the origin remote URL.
   github:
     owner: midoks
-    name: dztask
+    name: dztasks
 
   # If set to true, will not auto-publish the release.
   # Default is false.
