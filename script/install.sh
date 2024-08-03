@@ -6,7 +6,10 @@ startTime=`date +%s`
 echo "安装中..."
 
 
+sysName=`uname`
+sysArch=`arch`
 
+echo $sysName, $sysArch
 
 
 
