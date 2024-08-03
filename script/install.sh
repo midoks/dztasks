@@ -64,8 +64,8 @@ After=network.service
 After=syslog.target
 
 [Service]
-User=dztasks
-Group=dztasks
+User=root
+Group=root
 Type=simple
 WorkingDirectory=/opt/dztasks
 ExecStart=dztasks web
