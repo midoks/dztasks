@@ -6,7 +6,6 @@
 ### 安装脚本
 ```
 curl --insecure -fsSL https://raw.githubusercontent.com/midoks/dztasks/master/script/install.sh?$(date +%s) | bash
-
 ```
 
 
@@ -15,6 +14,10 @@ curl --insecure -fsSL https://raw.githubusercontent.com/midoks/dztasks/master/sc
 curl --insecure -fsSL https://raw.githubusercontent.com/midoks/dztasks/master/script/uninstall.sh?$(date +%s) | bash
 ```
 
+### 用户密码
+```
+cat /opt/dztasks/custom/conf/app.conf
+```
 
 ### 调式
 ```
