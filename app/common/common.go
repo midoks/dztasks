@@ -80,8 +80,6 @@ func ExecPluginCron(plugin Plugin, cron PluginCron) ([]byte, error) {
 		}
 	}
 
-	fmt.Println("ExecPluginCron", cmd.Dir)
-
 	env := os.Environ()
 	if !strings.EqualFold(cron.Env, "") {
 		env := make([]string, 0)
