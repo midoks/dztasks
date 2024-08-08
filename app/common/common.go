@@ -64,6 +64,7 @@ func ExecPluginCron(plugin Plugin, cron PluginCron) ([]byte, error) {
 	// Prepare the command to execute.
 	cmd := exec.Command(bin, cron.Args...)
 
+	fmt.Println(plugin, cron)
 	if !strings.EqualFold(cron.Dir, "") {
 		cmd.Dir = cron.Dir
 	} else if !strings.EqualFold(plugin.Dir, "") {
@@ -112,7 +113,12 @@ func ExecPluginCmd(plugin Plugin, args []string) ([]byte, error) {
 	cmd.Env = append(os.Environ())
 
 	if !strings.EqualFold(plugin.Dir, "") {
-		cmd.Dir = plugin.Dir
+		if !strings.HasSuffix(plugin.Dir, "/") {
+			pdir := fmt.Sprintf("%s/%s", conf.Plugins.Path, plugin.Dir)
+			cmd.Dir = pdir
+		} else {
+			cmd.Dir = plugin.Dir
+		}
 	}
 
 	// fmt.Println(os.Stdout, os.Stderr)

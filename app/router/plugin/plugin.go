@@ -130,6 +130,8 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 				default_script = fmt.Sprintf("%s", plugin.Index)
 			}
 
+			fmt.Println(default_script)
+
 			script_cmd := make([]string, 0)
 			script_cmd = append(script_cmd, default_script)
 			script_cmd = append(script_cmd, args.Action)
