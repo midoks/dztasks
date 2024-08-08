@@ -63,13 +63,24 @@ func ExecPluginCron(plugin Plugin, cron PluginCron) ([]byte, error) {
 
 	// Prepare the command to execute.
 	cmd := exec.Command(bin, cron.Args...)
-
-	fmt.Println(plugin, cron)
 	if !strings.EqualFold(cron.Dir, "") {
-		cmd.Dir = cron.Dir
+		if !strings.HasSuffix(cron.Dir, "/") {
+			pdir := fmt.Sprintf("%s/%s", conf.Plugins.Path, cron.Dir)
+			cmd.Dir = pdir
+		} else {
+			cmd.Dir = cron.Dir
+		}
+
 	} else if !strings.EqualFold(plugin.Dir, "") {
-		cmd.Dir = plugin.Dir
+		if !strings.HasSuffix(plugin.Dir, "/") {
+			pdir := fmt.Sprintf("%s/%s", conf.Plugins.Path, plugin.Dir)
+			cmd.Dir = pdir
+		} else {
+			cmd.Dir = plugin.Dir
+		}
 	}
+
+	fmt.Println("ExecPluginCron", cmd.Dir)
 
 	env := os.Environ()
 	if !strings.EqualFold(cron.Env, "") {
@@ -90,6 +101,12 @@ func ExecCron(bin string, cron PluginCron) ([]byte, error) {
 
 	if !strings.EqualFold(cron.Dir, "") {
 		cmd.Dir = cron.Dir
+		if !strings.HasSuffix(cron.Dir, "/") {
+			pdir := fmt.Sprintf("%s/%s", conf.Plugins.Path, cron.Dir)
+			cmd.Dir = pdir
+		} else {
+			cmd.Dir = cron.Dir
+		}
 	}
 
 	if !strings.EqualFold(cron.Env, "") {
