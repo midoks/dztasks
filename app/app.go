@@ -10,6 +10,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"gopkg.in/macaron.v1"
 
@@ -74,6 +75,11 @@ func newTemplateFileSystem(dir, customDir string) macaron.TemplateFileSystem {
 	return &fileSystem{files: files}
 }
 
+func staticFunc() string {
+	RFC1123 := "Mon, 02 Jan 2006 15:04:05 +0800"
+	return time.Now().Add(time.Hour * 24).Format(RFC1123)
+}
+
 func bootstrapMacaron() *macaron.Macaron {
 	m := macaron.New()
 
@@ -91,6 +97,8 @@ func bootstrapMacaron() *macaron.Macaron {
 		filepath.Join(conf.CustomDir(), "static"),
 		macaron.StaticOptions{
 			SkipLogging: conf.Web.DisableRouterLog,
+			ETag:        true,
+			Expires:     staticFunc,
 		},
 	))
 
@@ -104,6 +112,8 @@ func bootstrapMacaron() *macaron.Macaron {
 		macaron.StaticOptions{
 			FileSystem:  staticFs,
 			SkipLogging: conf.Web.DisableRouterLog,
+			ETag:        true,
+			Expires:     staticFunc,
 		},
 	))
 
