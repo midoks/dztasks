@@ -66,7 +66,7 @@ After=syslog.target
 [Service]
 User=root
 Group=root
-Type=f
+Type=simple
 WorkingDirectory=/opt/dztasks
 ExecStart=/opt/dztasks/dztasks web
 ExecReload=/bin/kill -USR2 $MAINPID
