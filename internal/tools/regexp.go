@@ -15,7 +15,7 @@ func IsURLRe(b string) bool {
 }
 
 func IsIpv4Re(b string) bool {
-	var re = regexp.MustCompile(`(((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)`)
+	var re = regexp.MustCompile(`(((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?))`)
 	return re.MatchString(b)
 }
 

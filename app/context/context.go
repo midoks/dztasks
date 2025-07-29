@@ -131,11 +131,10 @@ func (c *Context) HasValue(name string) bool {
 
 // HTML responses template with given status.
 func (c *Context) HTML(status int, name string) {
-	// log.Infof("Template:%s", name)
 	c.Context.HTML(status, name)
 }
 
-func (c *Context) HTMLString(name string, content string) {
+func (c *Context) HTMLString(name, content string) {
 	c.Context.HTMLString(name, content)
 }
 
@@ -185,8 +184,6 @@ func (c *Context) NotFound() {
 
 // Error renders the 500 page.
 func (c *Context) Error(err error, msg string) {
-	// c.Title("status.internal_server_error")
-
 	// Only in non-production mode or admin can see the actual error message.
 	if !conf.IsProdMode() || (c.IsLogged) {
 		c.Data["ErrorMsg"] = err
@@ -201,10 +198,6 @@ func (c *Context) Errorf(err error, format string, args ...interface{}) {
 
 // NotFoundOrError responses with 404 page for not found error and 500 page otherwise.
 func (c *Context) NotFoundOrError(err error, msg string) {
-	// if errutil.IsNotFound(err) {
-	// 	c.NotFound()
-	// 	return
-	// }
 	c.Error(err, msg)
 }
 
@@ -228,7 +221,7 @@ func Contexter() macaron.Handler {
 		ctx.Map(c)
 		c.Data["PageStartTime"] = time.Now()
 
-		if len(conf.Web.AccessControlAllowOrigin) > 0 {
+		if conf.Web.AccessControlAllowOrigin != "" {
 			c.Header().Set("Access-Control-Allow-Origin", conf.Web.AccessControlAllowOrigin)
 			c.Header().Set("Access-Control-Allow-Credentials", "true")
 			c.Header().Set("Access-Control-Max-Age", "3600")

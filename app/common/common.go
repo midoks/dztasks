@@ -3,7 +3,6 @@ package common
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -28,7 +27,7 @@ type PluginMenu struct {
 	Title string   `json:"title"`
 	Path  string   `json:"path"`
 	Tag   string   `json:"tag"`
-	Css   []string `json:"css"`
+	CSS   []string `json:"css"`
 	Js    []string `json:"js"`
 }
 
@@ -81,8 +80,9 @@ func ExecPluginCron(plugin Plugin, cron PluginCron) ([]byte, error) {
 
 	env := os.Environ()
 	if !strings.EqualFold(cron.Env, "") {
-		env := make([]string, 0)
-		env = append(env, cron.Env)
+		cronEnv := make([]string, 0)
+		cronEnv = append(cronEnv, cron.Env)
+		env = cronEnv
 		// fmt.Println(cmd.Env)
 	} else if !strings.EqualFold(plugin.Env, "") {
 		env = append(env, plugin.Env)
@@ -148,23 +148,23 @@ func ExecInput(bin string, args []string) ([]byte, error) {
 	return cmd.CombinedOutput()
 }
 
-func GetPluginInstallLock(plugin_name string) string {
-	lock := fmt.Sprintf("%s/install.lock", plugin_name)
+func GetPluginInstallLock(pluginName string) string {
+	lock := fmt.Sprintf("%s/install.lock", pluginName)
 	return lock
 }
 
-func PluginList(plugin_dir string) []Plugin {
-	files, _ := ioutil.ReadDir(plugin_dir)
+func PluginList(pluginDir string) []Plugin {
+	files, _ := os.ReadDir(pluginDir)
 	result := make([]Plugin, 0)
 
 	for _, file := range files {
-		plugin_name := fmt.Sprintf("%s/%s", plugin_dir, file.Name())
-		plugin_info := fmt.Sprintf("%s/info.json", plugin_name)
-		if !tools.IsExist(plugin_info) {
+		pluginName := fmt.Sprintf("%s/%s", pluginDir, file.Name())
+		pluginInfo := fmt.Sprintf("%s/info.json", pluginName)
+		if !tools.IsExist(pluginInfo) {
 			continue
 		}
 
-		content, err := ioutil.ReadFile(plugin_info)
+		content, err := os.ReadFile(pluginInfo)
 		if err != nil {
 			continue
 		}
@@ -181,8 +181,8 @@ func PluginList(plugin_dir string) []Plugin {
 			p.Icon = "layui-icon-tree"
 		}
 
-		plugin_lock := GetPluginInstallLock(plugin_name)
-		if tools.IsExist(plugin_lock) {
+		pluginLock := GetPluginInstallLock(pluginName)
+		if tools.IsExist(pluginLock) {
 			p.Installed = true
 		}
 		result = append(result, p)

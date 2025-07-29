@@ -22,8 +22,8 @@ func clearTask() {
 }
 
 func runPluginTask() {
-	plugin_dir := conf.Plugins.Path
-	result := common.PluginList(plugin_dir)
+	pluginDir := conf.Plugins.Path
+	result := common.PluginList(pluginDir)
 
 	for _, plugin := range result {
 		if !plugin.Installed {
@@ -38,7 +38,7 @@ func runPluginTask() {
 				// fmt.Println(msg)
 				// log.Info(msg)
 
-				run_start := time.Now()
+				runStart := time.Now()
 
 				// fmt.Println(cron.Bin, cron.Args)
 				// cronData, err := common.ExecCron(cron.Bin, cron)
@@ -56,7 +56,7 @@ func runPluginTask() {
 
 				if err != nil {
 					// fmt.Println(err)
-					cos := time.Since(run_start)
+					cos := time.Since(runStart)
 					msg = fmt.Sprintf("[%s][%s][%s]执行失败,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
 					// fmt.Println(msg)
 					log.Info(msg)
@@ -64,7 +64,7 @@ func runPluginTask() {
 					return
 				}
 
-				cos := time.Since(run_start)
+				cos := time.Since(runStart)
 
 				msg = fmt.Sprintf("[%s][%s][%s]执行结束,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
 				// fmt.Println(msg)

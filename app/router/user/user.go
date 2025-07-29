@@ -1,14 +1,9 @@
 package user
 
 import (
-	// "fmt"
-	// "net/url"
-
 	"github.com/midoks/dztasks/app/context"
 	"github.com/midoks/dztasks/app/form"
 	"github.com/midoks/dztasks/internal/conf"
-	// "github.com/midoks/dztasks/internal/log"
-	// "github.com/midoks/dztasks/internal/tools"
 )
 
 const (
@@ -24,9 +19,6 @@ func Login(c *context.Context) {
 }
 
 func LoginPost(c *context.Context, f form.SignIn) {
-	// fmt.Println("api",f.Username, f.Password)
-	// fmt.Println("conf",conf.Admin.User, conf.Admin.Pass)
-
 	if conf.Admin.User == f.Username && conf.Admin.Pass == f.Password {
 		name := conf.Admin.User
 		pass := conf.Admin.Pass

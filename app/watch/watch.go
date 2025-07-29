@@ -1,7 +1,6 @@
 package watch
 
 import (
-	// "fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -38,11 +37,9 @@ func InitWatch(filePos string) {
 	}()
 
 	var files []string
-	err = filepath.Walk(filePos, func(file string, info os.FileInfo, err error) error {
+	_ = filepath.Walk(filePos, func(file string, info os.FileInfo, err error) error {
 		extension := path.Ext(file)
-		// fmt.Println(file, extension)
 		if strings.EqualFold(extension, ".json") {
-			// fmt.Println(file)
 			files = append(files, file)
 		}
 

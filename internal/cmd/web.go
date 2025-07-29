@@ -1,13 +1,6 @@
 package cmd
 
 import (
-	// "fmt"
-	// "net/http"
-	// _ "net/http/pprof"
-	// "path/filepath"
-	// "strings"
-	// "time"
-
 	"github.com/urfave/cli"
 
 	"github.com/midoks/dztasks/app"

@@ -6,7 +6,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"math"
 	"math/rand"
 	"net/http"
@@ -208,11 +208,11 @@ func SizeFormat(size float64) string {
 }
 
 func RandString(len int) string {
-	rand.Seed(time.Now().UnixNano())
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	bytes := make([]byte, len)
 	for i := 0; i < len; i++ {
-		b := rand.Intn(26) + 65
+		b := r.Intn(26) + 65
 		bytes[i] = byte(b)
 	}
 	return string(bytes)
@@ -236,7 +236,7 @@ func GetHTTPData(url string) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	return string(body), err
 }
 
@@ -252,13 +252,16 @@ func PathExists(path string) (bool, error) {
 }
 
 func WriteFile(file string, content string) error {
-	return ioutil.WriteFile(file, []byte(content), os.ModePerm)
+	return os.WriteFile(file, []byte(content), os.ModePerm)
 }
 
 func ReadFileByte(file string) ([]byte, error) {
 	f, err := os.OpenFile(file, os.O_RDONLY, 0600)
+	if err != nil {
+		return nil, err
+	}
 	defer f.Close()
-	b, err := ioutil.ReadAll(f)
+	b, err := io.ReadAll(f)
 	return b, err
 }
 
@@ -307,7 +310,7 @@ func IsNumeric(val interface{}) bool {
 			return false
 		}
 		// Trim any whitespace
-		str = strings.Trim(str, " \\t\\n\\r\\v\\f")
+		str = strings.Trim(str, " \t\n\r\v\f")
 		if str[0] == '-' || str[0] == '+' {
 			if len(str) == 1 {
 				return false
