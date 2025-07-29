@@ -19,7 +19,7 @@ var DateFmtMailData = []struct {
 	{"2021-10-07 13:49:01", "2021-10-10 13:49:01", "2021-10-07", true},
 }
 
-func ForDateFmtMail(t time.Time, n time.Time) string {
+func ForDateFmtMail(t, n time.Time) string {
 	in := t.Format("2006-01-02")
 	now := n.Format("2006-01-02")
 

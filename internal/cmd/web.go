@@ -21,7 +21,7 @@ var Web = cli.Command{
 }
 
 func runWeb(c *cli.Context) error {
-	conf.Init("")
+	_ = conf.Init("")
 	log.Init()
 	go watch.InitWatch(conf.Plugins.Path)
 	bgtask.InitTask()

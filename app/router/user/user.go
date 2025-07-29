@@ -28,8 +28,8 @@ func LoginPost(c *context.Context, f form.SignIn) {
 			c.SetSuperSecureCookie(pass, conf.Security.CookieRememberName, name, days, conf.Web.Subpath, "", conf.Security.CookieSecure, true)
 		}
 
-		c.Session.Set("name", name)
-		c.Session.Set("login", true)
+		_ = c.Session.Set("name", name)
+		_ = c.Session.Set("login", true)
 
 		c.SetCookie(conf.Session.CSRFCookieName, "", -1, conf.Web.Subpath)
 		if conf.Security.EnableLoginStatusCookie {
