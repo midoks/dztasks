@@ -195,7 +195,14 @@ func PluginFile(c *context.Context, args form.ArgsPluginFile) {
 
 	for _, plugin := range list {
 		if plugin.Path == args.Name {
-			defaultScript := fmt.Sprintf("%s/%s/%s", pluginDir, plugin.Path, args.File)
+			var defaultScript string
+			if !strings.EqualFold(plugin.Dir, "") {
+				// 如果插件有自定义目录，使用自定义目录
+				defaultScript = fmt.Sprintf("%s/%s", plugin.Dir, args.File)
+			} else {
+				// 否则使用默认的插件目录
+				defaultScript = fmt.Sprintf("%s/%s/%s", pluginDir, plugin.Path, args.File)
+			}
 			content, err := tools.ReadFileByte(defaultScript)
 			if err == nil {
 				c.RawData(200, content)
@@ -204,5 +211,5 @@ func PluginFile(c *context.Context, args form.ArgsPluginFile) {
 			c.Fail(err.Error())
 		}
 	}
-	c.PlainText(200, []byte("异常"))
+	c.PlainText(400, []byte("异常"))
 }

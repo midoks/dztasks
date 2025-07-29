@@ -58,7 +58,7 @@ var (
 		HTTPPort                 int    `ini:"http_port"`
 		Domain                   string
 		AppDataPath              string
-		AccessControlAllowOrigin string
+		AccessControlAllowOrigin string `ini:"access_control_allow_origin"`
 
 		ExternalURL          string `ini:"EXTERNAL_URL"`
 		Protocol             string

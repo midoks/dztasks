@@ -39,6 +39,12 @@ func Toggle(options *ToggleOptions) macaron.Handler {
 				return
 			}
 		}
+		if options.SignOutRequired {
+			if c.IsLogged {
+				c.RedirectSubpath("/")
+				return
+			}
+		}
 	}
 }
 

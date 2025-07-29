@@ -207,7 +207,7 @@ func TestCurrentUsername(t *testing.T) {
 	t.Run("with USER environment variable", func(t *testing.T) {
 		os.Setenv("USER", "testuser")
 		os.Unsetenv("USERNAME")
-		
+
 		got := CurrentUsername()
 		if got != "testuser" {
 			t.Errorf("CurrentUsername() = %v, want %v", got, "testuser")
@@ -217,7 +217,7 @@ func TestCurrentUsername(t *testing.T) {
 	t.Run("with USERNAME environment variable", func(t *testing.T) {
 		os.Unsetenv("USER")
 		os.Setenv("USERNAME", "testuser2")
-		
+
 		got := CurrentUsername()
 		if got != "testuser2" {
 			t.Errorf("CurrentUsername() = %v, want %v", got, "testuser2")
@@ -227,7 +227,7 @@ func TestCurrentUsername(t *testing.T) {
 	t.Run("without environment variables", func(t *testing.T) {
 		os.Unsetenv("USER")
 		os.Unsetenv("USERNAME")
-		
+
 		got := CurrentUsername()
 		// Should fallback to user.Current()
 		// We can't predict the exact username, but it should not be empty
@@ -242,7 +242,7 @@ func TestCurrentUsername(t *testing.T) {
 	t.Run("with both environment variables set", func(t *testing.T) {
 		os.Setenv("USER", "user1")
 		os.Setenv("USERNAME", "user2")
-		
+
 		got := CurrentUsername()
 		// USER should take precedence
 		if got != "user1" {
@@ -253,7 +253,7 @@ func TestCurrentUsername(t *testing.T) {
 	t.Run("with empty environment variables", func(t *testing.T) {
 		os.Setenv("USER", "")
 		os.Setenv("USERNAME", "testuser3")
-		
+
 		got := CurrentUsername()
 		// Should use USERNAME since USER is empty
 		if got != "testuser3" {

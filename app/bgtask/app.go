@@ -56,16 +56,16 @@ func runPluginTask() {
 				if err != nil {
 					// fmt.Println(err)
 					cos := time.Since(runStart)
-				msg = fmt.Sprintf("[%s][%s][%s]执行失败,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
-				log.Info(msg)
+					msg = fmt.Sprintf("[%s][%s][%s]执行失败,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
+					log.Info(msg)
 
 					return
 				}
 
 				cos := time.Since(runStart)
 
-			msg = fmt.Sprintf("[%s][%s][%s]执行结束,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
-			log.Info(msg)
+				msg = fmt.Sprintf("[%s][%s][%s]执行结束,耗时:%s", plugin.Name, cron.Name, cron.Expr, cos)
+				log.Info(msg)
 			})
 		}
 	}

@@ -20,6 +20,7 @@ action:
   - gofmt -w ./
   - ps -ef|grep 'dztasks web'| grep -v grep | awk '{print $2}' | xargs kill -9
   after:
+  - ps -ef|grep 'dztasks web'| grep -v grep | awk '{print $2}' | xargs kill -9
   - ./dztasks web &
   exit:
   - ps -ef|grep 'dztasks web'| grep -v grep | awk '{print $2}' | xargs kill -9

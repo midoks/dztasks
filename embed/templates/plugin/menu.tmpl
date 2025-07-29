@@ -5,7 +5,7 @@
 {[if eq .Path $.PageIsPluginMenu_Name ]}
     {[range .Menu]}
         {[if eq .Tag $.PageIsPluginMenu_Tag ]}
-        	{[range .Css]}
+        	{[range .CSS]}
         	<link rel="stylesheet" href="/plugin/file?name={[$_M.Path]}&file={[.]}" media="all">
         	{[end]}
 

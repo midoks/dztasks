@@ -32,7 +32,7 @@
             
         
             <div class="layui-form-item">
-                <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit">登 入</button>
+                <button id="login" class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit">登 入</button>
             </div>
 
         </div>
@@ -60,6 +60,13 @@ var $ = layui.$
 ,search = router.search;
 
 form.render();
+
+$(document).keydown(function(event){
+    if(event.keyCode == 13){
+        $('#login').click();
+        return false;
+    }
+});
 
 //提交
 form.on('submit(LAY-user-login-submit)', function(d){
