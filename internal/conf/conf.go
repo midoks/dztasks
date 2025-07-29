@@ -52,7 +52,7 @@ func autoMakeCustomConf(customConf string) error {
 	if err := os.MkdirAll(filepath.Dir(customConf), os.ModePerm); err != nil {
 		return errors.Wrap(err, "create config directory")
 	}
-	
+
 	// Save configuration file
 	if err := cfg.SaveTo(customConf); err != nil {
 		return errors.Wrap(err, "save config file")

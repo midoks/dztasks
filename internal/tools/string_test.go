@@ -66,19 +66,19 @@ func TestToSlice(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := ToSlice(tt.input)
-			
+
 			if tt.hasError {
 				if err == nil {
 					t.Errorf("expected error but got none")
 				}
 				return
 			}
-			
+
 			if err != nil {
 				t.Errorf("unexpected error: %v", err)
 				return
 			}
-			
+
 			if !reflect.DeepEqual(result, tt.expected) {
 				t.Errorf("ToSlice(%q) = %v, want %v", tt.input, result, tt.expected)
 			}
@@ -141,10 +141,10 @@ func TestStringInSlice(t *testing.T) {
 	// Test that StringInSlice works the same as CheckStringIsExist
 	str := "test"
 	slice := []string{"test", "example"}
-	
+
 	result1 := CheckStringIsExist(str, slice)
 	result2 := StringInSlice(str, slice)
-	
+
 	if result1 != result2 {
 		t.Errorf("StringInSlice and CheckStringIsExist should return the same result")
 	}
@@ -203,7 +203,7 @@ func TestRandString(t *testing.T) {
 			if len(result) != tt.length {
 				t.Errorf("RandString(%d) returned string of length %d, want %d", tt.length, len(result), tt.length)
 			}
-			
+
 			// Test that multiple calls return different strings (for length > 0)
 			if tt.length > 0 {
 				result2 := RandString(tt.length)

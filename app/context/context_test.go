@@ -54,7 +54,7 @@ func TestJsonData(t *testing.T) {
 			if err != nil {
 				t.Fatalf("Failed to marshal JsonData: %v", err)
 			}
-			
+
 			if string(jsonBytes) != tt.expected {
 				t.Errorf("JsonData marshal = %s, want %s", string(jsonBytes), tt.expected)
 			}
@@ -97,7 +97,7 @@ func TestLayuiData(t *testing.T) {
 			if err != nil {
 				t.Fatalf("Failed to marshal LayuiData: %v", err)
 			}
-			
+
 			if string(jsonBytes) != tt.expected {
 				t.Errorf("LayuiData marshal = %s, want %s", string(jsonBytes), tt.expected)
 			}
@@ -110,25 +110,25 @@ func TestContextJSONMethods(t *testing.T) {
 	// Create a test macaron instance with proper middleware
 	m := macaron.New()
 	m.Use(macaron.Renderer())
-	
+
 	// Test ReturnJson method
 	m.Get("/test-json", func(ctx *macaron.Context) {
 		c := &Context{Context: ctx}
 		c.ReturnJson(0, "success", "test data")
 	})
-	
+
 	// Test Ok method
 	m.Get("/test-ok", func(ctx *macaron.Context) {
 		c := &Context{Context: ctx}
 		c.Ok("operation successful")
 	})
-	
+
 	// Test Fail method
 	m.Get("/test-fail", func(ctx *macaron.Context) {
 		c := &Context{Context: ctx}
 		c.Fail("operation failed")
 	})
-	
+
 	// Test ReturnLayuiJson method
 	m.Get("/test-layui", func(ctx *macaron.Context) {
 		c := &Context{Context: ctx}
@@ -171,18 +171,18 @@ func TestContextJSONMethods(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			req := httptest.NewRequest("GET", tt.path, nil)
 			w := httptest.NewRecorder()
-			
+
 			m.ServeHTTP(w, req)
-			
+
 			if w.Code != tt.expectedCode {
 				t.Errorf("Expected status code %d, got %d", tt.expectedCode, w.Code)
 			}
-			
+
 			body := w.Body.String()
 			if body != tt.expectedBody {
 				t.Errorf("Expected body %s, got %s", tt.expectedBody, body)
 			}
-			
+
 			// Verify content type
 			contentType := w.Header().Get("Content-Type")
 			if contentType != "application/json; charset=UTF-8" {
@@ -196,7 +196,7 @@ func TestContextJSONMethods(t *testing.T) {
 func TestContextHelperMethods(t *testing.T) {
 	m := macaron.New()
 	m.Use(macaron.Renderer())
-	
+
 	// Test PageIs method
 	m.Get("/test-page-is", func(ctx *macaron.Context) {
 		c := &Context{Context: ctx}
@@ -207,7 +207,7 @@ func TestContextHelperMethods(t *testing.T) {
 		}
 		c.ReturnJson(0, "ok", nil)
 	})
-	
+
 	// Test Require method
 	m.Get("/test-require", func(ctx *macaron.Context) {
 		c := &Context{Context: ctx}
@@ -218,7 +218,7 @@ func TestContextHelperMethods(t *testing.T) {
 		}
 		c.ReturnJson(0, "ok", nil)
 	})
-	
+
 	// Test FormErr method
 	m.Get("/test-form-err", func(ctx *macaron.Context) {
 		c := &Context{Context: ctx}
@@ -231,14 +231,14 @@ func TestContextHelperMethods(t *testing.T) {
 	})
 
 	tests := []string{"/test-page-is", "/test-require", "/test-form-err"}
-	
+
 	for _, path := range tests {
 		t.Run(path, func(t *testing.T) {
 			req := httptest.NewRequest("GET", path, nil)
 			w := httptest.NewRecorder()
-			
+
 			m.ServeHTTP(w, req)
-			
+
 			if w.Code != http.StatusOK {
 				t.Errorf("Expected status code %d, got %d", http.StatusOK, w.Code)
 			}

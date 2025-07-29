@@ -40,7 +40,7 @@ func FuncMap() []template.FuncMap {
 			"AppVer": func() string {
 				return conf.App.Version
 			},
-			
+
 			// HTML processing functions
 			"Safe":        Safe,
 			"Str2HTML":    Str2HTML,

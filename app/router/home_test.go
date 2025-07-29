@@ -44,9 +44,9 @@ func TestReverseStrings(t *testing.T) {
 			// Make a copy of input to avoid modifying the test data
 			inputCopy := make([]string, len(tt.input))
 			copy(inputCopy, tt.input)
-			
+
 			reverseStrings(inputCopy)
-			
+
 			if !reflect.DeepEqual(inputCopy, tt.expected) {
 				t.Errorf("reverseStrings(%v) = %v, want %v", tt.input, inputCopy, tt.expected)
 			}
@@ -88,9 +88,9 @@ func TestGetLinesText(t *testing.T) {
 			// Make a copy of input since getLinesText modifies the slice
 			inputCopy := make([]string, len(tt.input))
 			copy(inputCopy, tt.input)
-			
+
 			result := getLinesText(inputCopy)
-			
+
 			if result != tt.expected {
 				t.Errorf("getLinesText(%v) = %q, want %q", tt.input, result, tt.expected)
 			}

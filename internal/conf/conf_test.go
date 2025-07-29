@@ -69,12 +69,12 @@ func TestAutoMakeCustomConf(t *testing.T) {
 	// Test that calling again doesn't overwrite existing file
 	originalModTime := getFileModTime(t, customConf)
 	time.Sleep(10 * time.Millisecond) // Ensure different timestamp
-	
+
 	err = autoMakeCustomConf(customConf)
 	if err != nil {
 		t.Fatalf("autoMakeCustomConf failed on existing file: %v", err)
 	}
-	
+
 	newModTime := getFileModTime(t, customConf)
 	if !newModTime.Equal(originalModTime) {
 		t.Errorf("Existing config file was modified when it shouldn't have been")
@@ -85,7 +85,7 @@ func TestAutoMakeCustomConf(t *testing.T) {
 func TestAutoMakeCustomConfInvalidPath(t *testing.T) {
 	// Test with an invalid path (trying to create file in non-existent directory with no permissions)
 	invalidPath := "/root/nonexistent/app.conf"
-	
+
 	// This should fail on most systems due to permission issues
 	err := autoMakeCustomConf(invalidPath)
 	if err == nil {
@@ -121,12 +121,12 @@ func TestConfigStructures(t *testing.T) {
 			RunUser string
 		}{}},
 		{"WebConfig", &struct {
-			HttpPort            int
-			ExternalURL         string
-			Subpath             string
-			LoadAssetsFromDisk  bool
-			DisableRouterLog    bool
-			EnableGzip          bool
+			HttpPort             int
+			ExternalURL          string
+			Subpath              string
+			LoadAssetsFromDisk   bool
+			DisableRouterLog     bool
+			EnableGzip           bool
 			UnixSocketPermission string
 		}{}},
 		{"SessionConfig", &struct {
@@ -152,13 +152,13 @@ func TestConfigStructures(t *testing.T) {
 // BenchmarkAutoMakeCustomConf benchmarks the autoMakeCustomConf function
 func BenchmarkAutoMakeCustomConf(b *testing.B) {
 	tempDir := b.TempDir()
-	
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		customConf := filepath.Join(tempDir, "bench", "app.conf")
 		// Remove the file if it exists to test creation each time
 		os.RemoveAll(filepath.Dir(customConf))
-		
+
 		err := autoMakeCustomConf(customConf)
 		if err != nil {
 			b.Fatalf("autoMakeCustomConf failed: %v", err)
@@ -207,15 +207,15 @@ http_port = 3000
 			// Create temporary config file
 			tempDir := t.TempDir()
 			configPath := filepath.Join(tempDir, "test.conf")
-			
+
 			err := os.WriteFile(configPath, []byte(tt.configData), 0644)
 			if err != nil {
 				t.Fatalf("Failed to write test config: %v", err)
 			}
-			
+
 			// Try to load the config
 			_, err = ini.Load(configPath)
-			
+
 			if tt.expectError && err == nil {
 				t.Errorf("Expected error but got none")
 			} else if !tt.expectError && err != nil {

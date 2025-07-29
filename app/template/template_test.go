@@ -50,13 +50,13 @@ func TestDateFmtMail(t *testing.T) {
 // TestFuncMap tests the template function map
 func TestFuncMap(t *testing.T) {
 	funcMaps := FuncMap()
-	
+
 	if len(funcMaps) == 0 {
 		t.Error("FuncMap should return at least one function map")
 	}
-	
+
 	funcMap := funcMaps[0]
-	
+
 	// Test that expected functions exist
 	expectedFunctions := []string{
 		"BuildCommit",
@@ -68,13 +68,13 @@ func TestFuncMap(t *testing.T) {
 		"Str2HTML",
 		"Sanitize",
 	}
-	
+
 	for _, funcName := range expectedFunctions {
 		if _, exists := funcMap[funcName]; !exists {
 			t.Errorf("Expected function %s not found in FuncMap", funcName)
 		}
 	}
-	
+
 	// Test Year function
 	if yearFunc, ok := funcMap["Year"]; ok {
 		if yearFn, ok := yearFunc.(func() int); ok {
@@ -117,7 +117,7 @@ func TestSafe(t *testing.T) {
 			expected: template.HTML("<script>alert('test')</script>"),
 		},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := Safe(tt.input)
@@ -162,7 +162,7 @@ func TestStr2HTML(t *testing.T) {
 			expected: template.HTML(""), // bluemonday removes unsafe content
 		},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := Str2HTML(tt.input)
@@ -201,7 +201,7 @@ func TestNewLine2br(t *testing.T) {
 			expected: "",
 		},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := NewLine2br(tt.input)
@@ -261,7 +261,7 @@ func TestEscapePound(t *testing.T) {
 			expected: "test%25%23%3Fvalue%20test",
 		},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := EscapePound(tt.input)
@@ -302,7 +302,7 @@ func BenchmarkStr2HTML(b *testing.B) {
 func TestFuncMapConsistency(t *testing.T) {
 	funcMap1 := FuncMap()
 	funcMap2 := FuncMap()
-	
+
 	if !reflect.DeepEqual(funcMap1, funcMap2) {
 		t.Error("FuncMap should return consistent results across multiple calls")
 	}
