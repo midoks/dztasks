@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"os"
 	"path"
 	"path/filepath"
 	"strings"
@@ -210,6 +212,16 @@ func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 }
 
 func Start(port int) {
+	// 抑制 HTTP 服务器的 superfluous response.WriteHeader 警告日志
+	log.SetOutput(os.Stderr)
+	if conf.IsProdMode() {
+		// 在生产模式下，将 HTTP 服务器错误日志重定向到 /dev/null
+		devNull, err := os.OpenFile(os.DevNull, os.O_WRONLY, 0)
+		if err == nil {
+			log.SetOutput(devNull)
+		}
+	}
+
 	boot := bootstrapMacaron()
 	boot = bootstrapRouter(boot)
 	boot.Run(port)
