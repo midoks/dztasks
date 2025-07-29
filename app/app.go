@@ -1,11 +1,9 @@
 package app
 
 import (
+	"bytes"
 	"fmt"
 	"io"
-	// "io/fs"
-	// "io/ioutil"
-	"bytes"
 	"net/http"
 	"path"
 	"path/filepath"
@@ -31,19 +29,18 @@ import (
 	"github.com/midoks/dztasks/internal/conf"
 )
 
+// fileSystem implements macaron.TemplateFileSystem for embedded templates
 type fileSystem struct {
 	files []macaron.TemplateFile
 }
 
+// ListFiles returns all template files in the filesystem
 func (fs *fileSystem) ListFiles() []macaron.TemplateFile {
-	// for i := range fs.files {
-	// 	fmt.Println(fs.files[i].Name())
-	// }
 	return fs.files
 }
 
+// Get retrieves a template file by name
 func (fs *fileSystem) Get(name string) (io.Reader, error) {
-
 	for i := range fs.files {
 		if fs.files[i].Name()+fs.files[i].Ext() == name {
 			return bytes.NewReader(fs.files[i].Data()), nil
@@ -52,7 +49,7 @@ func (fs *fileSystem) Get(name string) (io.Reader, error) {
 	return nil, fmt.Errorf("file %q not found", name)
 }
 
-// NewTemplateFileSystem returns a macaron.TemplateFileSystem instance for embedded assets.
+// newTemplateFileSystem returns a macaron.TemplateFileSystem instance for embedded assets.
 // The argument "dir" can be used to serve subset of embedded assets. Template file
 // found under the "customDir" on disk has higher precedence over embedded assets.
 func newTemplateFileSystem(dir, customDir string) macaron.TemplateFileSystem {
@@ -61,11 +58,14 @@ func newTemplateFileSystem(dir, customDir string) macaron.TemplateFileSystem {
 	if dir != "" && !strings.HasSuffix(dir, "/") {
 		dir += "/"
 	}
-	allfn := embed.TemplatesAllNames("templates")
 
+	allfn := embed.TemplatesAllNames("templates")
 	for _, name := range allfn {
 		ext := path.Ext(name)
-		data, _ := embed.Templates.ReadFile(name)
+		data, err := embed.Templates.ReadFile(name)
+		if err != nil {
+			continue // Skip files that can't be read
+		}
 
 		name = strings.TrimPrefix(name, "templates")
 		name = strings.TrimSuffix(name, ext)
@@ -75,9 +75,10 @@ func newTemplateFileSystem(dir, customDir string) macaron.TemplateFileSystem {
 	return &fileSystem{files: files}
 }
 
+// staticFunc returns an expiration time for static assets (24 hours from now)
 func staticFunc() string {
-	RFC1123 := "Mon, 02 Jan 2006 15:04:05 +0800"
-	return time.Now().Add(time.Hour * 24).Format(RFC1123)
+	const rfc1123Format = "Mon, 02 Jan 2006 15:04:05 +0800"
+	return time.Now().Add(24 * time.Hour).Format(rfc1123Format)
 }
 
 func bootstrapMacaron() *macaron.Macaron {

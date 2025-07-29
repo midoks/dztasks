@@ -58,14 +58,14 @@ type Context struct {
 	IsTokenAuth bool
 }
 
-// json api common data
+// JsonData represents the standard JSON API response structure
 type JsonData struct {
 	Code int64       `json:"code"`
 	Msg  string      `json:"msg"`
 	Data interface{} `json:"data,omitempty"`
 }
 
-// json layui common data
+// LayuiData represents the Layui table JSON response structure
 type LayuiData struct {
 	Code  int64       `json:"code"`
 	Count int         `json:"count"`
@@ -155,26 +155,27 @@ func (c *Context) Success(name string) {
 	c.HTML(http.StatusOK, name)
 }
 
-// JSONSuccess responses JSON with status http.StatusOK.
+// RenderJson renders JSON response with status http.StatusOK
 func (c *Context) RenderJson(data interface{}) {
 	c.JSON(http.StatusOK, data)
 }
 
-// JSON Success Message
+// ReturnJson returns a standard JSON API response
 func (c *Context) ReturnJson(code int64, msg string, data interface{}) {
 	c.RenderJson(JsonData{Code: code, Msg: msg, Data: data})
 }
 
-// Layui JSON Success Message
+// ReturnLayuiJson returns a Layui table JSON response
 func (c *Context) ReturnLayuiJson(code int64, msg string, count int, data interface{}) {
 	c.RenderJson(LayuiData{Code: code, Msg: msg, Count: count, Data: data})
 }
 
+// Ok returns a success JSON response
 func (c *Context) Ok(msg string) {
 	c.ReturnJson(1, msg, "")
 }
 
-// JSON Fail Message
+// Fail returns a failure JSON response
 func (c *Context) Fail(msg string) {
 	c.ReturnJson(-1, msg, "")
 }

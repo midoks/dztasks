@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "fmt"
 	"log"
 	"os"
 
@@ -11,8 +10,10 @@ import (
 	"github.com/midoks/dztasks/internal/conf"
 )
 
-const Version = "1.0"
-const AppName = "dztasks"
+const (
+	Version = "1.0"
+	AppName = "dztasks"
+)
 
 func init() {
 	conf.App.Version = Version
@@ -20,7 +21,6 @@ func init() {
 }
 
 func main() {
-
 	app := cli.NewApp()
 	app.Name = AppName
 	app.Version = Version
@@ -30,7 +30,6 @@ func main() {
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		log.Println("Failed to start application: ", err)
+		log.Fatalf("Failed to start application: %v", err)
 	}
-
 }

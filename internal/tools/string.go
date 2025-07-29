@@ -38,15 +38,24 @@ func Md5(s string) string {
 	return Md5Byte([]byte(s))
 }
 
+// ToSlice converts a comma-separated string to a slice of int64
 func ToSlice(input string) ([]int64, error) {
-	ret := []int64{}
-	inputN := strings.SplitN(input, ",", -1)
-	fmt.Println(inputN)
+	if input == "" {
+		return []int64{}, nil
+	}
 
-	for _, i := range inputN {
-		ival, err := strconv.ParseInt(i, 10, 64)
+	inputParts := strings.Split(input, ",")
+	ret := make([]int64, 0, len(inputParts))
+
+	for _, part := range inputParts {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+
+		ival, err := strconv.ParseInt(part, 10, 64)
 		if err != nil {
-			return ret, err
+			return nil, fmt.Errorf("invalid number '%s': %w", part, err)
 		}
 		ret = append(ret, ival)
 	}
@@ -54,6 +63,7 @@ func ToSlice(input string) ([]int64, error) {
 	return ret, nil
 }
 
+// CheckStringIsExist checks if a string exists in a slice of strings
 func CheckStringIsExist(source string, check []string) bool {
 	for _, s := range check {
 		if source == s {
@@ -61,6 +71,11 @@ func CheckStringIsExist(source string, check []string) bool {
 		}
 	}
 	return false
+}
+
+// StringInSlice is an alias for CheckStringIsExist with a more conventional name
+func StringInSlice(str string, slice []string) bool {
+	return CheckStringIsExist(str, slice)
 }
 
 // Seconds-based time units

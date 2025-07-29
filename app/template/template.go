@@ -7,7 +7,6 @@ package template
 import (
 	"fmt"
 	"html/template"
-	// "strconv"
 	"strings"
 	"sync"
 	"time"
@@ -24,15 +23,11 @@ var (
 // FuncMap returns a list of user-defined template functions.
 func FuncMap() []template.FuncMap {
 	funcMapOnce.Do(func() {
-		funcMap = []template.FuncMap{map[string]interface{}{
+		funcMap = []template.FuncMap{{
+			// Application information functions
 			"BuildCommit": func() string {
 				return conf.App.Version
-				// if !strings.EqualFold(conf.BuildCommit, "") {
-				// return conf.BuildCommit
-				// }
-				// return strconv.FormatInt(time.Now().Unix(), 10)
 			},
-
 			"Year": func() int {
 				return time.Now().Year()
 			},
@@ -45,6 +40,8 @@ func FuncMap() []template.FuncMap {
 			"AppVer": func() string {
 				return conf.App.Version
 			},
+			
+			// HTML processing functions
 			"Safe":        Safe,
 			"Str2HTML":    Str2HTML,
 			"Sanitize":    bluemonday.UGCPolicy().Sanitize,

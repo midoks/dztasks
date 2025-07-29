@@ -20,20 +20,21 @@ import (
 // File is the configuration object.
 var File *ini.File
 
+// autoMakeCustomConf creates a default configuration file if it doesn't exist
 func autoMakeCustomConf(customConf string) error {
-
 	if tools.IsExist(customConf) {
 		return nil
 	}
 
-	// auto make custom conf file
+	// Create default configuration
 	cfg := ini.Empty()
 	if tools.IsFile(customConf) {
 		if err := cfg.Append(customConf); err != nil {
-			return err
+			return errors.Wrap(err, "append existing config")
 		}
 	}
 
+	// Set default values
 	cfg.Section("").Key("app_name").SetValue("dztasks")
 	cfg.Section("").Key("run_mode").SetValue("prod")
 
@@ -47,29 +48,40 @@ func autoMakeCustomConf(customConf string) error {
 	cfg.Section("plugins").Key("show_error").SetValue("true")
 	cfg.Section("plugins").Key("show_cmd").SetValue("true")
 
-	os.MkdirAll(filepath.Dir(customConf), os.ModePerm)
+	// Ensure directory exists
+	if err := os.MkdirAll(filepath.Dir(customConf), os.ModePerm); err != nil {
+		return errors.Wrap(err, "create config directory")
+	}
+	
+	// Save configuration file
 	if err := cfg.SaveTo(customConf); err != nil {
-		return err
+		return errors.Wrap(err, "save config file")
 	}
 
 	return nil
 }
 
+// Init initializes the configuration system
 func Init(customConf string) error {
+	data, err := embed.Conf.ReadFile("conf/app.conf")
+	if err != nil {
+		return errors.Wrap(err, "read embedded config")
+	}
 
-	data, _ := embed.Conf.ReadFile("conf/app.conf")
-
-	// fmt.Println(data)
-	File, err := ini.LoadSources(ini.LoadOptions{
+	// Load embedded configuration
+	File, err = ini.LoadSources(ini.LoadOptions{
 		IgnoreInlineComment: true,
 	}, data)
 	if err != nil {
 		return errors.Wrap(err, "parse 'conf/app.conf'")
 	}
 
+	// Determine custom config path
 	if customConf == "" {
 		customConf = filepath.Join(CustomDir(), "conf", "app.conf")
-		autoMakeCustomConf(customConf)
+		if err := autoMakeCustomConf(customConf); err != nil {
+			return errors.Wrap(err, "create default config")
+		}
 	} else {
 		customConf, err = filepath.Abs(customConf)
 		if err != nil {
@@ -78,16 +90,18 @@ func Init(customConf string) error {
 	}
 	CustomConf = customConf
 
+	// Append custom configuration if exists
 	if tools.IsFile(customConf) {
 		if err = File.Append(customConf); err != nil {
 			return errors.Wrapf(err, "append %q", customConf)
 		}
 	} else {
-		log.Println("Custom config ", customConf, " not found. Ignore this warning if you're running for the first time")
+		log.Printf("Custom config %s not found. Ignore this warning if you're running for the first time", customConf)
 	}
 
 	File.NameMapper = ini.TitleUnderscore
 
+	// Map default section to App struct
 	if err = File.Section(ini.DefaultSection).MapTo(&App); err != nil {
 		return errors.Wrap(err, "mapping default section")
 	}
@@ -139,7 +153,7 @@ func Init(customConf string) error {
 	}
 
 	// ****************************
-	// ----- Session settings -----
+	// ----- Admin settings -----
 	// ****************************
 
 	if err = File.Section("admin").MapTo(&Admin); err != nil {
@@ -147,7 +161,7 @@ func Init(customConf string) error {
 	}
 
 	// ****************************
-	// ----- Session settings -----
+	// ----- Plugins settings -----
 	// ****************************
 
 	if err = File.Section("plugins").MapTo(&Plugins); err != nil {
