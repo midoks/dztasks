@@ -31,9 +31,7 @@ type ToggleOptions struct {
 }
 
 func Toggle(options *ToggleOptions) macaron.Handler {
-
 	return func(c *Context) {
-
 		if options.SignInRequired {
 			if !c.IsLogged {
 				c.SetCookie("redirect_to", url.QueryEscape(conf.Web.Subpath+c.Req.RequestURI), 0, conf.Web.Subpath)
@@ -58,8 +56,8 @@ type Context struct {
 	IsTokenAuth bool
 }
 
-// JsonData represents the standard JSON API response structure
-type JsonData struct {
+// JSONData represents the standard JSON API response structure
+type JSONData struct {
 	Code int64       `json:"code"`
 	Msg  string      `json:"msg"`
 	Data interface{} `json:"data,omitempty"`
@@ -155,29 +153,29 @@ func (c *Context) Success(name string) {
 	c.HTML(http.StatusOK, name)
 }
 
-// RenderJson renders JSON response with status http.StatusOK
-func (c *Context) RenderJson(data interface{}) {
+// RenderJSON renders JSON response with status http.StatusOK
+func (c *Context) RenderJSON(data interface{}) {
 	c.JSON(http.StatusOK, data)
 }
 
-// ReturnJson returns a standard JSON API response
-func (c *Context) ReturnJson(code int64, msg string, data interface{}) {
-	c.RenderJson(JsonData{Code: code, Msg: msg, Data: data})
+// ReturnJSON returns a standard JSON API response
+func (c *Context) ReturnJSON(code int64, msg string, data interface{}) {
+	c.RenderJSON(JSONData{Code: code, Msg: msg, Data: data})
 }
 
-// ReturnLayuiJson returns a Layui table JSON response
-func (c *Context) ReturnLayuiJson(code int64, msg string, count int, data interface{}) {
-	c.RenderJson(LayuiData{Code: code, Msg: msg, Count: count, Data: data})
+// ReturnLayuiJSON returns a Layui table JSON response
+func (c *Context) ReturnLayuiJSON(code int64, msg string, count int, data interface{}) {
+	c.RenderJSON(LayuiData{Code: code, Msg: msg, Count: count, Data: data})
 }
 
 // Ok returns a success JSON response
 func (c *Context) Ok(msg string) {
-	c.ReturnJson(1, msg, "")
+	c.ReturnJSON(1, msg, "")
 }
 
 // Fail returns a failure JSON response
 func (c *Context) Fail(msg string) {
-	c.ReturnJson(-1, msg, "")
+	c.ReturnJSON(-1, msg, "")
 }
 
 // NotFound renders the 404 page.
@@ -252,12 +250,11 @@ func Contexter() macaron.Handler {
 			log.Debugf("Session ID: %s", sess.ID())
 			log.Debugf("CSRF Token: %s", c.Data["CSRFToken"])
 		}
-		plugin_dir := conf.Plugins.Path
-		c.Data["PluginMenu"] = common.PluginList(plugin_dir)
+		pluginDir := conf.Plugins.Path
+		c.Data["PluginMenu"] = common.PluginList(pluginDir)
 
 		// avoid iframe use by other.
 		// c.Header().Set("X-Content-Type-Options", "nosniff")
 		// c.Header().Set("X-Frame-Options", "DENY")
-
 	}
 }

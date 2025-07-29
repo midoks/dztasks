@@ -21,13 +21,13 @@ func (d *decoder) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 
 		if ch < min || ch > max { // Illegal code point in ASCII mode
 			err = ErrInvalidUTF7
-			return
+			return nDst, nSrc, err
 		}
 
 		if ch != '&' {
 			if nDst+1 > len(dst) {
 				err = transform.ErrShortDst
-				return
+				return nDst, nSrc, err
 			}
 
 			nSrc++
@@ -44,7 +44,7 @@ func (d *decoder) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 		for i++; i < len(src) && src[i] != '-'; i++ {
 			if src[i] == '\r' || src[i] == '\n' { // base64 package ignores CR and LF
 				err = ErrInvalidUTF7
-				return
+				return nDst, nSrc, err
 			}
 		}
 
@@ -54,7 +54,7 @@ func (d *decoder) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 			} else {
 				err = transform.ErrShortSrc
 			}
-			return
+			return nDst, nSrc, err
 		}
 
 		var b []byte
@@ -64,7 +64,7 @@ func (d *decoder) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 		} else { // Control or non-ASCII code points in base64
 			if !d.ascii { // Null shift ("&...-&...-")
 				err = ErrInvalidUTF7
-				return
+				return nDst, nSrc, err
 			}
 
 			b = decode(src[start:i])
@@ -73,12 +73,12 @@ func (d *decoder) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 
 		if len(b) == 0 { // Bad encoding
 			err = ErrInvalidUTF7
-			return
+			return nDst, nSrc, err
 		}
 
 		if nDst+len(b) > len(dst) {
 			err = transform.ErrShortDst
-			return
+			return nDst, nSrc, err
 		}
 
 		nSrc = i + 1
@@ -93,7 +93,7 @@ func (d *decoder) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 		d.ascii = true
 	}
 
-	return
+	return nDst, nSrc, err
 }
 
 func (d *decoder) Reset() {

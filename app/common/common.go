@@ -70,7 +70,6 @@ func ExecPluginCron(plugin Plugin, cron PluginCron) ([]byte, error) {
 		} else {
 			cmd.Dir = cron.Dir
 		}
-
 	} else if !strings.EqualFold(plugin.Dir, "") {
 		if !strings.HasSuffix(plugin.Dir, "/") {
 			pdir := fmt.Sprintf("%s/%s", conf.Plugins.Path, plugin.Dir)
@@ -159,7 +158,6 @@ func PluginList(plugin_dir string) []Plugin {
 	result := make([]Plugin, 0)
 
 	for _, file := range files {
-
 		plugin_name := fmt.Sprintf("%s/%s", plugin_dir, file.Name())
 		plugin_info := fmt.Sprintf("%s/info.json", plugin_name)
 		if !tools.IsExist(plugin_info) {

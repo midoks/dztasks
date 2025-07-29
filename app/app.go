@@ -59,8 +59,14 @@ func newTemplateFileSystem(dir, customDir string) macaron.TemplateFileSystem {
 		dir += "/"
 	}
 
+	// Load embedded templates
 	allfn := embed.TemplatesAllNames("templates")
 	for _, name := range allfn {
+		// Filter by directory if specified
+		if dir != "" && !strings.HasPrefix(name, "templates/"+dir) {
+			continue
+		}
+
 		ext := path.Ext(name)
 		data, err := embed.Templates.ReadFile(name)
 		if err != nil {
@@ -69,6 +75,15 @@ func newTemplateFileSystem(dir, customDir string) macaron.TemplateFileSystem {
 
 		name = strings.TrimPrefix(name, "templates")
 		name = strings.TrimSuffix(name, ext)
+
+		// Check if custom template exists and use it instead
+		if customDir != "" {
+			customPath := filepath.Join(customDir, name+ext)
+			if customData, err := embed.Templates.ReadFile(customPath); err == nil {
+				data = customData
+			}
+		}
+
 		files = append(files, macaron.NewTplFile(name, data, ext))
 	}
 
@@ -118,12 +133,12 @@ func bootstrapMacaron() *macaron.Macaron {
 		},
 	))
 
-	//template start
+	// template start
 	renderOpt := macaron.RenderOptions{
 		Directory:         filepath.Join(conf.WorkDir(), "templates"),
 		AppendDirectories: []string{filepath.Join(conf.CustomDir(), "templates")},
 		Funcs:             template.FuncMap(),
-		Delims:            macaron.Delims{"{[", "]}"},
+		Delims:            macaron.Delims{Left: "{[", Right: "]}"},
 		IndentJSON:        macaron.Env != macaron.PROD,
 	}
 	if !conf.Web.LoadAssetsFromDisk {
@@ -131,7 +146,7 @@ func bootstrapMacaron() *macaron.Macaron {
 	}
 
 	m.Use(macaron.Renderer(renderOpt))
-	//template end
+	// template end
 
 	m.Use(cache.Cacher(cache.Options{
 		Adapter:       conf.Cache.Adapter,
@@ -147,7 +162,6 @@ func bootstrapMacaron() *macaron.Macaron {
 }
 
 func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
-
 	reqSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: true})
 	reqSignOut := context.Toggle(&context.ToggleOptions{SignOutRequired: true})
 
@@ -155,7 +169,6 @@ func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 	m.SetAutoHead(true)
 
 	m.Group("", func() {
-
 		m.Group("", func() {
 			m.Group("/login", func() {
 				m.Combo("").Get(user.Login).Post(bindIgnErr(form.SignIn{}), user.LoginPost)
@@ -174,7 +187,6 @@ func bootstrapRouter(m *macaron.Macaron) *macaron.Macaron {
 		m.Group("/plugin/data", func() {
 			m.Combo("").Get(bindIgnErr(form.ArgsPluginData{}), plugin.PluginData).Post(bindIgnErr(form.ArgsPluginData{}), plugin.PluginData)
 		}, reqSignIn)
-
 	}, session.Sessioner(session.Options{
 		Provider:       conf.Session.Provider,
 		ProviderConfig: conf.Session.ProviderConfig,

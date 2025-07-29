@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/microcosm-cc/bluemonday"
+
 	"github.com/midoks/dztasks/internal/conf"
 )
 

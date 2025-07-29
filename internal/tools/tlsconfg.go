@@ -14,7 +14,6 @@ import (
 )
 
 func InitAutoMakeTLSConfigWithArgs(cert, key string) *tls.Config {
-
 	certVal, err := tls.LoadX509KeyPair(cert, key)
 	if err != nil {
 		log.Fatalf("Cert load failed: %v", err)
@@ -28,7 +27,6 @@ func InitAutoMakeTLSConfigWithArgs(cert, key string) *tls.Config {
 }
 
 func InitAutoMakeTLSConfig() *tls.Config {
-
 	max := new(big.Int).Lsh(big.NewInt(1), 128)
 	serialNumber, _ := rand.Int(rand.Reader, max)
 	subject := pkix.Name{

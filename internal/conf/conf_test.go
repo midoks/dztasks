@@ -121,7 +121,7 @@ func TestConfigStructures(t *testing.T) {
 			RunUser string
 		}{}},
 		{"WebConfig", &struct {
-			HttpPort             int
+			HTTPPort             int
 			ExternalURL          string
 			Subpath              string
 			LoadAssetsFromDisk   bool

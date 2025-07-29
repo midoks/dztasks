@@ -24,7 +24,6 @@ func Login(c *context.Context) {
 }
 
 func LoginPost(c *context.Context, f form.SignIn) {
-
 	// fmt.Println("api",f.Username, f.Password)
 	// fmt.Println("conf",conf.Admin.User, conf.Admin.Pass)
 
@@ -53,7 +52,7 @@ func LoginPost(c *context.Context, f form.SignIn) {
 
 func SignOut(c *context.Context) {
 	_ = c.Session.Flush()
-	_ = c.Session.Destory(c.Context)
+	_ = c.Session.Release()
 	c.SetCookie(conf.Security.CookieUsername, "", -1, conf.Web.Subpath)
 	c.SetCookie(conf.Security.CookieRememberName, "", -1, conf.Web.Subpath)
 	c.SetCookie(conf.Session.CSRFCookieName, "", -1, conf.Web.Subpath)

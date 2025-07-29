@@ -25,9 +25,7 @@ func TemplatesAllNames(dirName string) []string {
 	for _, d := range dir {
 		if d.IsDir() {
 			sub_name := TemplatesAllNames(fmt.Sprintf("%s/%s", dirName, d.Name()))
-			for _, sn := range sub_name {
-				names = append(names, sn)
-			}
+			names = append(names, sub_name...)
 		} else {
 			names = append(names, fmt.Sprintf("%s/%s", dirName, d.Name()))
 		}

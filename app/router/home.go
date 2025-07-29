@@ -32,10 +32,10 @@ func getLinesText(lines []string) string {
 func Log(c *context.Context) {
 	lines, err := log.ReverseRead(25)
 	if err != nil {
-		c.ReturnJson(1, "读取日志失败", "暂无内容")
+		c.ReturnJSON(1, "读取日志失败", "暂无内容")
 		return
 	}
 
 	content := getLinesText(lines)
-	c.ReturnJson(0, "ok", content)
+	c.ReturnJSON(0, "ok", content)
 }

@@ -32,7 +32,7 @@ func (e *encoder) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 
 			if !atEOF && i == len(src) {
 				err = transform.ErrShortSrc
-				return
+				return nDst, nSrc, err
 			}
 
 			b = encode(src[start:i])
@@ -40,7 +40,7 @@ func (e *encoder) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 
 		if nDst+len(b) > len(dst) {
 			err = transform.ErrShortDst
-			return
+			return nDst, nSrc, err
 		}
 
 		nSrc = i
@@ -51,7 +51,7 @@ func (e *encoder) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 		}
 	}
 
-	return
+	return nDst, nSrc, err
 }
 
 func (e *encoder) Reset() {}

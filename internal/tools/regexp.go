@@ -9,7 +9,7 @@ func IsEmailRe(b string) bool {
 	return re.MatchString(b)
 }
 
-func IsUrlRe(b string) bool {
+func IsURLRe(b string) bool {
 	var re = regexp.MustCompile(`[a-zA-z]+://[^\s]*`)
 	return re.MatchString(b)
 }

@@ -26,7 +26,6 @@ func runPluginTask() {
 	result := common.PluginList(plugin_dir)
 
 	for _, plugin := range result {
-
 		if !plugin.Installed {
 			continue
 		}
@@ -73,7 +72,6 @@ func runPluginTask() {
 			})
 		}
 	}
-
 }
 
 func InitTask() {

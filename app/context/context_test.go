@@ -9,16 +9,16 @@ import (
 	"gopkg.in/macaron.v1"
 )
 
-// TestJsonData tests the JsonData structure
-func TestJsonData(t *testing.T) {
+// TestJSONData tests the JSONData structure
+func TestJSONData(t *testing.T) {
 	tests := []struct {
 		name     string
-		data     JsonData
+		data     JSONData
 		expected string
 	}{
 		{
 			name: "success response",
-			data: JsonData{
+			data: JSONData{
 				Code: 0,
 				Msg:  "success",
 				Data: "test data",
@@ -27,7 +27,7 @@ func TestJsonData(t *testing.T) {
 		},
 		{
 			name: "error response",
-			data: JsonData{
+			data: JSONData{
 				Code: -1,
 				Msg:  "error occurred",
 				Data: nil,
@@ -36,7 +36,7 @@ func TestJsonData(t *testing.T) {
 		},
 		{
 			name: "response with complex data",
-			data: JsonData{
+			data: JSONData{
 				Code: 1,
 				Msg:  "ok",
 				Data: map[string]interface{}{
@@ -52,11 +52,11 @@ func TestJsonData(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			jsonBytes, err := json.Marshal(tt.data)
 			if err != nil {
-				t.Fatalf("Failed to marshal JsonData: %v", err)
+				t.Fatalf("Failed to marshal JSONData: %v", err)
 			}
 
 			if string(jsonBytes) != tt.expected {
-				t.Errorf("JsonData marshal = %s, want %s", string(jsonBytes), tt.expected)
+				t.Errorf("JSONData marshal = %s, want %s", string(jsonBytes), tt.expected)
 			}
 		})
 	}
@@ -111,10 +111,10 @@ func TestContextJSONMethods(t *testing.T) {
 	m := macaron.New()
 	m.Use(macaron.Renderer())
 
-	// Test ReturnJson method
+	// Test ReturnJSON method
 	m.Get("/test-json", func(ctx *macaron.Context) {
 		c := &Context{Context: ctx}
-		c.ReturnJson(0, "success", "test data")
+		c.ReturnJSON(0, "success", "test data")
 	})
 
 	// Test Ok method
@@ -129,10 +129,10 @@ func TestContextJSONMethods(t *testing.T) {
 		c.Fail("operation failed")
 	})
 
-	// Test ReturnLayuiJson method
+	// Test ReturnLayuiJSON method
 	m.Get("/test-layui", func(ctx *macaron.Context) {
 		c := &Context{Context: ctx}
-		c.ReturnLayuiJson(0, "success", 10, []string{"item1", "item2"})
+		c.ReturnLayuiJSON(0, "success", 10, []string{"item1", "item2"})
 	})
 
 	tests := []struct {
@@ -142,7 +142,7 @@ func TestContextJSONMethods(t *testing.T) {
 		expectedBody string
 	}{
 		{
-			name:         "ReturnJson method",
+			name:         "ReturnJSON method",
 			path:         "/test-json",
 			expectedCode: http.StatusOK,
 			expectedBody: `{"code":0,"msg":"success","data":"test data"}`,
@@ -160,7 +160,7 @@ func TestContextJSONMethods(t *testing.T) {
 			expectedBody: `{"code":-1,"msg":"operation failed","data":""}`,
 		},
 		{
-			name:         "ReturnLayuiJson method",
+			name:         "ReturnLayuiJSON method",
 			path:         "/test-layui",
 			expectedCode: http.StatusOK,
 			expectedBody: `{"code":0,"count":10,"msg":"success","data":["item1","item2"]}`,
@@ -169,7 +169,7 @@ func TestContextJSONMethods(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			req := httptest.NewRequest("GET", tt.path, nil)
+			req := httptest.NewRequest("GET", tt.path, http.NoBody)
 			w := httptest.NewRecorder()
 
 			m.ServeHTTP(w, req)
@@ -205,7 +205,7 @@ func TestContextHelperMethods(t *testing.T) {
 		if !c.Data["PageIsHome"].(bool) {
 			t.Error("PageIs method did not set the correct data")
 		}
-		c.ReturnJson(0, "ok", nil)
+		c.ReturnJSON(0, "ok", nil)
 	})
 
 	// Test Require method
@@ -216,7 +216,7 @@ func TestContextHelperMethods(t *testing.T) {
 		if !c.Data["RequirejQuery"].(bool) {
 			t.Error("Require method did not set the correct data")
 		}
-		c.ReturnJson(0, "ok", nil)
+		c.ReturnJSON(0, "ok", nil)
 	})
 
 	// Test FormErr method
@@ -227,14 +227,14 @@ func TestContextHelperMethods(t *testing.T) {
 		if !c.Data["Err_username"].(bool) || !c.Data["Err_password"].(bool) {
 			t.Error("FormErr method did not set the correct data")
 		}
-		c.ReturnJson(0, "ok", nil)
+		c.ReturnJSON(0, "ok", nil)
 	})
 
 	tests := []string{"/test-page-is", "/test-require", "/test-form-err"}
 
 	for _, path := range tests {
 		t.Run(path, func(t *testing.T) {
-			req := httptest.NewRequest("GET", path, nil)
+			req := httptest.NewRequest("GET", path, http.NoBody)
 			w := httptest.NewRecorder()
 
 			m.ServeHTTP(w, req)

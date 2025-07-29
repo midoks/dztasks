@@ -28,12 +28,11 @@ var Web = cli.Command{
 }
 
 func runWeb(c *cli.Context) error {
-
 	conf.Init("")
 	log.Init()
 	go watch.InitWatch(conf.Plugins.Path)
 	bgtask.InitTask()
 
-	app.Start(conf.Web.HttpPort)
+	app.Start(conf.Web.HTTPPort)
 	return nil
 }

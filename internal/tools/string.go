@@ -219,8 +219,8 @@ func RandString(len int) string {
 }
 
 func RemoveDuplicatesAndEmpty(a []string) (ret []string) {
-	a_len := len(a)
-	for i := 0; i < a_len; i++ {
+	aLen := len(a)
+	for i := 0; i < aLen; i++ {
 		if (i > 0 && a[i-1] == a[i]) || len(a[i]) == 0 {
 			continue
 		}
@@ -229,10 +229,10 @@ func RemoveDuplicatesAndEmpty(a []string) (ret []string) {
 	return
 }
 
-func GetHttpData(url string) (string, error) {
+func GetHTTPData(url string) (string, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return "", errors.New("资源获取错误!")
+		return "", errors.New("资源获取错误")
 	}
 	defer resp.Body.Close()
 
@@ -297,12 +297,12 @@ func FilterAddressBody(src string) string {
 
 // is_numeric()
 func IsNumeric(val interface{}) bool {
-	switch val.(type) {
+	switch val := val.(type) {
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
 	case float32, float64, complex64, complex128:
 		return true
 	case string:
-		str := val.(string)
+		str := val
 		if str == "" {
 			return false
 		}
@@ -364,7 +364,6 @@ func GetRealMail(src string) string {
 }
 
 func ToEditorLang(lang string) string {
-
 	tupleLang := map[string]string{
 		"zh-CN": "zh-cn",
 		"en-US": "en-gb",

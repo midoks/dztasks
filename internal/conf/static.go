@@ -54,8 +54,8 @@ var (
 
 	// web settings
 	Web struct {
-		HttpAddr                 string `ini:"http_addr"`
-		HttpPort                 int    `ini:"http_port"`
+		HTTPAddr                 string `ini:"http_addr"`
+		HTTPPort                 int    `ini:"http_port"`
 		Domain                   string
 		AppDataPath              string
 		AccessControlAllowOrigin string

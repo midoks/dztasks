@@ -3,7 +3,6 @@ package plugin
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 	"time"
@@ -18,14 +17,14 @@ import (
 )
 
 const (
-	PLUGIN_HOME    = "/plugin/index"
-	PLUGIN_MENU    = "/plugin/menu"
-	PLUGIN_CONTENT = "/plugin/content"
+	PluginHomePath    = "/plugin/index"
+	PluginMenuPath    = "/plugin/menu"
+	PluginContentPath = "/plugin/content"
 )
 
 func PluginHome(c *context.Context) {
 	c.Data["PageIsPlugin"] = true
-	c.Success(PLUGIN_HOME)
+	c.Success(PluginHomePath)
 }
 
 func PluginMenu(c *context.Context, args form.ArgsPluginMenu) {
@@ -34,37 +33,37 @@ func PluginMenu(c *context.Context, args form.ArgsPluginMenu) {
 	c.Data["PageIsPluginMenu_Tag"] = args.Tag
 
 	// fmt.Println(args.Name, args.Tag)
-	plugin_dir := conf.Plugins.Path
-	list := common.PluginList(plugin_dir)
+	pluginDir := conf.Plugins.Path
+	list := common.PluginList(pluginDir)
 	c.Data["PluginContent"] = ""
 
 	for _, plugin := range list {
 		for _, menu := range plugin.Menu {
 			if plugin.Path == args.Name && menu.Tag == args.Tag {
-				abs_path := fmt.Sprintf("%s/%s/%s", conf.Plugins.Path, plugin.Path, menu.Path)
-				content, _ := ioutil.ReadFile(abs_path)
+				absPath := fmt.Sprintf("%s/%s/%s", conf.Plugins.Path, plugin.Path, menu.Path)
+				content, _ := os.ReadFile(absPath)
 				c.Data["PluginContent"] = string(content)
 			}
 		}
 	}
-	c.Success(PLUGIN_MENU)
+	c.Success(PluginMenuPath)
 }
 
 // 插件列表
 func PluginList(c *context.Context) {
-	plugin_dir := conf.Plugins.Path
-	result := common.PluginList(plugin_dir)
-	c.ReturnLayuiJson(0, "ok", len(result), result)
+	pluginDir := conf.Plugins.Path
+	result := common.PluginList(pluginDir)
+	c.ReturnLayuiJSON(0, "ok", len(result), result)
 }
 
 // 插件安装
 func PluginInstall(c *context.Context, args form.ArgsPluginInstall) {
-	plugin_dir := conf.Plugins.Path
-	plugin_name := fmt.Sprintf("%s/%s", plugin_dir, args.Path)
-	plugin_lock := common.GetPluginInstallLock(plugin_name)
-	if !tools.IsExist(plugin_lock) {
-		tools.WriteFile(plugin_lock, "ok")
-		time.Sleep(2)
+	pluginDir := conf.Plugins.Path
+	pluginName := fmt.Sprintf("%s/%s", pluginDir, args.Path)
+	pluginLock := common.GetPluginInstallLock(pluginName)
+	if !tools.IsExist(pluginLock) {
+		tools.WriteFile(pluginLock, "ok")
+		time.Sleep(2 * time.Second)
 		bgtask.ResetTask()
 		c.Ok("安装成功")
 		return
@@ -74,12 +73,12 @@ func PluginInstall(c *context.Context, args form.ArgsPluginInstall) {
 
 // 插件卸载
 func PluginUninstall(c *context.Context, args form.ArgsPluginUninstall) {
-	plugin_dir := conf.Plugins.Path
-	plugin_name := fmt.Sprintf("%s/%s", plugin_dir, args.Path)
-	plugin_lock := common.GetPluginInstallLock(plugin_name)
-	if tools.IsExist(plugin_lock) {
-		os.Remove(plugin_lock)
-		time.Sleep(2)
+	pluginDir := conf.Plugins.Path
+	pluginName := fmt.Sprintf("%s/%s", pluginDir, args.Path)
+	pluginLock := common.GetPluginInstallLock(pluginName)
+	if tools.IsExist(pluginLock) {
+		os.Remove(pluginLock)
+		time.Sleep(2 * time.Second)
 		bgtask.ResetTask()
 		c.Ok("卸载成功")
 		return
@@ -89,35 +88,33 @@ func PluginUninstall(c *context.Context, args form.ArgsPluginUninstall) {
 
 // 插件数据请求
 func PluginPage(c *context.Context, args form.ArgsPluginPage) {
-	plugin_dir := conf.Plugins.Path
-	list := common.PluginList(plugin_dir)
+	pluginDir := conf.Plugins.Path
+	list := common.PluginList(pluginDir)
 	c.Data["PluginContent"] = ""
 	for _, plugin := range list {
 		if plugin.Path == args.Name {
-
 			// fmt.Println(args)
-			abs_path := fmt.Sprintf("%s/%s/%s", plugin_dir, plugin.Path, args.Page)
+			absPath := fmt.Sprintf("%s/%s/%s", pluginDir, plugin.Path, args.Page)
 
-			content, err := tools.ReadFile(abs_path)
+			content, err := tools.ReadFile(absPath)
 			if err == nil {
 				c.Data["PluginContent"] = content
-				c.Success(PLUGIN_CONTENT)
+				c.Success(PluginContentPath)
 				return
 			}
 			c.Data["PluginContent"] = err.Error()
 		}
 	}
-	c.Success(PLUGIN_CONTENT)
+	c.Success(PluginContentPath)
 }
 
 // 插件数据请求
 func PluginData(c *context.Context, args form.ArgsPluginData) {
-	plugin_dir := conf.Plugins.Path
-	list := common.PluginList(plugin_dir)
+	pluginDir := conf.Plugins.Path
+	list := common.PluginList(pluginDir)
 
 	for _, plugin := range list {
 		if plugin.Path == args.Name {
-
 			if plugin.Index == "" {
 				plugin.Index = "index.py"
 			}
@@ -125,45 +122,45 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 				plugin.Bin = "python3"
 			}
 
-			default_script := fmt.Sprintf("%s/%s/%s", plugin_dir, plugin.Path, plugin.Index)
+			defaultScript := fmt.Sprintf("%s/%s/%s", pluginDir, plugin.Path, plugin.Index)
 			if !strings.EqualFold(plugin.Dir, "") {
-				default_script = fmt.Sprintf("%s", plugin.Index)
+				defaultScript = plugin.Index
 			}
 
-			fmt.Println(default_script)
+			fmt.Println(defaultScript)
 
-			script_cmd := make([]string, 0)
-			script_cmd = append(script_cmd, default_script)
-			script_cmd = append(script_cmd, args.Action)
+			scriptCmd := make([]string, 0)
+			scriptCmd = append(scriptCmd, defaultScript)
+			scriptCmd = append(scriptCmd, args.Action)
 
-			script_args := make(map[string]interface{})
+			scriptArgs := make(map[string]interface{})
 
 			if args.Page > 0 {
-				script_args["page"] = args.Page
+				scriptArgs["page"] = args.Page
 			}
 			if args.Limit > 0 {
-				script_args["limit"] = args.Limit
+				scriptArgs["limit"] = args.Limit
 			}
 
 			if !strings.EqualFold(args.Extra, "") {
-				script_args["extra"] = args.Extra
+				scriptArgs["extra"] = args.Extra
 			}
 			if !strings.EqualFold(args.Args, "") {
-				script_args["args"] = args.Args
+				scriptArgs["args"] = args.Args
 			}
 
-			post_args, _ := json.Marshal(script_args)
+			postArgs, _ := json.Marshal(scriptArgs)
 
-			//展示调用命令
+			// 展示调用命令
 			if conf.Plugins.ShowCmd {
-				cmd_args := strings.Join(script_cmd, " ")
-				cmd := "[CMD]" + plugin.Bin + " " + cmd_args + " '" + string(post_args) + "'"
+				cmdArgs := strings.Join(scriptCmd, " ")
+				cmd := "[CMD]" + plugin.Bin + " " + cmdArgs + " '" + string(postArgs) + "'"
 				log.Info(cmd)
 			}
 
-			script_cmd = append(script_cmd, string(post_args))
-			// cmd_data, err := common.ExecInput(plugin.Bin, script_cmd)
-			cmdData, err := common.ExecPluginCmd(plugin, script_cmd)
+			scriptCmd = append(scriptCmd, string(postArgs))
+			// cmd_data, err := common.ExecInput(plugin.Bin, scriptCmd)
+			cmdData, err := common.ExecPluginCmd(plugin, scriptCmd)
 
 			if err != nil && conf.Plugins.ShowError {
 				log.Info(err.Error())
@@ -173,15 +170,15 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 				log.Info(string(cmdData) + "\n")
 			}
 
-			var plugin_data interface{}
-			err = json.Unmarshal(cmdData, &plugin_data)
+			var pluginData interface{}
+			err = json.Unmarshal(cmdData, &pluginData)
 
 			if err != nil && conf.Plugins.ShowError {
 				log.Info(err.Error())
 			}
 
 			if err == nil {
-				c.RenderJson(plugin_data)
+				c.RenderJSON(pluginData)
 				return
 			}
 			c.Fail(err.Error())
@@ -193,14 +190,13 @@ func PluginData(c *context.Context, args form.ArgsPluginData) {
 
 // 插件数据请求
 func PluginFile(c *context.Context, args form.ArgsPluginFile) {
-	plugin_dir := conf.Plugins.Path
-	list := common.PluginList(plugin_dir)
+	pluginDir := conf.Plugins.Path
+	list := common.PluginList(pluginDir)
 
 	for _, plugin := range list {
 		if plugin.Path == args.Name {
-
-			default_script := fmt.Sprintf("%s/%s/%s", plugin_dir, plugin.Path, args.File)
-			content, err := tools.ReadFileByte(default_script)
+			defaultScript := fmt.Sprintf("%s/%s/%s", pluginDir, plugin.Path, args.File)
+			content, err := tools.ReadFileByte(defaultScript)
 			if err == nil {
 				c.RawData(200, content)
 				return

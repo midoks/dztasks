@@ -13,8 +13,7 @@ import (
 	"github.com/midoks/dztasks/internal/log"
 )
 
-func InitWatch(file_pos string) {
-
+func InitWatch(filePos string) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Infof("init failed to create watcher: %T", err)
@@ -39,8 +38,7 @@ func InitWatch(file_pos string) {
 	}()
 
 	var files []string
-	err = filepath.Walk(file_pos, func(file string, info os.FileInfo, err error) error {
-
+	err = filepath.Walk(filePos, func(file string, info os.FileInfo, err error) error {
 		extension := path.Ext(file)
 		// fmt.Println(file, extension)
 		if strings.EqualFold(extension, ".json") {
