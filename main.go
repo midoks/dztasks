@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	Version = "1.0"
+	Version = "1.2"
 	AppName = "dztasks"
 )
 
