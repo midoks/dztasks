@@ -62,17 +62,15 @@ func ExecPluginCron(plugin Plugin, cron PluginCron) ([]byte, error) {
 
 	// Prepare the command to execute.
 	cmd := exec.Command(bin, cron.Args...)
-	if !strings.EqualFold(cron.Dir, "") {
+	if strings.EqualFold(cron.Dir, "") {
 		if !strings.HasSuffix(cron.Dir, "/") {
-			pdir := fmt.Sprintf("%s/%s", conf.Plugins.Path, cron.Dir)
-			cmd.Dir = pdir
+			cmd.Dir = fmt.Sprintf("%s/%s", conf.Plugins.Path, plugin.Dir)
 		} else {
 			cmd.Dir = cron.Dir
 		}
 	} else if !strings.EqualFold(plugin.Dir, "") {
 		if !strings.HasSuffix(plugin.Dir, "/") {
-			pdir := fmt.Sprintf("%s/%s", conf.Plugins.Path, plugin.Dir)
-			cmd.Dir = pdir
+			cmd.Dir = fmt.Sprintf("%s/%s", conf.Plugins.Path, plugin.Dir)
 		} else {
 			cmd.Dir = plugin.Dir
 		}
@@ -109,7 +107,6 @@ func ExecCron(bin string, cron PluginCron) ([]byte, error) {
 	if !strings.EqualFold(cron.Env, "") {
 		env := make([]string, 0)
 		cmd.Env = append(env, cron.Env)
-		// fmt.Println(cmd.Env)
 	} else {
 		cmd.Env = append(os.Environ())
 	}
@@ -158,6 +155,7 @@ func PluginList(pluginDir string) []Plugin {
 	result := make([]Plugin, 0)
 
 	for _, file := range files {
+
 		pluginName := fmt.Sprintf("%s/%s", pluginDir, file.Name())
 		pluginInfo := fmt.Sprintf("%s/info.json", pluginName)
 		if !tools.IsExist(pluginInfo) {
@@ -181,6 +179,7 @@ func PluginList(pluginDir string) []Plugin {
 			p.Icon = "layui-icon-tree"
 		}
 
+		p.Dir = file.Name()
 		pluginLock := GetPluginInstallLock(pluginName)
 		if tools.IsExist(pluginLock) {
 			p.Installed = true

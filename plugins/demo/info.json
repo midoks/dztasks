@@ -36,7 +36,6 @@
 			"path":"html/mongodb.html"
 		}
 	],
-	"dir":"",
 	"bin" : "python3",
 	"index":"index.py",
 	"icon":"layui-icon-template-1",
